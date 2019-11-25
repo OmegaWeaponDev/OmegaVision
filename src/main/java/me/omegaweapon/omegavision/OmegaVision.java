@@ -3,14 +3,17 @@ package me.omegaweapon.omegavision;
 import me.omegaweapon.omegavision.command.OmegaVisionCommand;
 import me.omegaweapon.omegavision.events.PlayerListener;
 import me.omegaweapon.omegavision.settings.PlayerData;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.logging.Logger;
 
 public class OmegaVision extends JavaPlugin {
+	private static OmegaVision instance;
 	private File messagesFile = new File(getDataFolder(), "messages.yml");
 	private FileConfiguration messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
 
@@ -39,13 +42,16 @@ public class OmegaVision extends JavaPlugin {
 		// Plugin Updater
 		Logger logger = this.getLogger();
 
-//		new OmegaUpdater(this, 12345).getVersion(version -> {
-//			if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-//				logger.info("There is not a new update available.");
-//			} else {
-//				logger.info("There is a new update available.");
-//			}
-//		});
+		new OmegaUpdater(271) {
+
+			@Override
+			public void onUpdateAvailable() {
+				getLogger().info( OmegaVision.getInstance().getDescription().getName() + " has been updated!");
+				getLogger().info("Your current version is: " + OmegaVision.getInstance().getDescription().getVersion());
+				getLogger().info("The latest version is: " + getLatestVersion());
+				getLogger().info("You can grab the update here: https://spigotmc.org/resources/" + getProjectId());
+			}
+		}.runTaskAsynchronously(this);
 	}
 
 	@Override
@@ -65,5 +71,9 @@ public class OmegaVision extends JavaPlugin {
 
 	public File getMessagesFile() {
 		return messagesFile;
+	}
+
+	public static OmegaVision getInstance() {
+		return instance;
 	}
 }

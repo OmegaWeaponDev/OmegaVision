@@ -1,7 +1,9 @@
 package me.omegaweapon.omegavision.events;
 
+import me.omegaweapon.omegavision.OmegaUpdater;
 import me.omegaweapon.omegavision.OmegaVision;
 import me.omegaweapon.omegavision.settings.PlayerData;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,13 +20,18 @@ public class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent playerJoinEvent) {
+		// Setup all the variables
 		Player player = playerJoinEvent.getPlayer();
 		Boolean nightVision = PlayerData.getPlayerData().getBoolean(player.getUniqueId() + ".NightVision");
 		Boolean nightVisionLogin = plugin.getConfig().getBoolean("Night_Vision_Login");
 		Boolean particles = plugin.getConfig().getBoolean("Particle_Effects");
 		Boolean ambient = plugin.getConfig().getBoolean("Particle_Ambient");
 		Boolean nightVisionIcon = plugin.getConfig().getBoolean("NightVision_Icon");
+		Boolean updateNotify = plugin.getConfig().getBoolean("Update_Notify");
 
+		String prefix = ChatColor.translateAlternateColorCodes('&', plugin.getMessagesConfig().getString("Prefix"));
+
+		// Applies or removes nightvision onjoin
 		if(nightVision.equals(true) && nightVisionLogin.equals(true)) {
 			player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1, ambient, particles, nightVisionIcon));
 		} else if (nightVision.equals(false) ||  nightVisionLogin.equals(false)) {
@@ -35,5 +42,13 @@ public class PlayerListener implements Listener {
 				PlayerData.savePlayerData();
 			}
 		}
+
+		// Sends Update message depending on config setting.
+		if(updateNotify.equals(true) && player.hasPermission("omegavision.update")) {
+			if(OmegaUpdater.isUpdateAvailable()) {
+				player.sendMessage(OmegaUpdater.getUpdateMessage());
+			}
+		}
+
 	}
 }
