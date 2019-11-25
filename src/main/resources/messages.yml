@@ -1,0 +1,24 @@
+# -------------------------------------------------------------------------------------------
+#
+#  Welcome to OmegaVision's messages file.
+#
+#  Here you'll find all of the messages that you can
+#  customize to your server needs.
+#
+# -------------------------------------------------------------------------------------------
+
+# Sets the plugins prefix to use in all the messages.
+# NOTE: A space will automatically be added after the prefix.
+Prefix: "&7[&9&lAV&7]"
+
+# Sets the message for when pleased have night vision applied.
+NightVision_Applied: "&9Night Vision has been applied!"
+
+# Sets the message for when players have night vision removed.
+NightVision_Removed: "&cNight Vision has been removed!"
+
+# Sets the messages for when players don't have permission to use nightvision.
+No_Permission: "&cSorry, but you don't have permission to do that"
+
+# Sets the reload message
+Reload_Message: "&cAusvision has successfully been reloaded"

@@ -1,0 +1,27 @@
+# -------------------------------------------------------------------------------------------
+#
+#  Welcome to OmegaVision's main configuration file.
+#
+#  Here you'll find of the settings and options that you can
+#  customize to your server needs. Most features are customizable
+#  to an extent.
+#
+# -------------------------------------------------------------------------------------------
+
+# If set to true, players with permission omegavision.login will login with nightvision
+# enabled, if they logged out without it still enabled.
+Night_Vision_Login: true
+
+# If set to true, players will get particle effects when nightvision is applied
+Particle_Effects: true
+
+# If set to true, potion effect produce more, translucent, particles.
+# This does require the Particle_Effect setting to be set to true
+Paritcle_Ambient: true
+
+# If set to true, an icon will display on the screen when nightvision is applied
+NightVision_Icon: true
+
+# If set to true, those with the permission omegavision.update will recieve messages
+# when the plugin updates on spigot
+Update_Nofity: true

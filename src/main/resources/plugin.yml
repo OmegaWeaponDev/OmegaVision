@@ -21,6 +21,7 @@ permissions:
       omegavision.toggle: true
       omegavision.login: true
       omegavision.reload: true
+      omegavision.update: true
   omegavision.toggle:
     description: Lets the player toggle nightvision on and off.
     default: false
@@ -29,4 +30,7 @@ permissions:
     default: false
   omegavision.reload:
     description: Lets the player use the reload command
+    default: false
+  omegavision.update:
+    description: Recieve update messages for the plugin
     default: false
