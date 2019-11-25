@@ -1,0 +1,32 @@
+name: ${project.name}
+version: ${project.version}
+api-version: 1.13
+description: ${project.description}
+
+main: me.omegaweapon.omegavision.OmegaVision
+author: OmegaWeapon_
+
+commands:
+  omegavision:
+    description: The main command for OmegaVision.
+    usage: /omegavision toggle
+    aliases: [ov, nv, ovision]
+    permission: ausvision.toggle
+
+permissions:
+  omegavision.*:
+    description: Gives full access to omegavision commands.
+    default: false
+    children:
+      omegavision.toggle: true
+      omegavision.login: true
+      omegavision.reload: true
+  omegavision.toggle:
+    description: Lets the player toggle nightvision on and off.
+    default: false
+  omegavision.login:
+    description: Lets the player keep nightvision on if they logout/login
+    default: false
+  omegavision.reload:
+    description: Lets the player use the reload command
+    default: false
