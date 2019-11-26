@@ -8,11 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class PlayerListener implements Listener {
 	OmegaVision plugin;
+	final PluginDescriptionFile pdf = OmegaVision.getInstance().getDescription();
 
 	public PlayerListener(OmegaVision plugin) {
 		this.plugin = plugin;
@@ -45,10 +47,12 @@ public class PlayerListener implements Listener {
 
 		// Sends Update message depending on config setting.
 		if(updateNotify.equals(true) && player.hasPermission("omegavision.update")) {
-			if(OmegaUpdater.isUpdateAvailable()) {
-				player.sendMessage(OmegaUpdater.getUpdateMessage());
+			if (OmegaUpdater.isUpdateAvailable()) {
+				player.sendMessage(prefix + ChatColor.RED + " " + pdf.getName() + ChatColor.DARK_AQUA + " has been updated!");
+				player.sendMessage(prefix + ChatColor.DARK_AQUA + " Your current version: " + ChatColor.RED + pdf.getVersion());
+				player.sendMessage(prefix + ChatColor.DARK_AQUA + " Latest version: " + ChatColor.RED + OmegaUpdater.getLatestVersion());
+				player.sendMessage(prefix + ChatColor.DARK_AQUA + " Get the update here:  " + ChatColor.RED + " https://spigotmc.org/resources/" + OmegaUpdater.getProjectId());
 			}
 		}
-
 	}
 }

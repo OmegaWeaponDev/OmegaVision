@@ -24,4 +24,4 @@ NightVision_Icon: true
 
 # If set to true, those with the permission omegavision.update will recieve messages
 # when the plugin updates on spigot
-Update_Nofity: true
+Update_Notify: true

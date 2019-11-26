@@ -32,7 +32,7 @@ public class OmegaVisionCommand implements CommandExecutor {
 		String nightvisionRemoved = ChatColor.translateAlternateColorCodes('&', plugin.getMessagesConfig().getString("NightVision_Removed"));
 
 		if(commandSender instanceof Player) {
-			if(command.getName().equalsIgnoreCase("omegavision")) {
+			if(command.getName().equalsIgnoreCase("omegavision") && commandSender.hasPermission("omegavision.toggle")) {
 				Player player = (Player) commandSender;
 				if(args.length != 1) {
 					player.sendMessage(prefix + ChatColor.translateAlternateColorCodes('&', "&b /ausvision toggle - Toggle your nightvision on or off"));

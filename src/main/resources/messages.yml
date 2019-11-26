@@ -9,7 +9,7 @@
 
 # Sets the plugins prefix to use in all the messages.
 # NOTE: A space will automatically be added after the prefix.
-Prefix: "&7[&9&lAV&7]"
+Prefix: "&7[&9&lOV&7]"
 
 # Sets the message for when pleased have night vision applied.
 NightVision_Applied: "&9Night Vision has been applied!"
@@ -21,4 +21,4 @@ NightVision_Removed: "&cNight Vision has been removed!"
 No_Permission: "&cSorry, but you don't have permission to do that"
 
 # Sets the reload message
-Reload_Message: "&cAusvision has successfully been reloaded"
+Reload_Message: "&cOmegaVision has successfully been reloaded"

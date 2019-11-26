@@ -7,8 +7,7 @@
   <groupId>me.omegaweapon</groupId>
   <artifactId>omegavision</artifactId>
   <name>OmegaVision</name>
-  <description>OmegaVision allows the user to toggle nightvision on and off.</description>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 
   <properties>
     <main.class>me.omegaweapon.omegavision.OmegaVision</main.class>

@@ -1,7 +1,7 @@
-name: ${project.name}
-version: ${project.version}
+name: OmegaVision
+version: 1.0.1
 api-version: 1.13
-description: ${project.description}
+description: OmegaVision allows the user to toggle nightvision on and off.
 
 main: me.omegaweapon.omegavision.OmegaVision
 author: OmegaWeapon_
@@ -11,7 +11,6 @@ commands:
     description: The main command for OmegaVision.
     usage: /omegavision toggle
     aliases: [ov, nv, ovision]
-    permission: ausvision.toggle
 
 permissions:
   omegavision.*:

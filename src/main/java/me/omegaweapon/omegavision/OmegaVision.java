@@ -3,10 +3,9 @@ package me.omegaweapon.omegavision;
 import me.omegaweapon.omegavision.command.OmegaVisionCommand;
 import me.omegaweapon.omegavision.events.PlayerListener;
 import me.omegaweapon.omegavision.settings.PlayerData;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -19,6 +18,8 @@ public class OmegaVision extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		instance = this;
+
 		// Logs a message to console, saying that the plugin has enabled correctly.
 		getLogger().info("OmegaVision has been enabled.");
 
@@ -42,20 +43,22 @@ public class OmegaVision extends JavaPlugin {
 		// Plugin Updater
 		Logger logger = this.getLogger();
 
-		new OmegaUpdater(271) {
+		new OmegaUpdater(73013) {
+			final PluginDescriptionFile pdf = OmegaVision.getInstance().getDescription();
 
 			@Override
 			public void onUpdateAvailable() {
-				getLogger().info( OmegaVision.getInstance().getDescription().getName() + " has been updated!");
-				getLogger().info("Your current version is: " + OmegaVision.getInstance().getDescription().getVersion());
-				getLogger().info("The latest version is: " + getLatestVersion());
-				getLogger().info("You can grab the update here: https://spigotmc.org/resources/" + getProjectId());
+				logger.info(pdf.getName() + " has been updated!");
+				logger.info("Your current version: " + pdf.getVersion());
+				logger.info("Latest version: " + getLatestVersion());
+				logger.info("Get the update here: https://spigotmc.org/resources/" + getProjectId());
 			}
 		}.runTaskAsynchronously(this);
 	}
 
 	@Override
 	public void onDisable() {
+		instance = null;
 		super.onDisable();
 	}
 

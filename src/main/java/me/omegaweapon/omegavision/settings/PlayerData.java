@@ -12,7 +12,7 @@ public class PlayerData {
 	private static File playerFile;
 
 	public static void setupPlayerData() {
-		playerFile = new File(Bukkit.getPluginManager().getPlugin("Ausvision").getDataFolder(), "playerData.yml");
+		playerFile = new File(Bukkit.getPluginManager().getPlugin("Omegavision").getDataFolder(), "playerData.yml");
 
 		if(!playerFile.exists()) {
 			try {
@@ -26,7 +26,7 @@ public class PlayerData {
 		playerData.options().header(
 			"" +
 				"\n This file contains all the stored nightvision data for all" +
-				"\n the players with the permission ausvision.login" +
+				"\n the players with the permission omegavision.login" +
 				"\n "
 		);
 	}
