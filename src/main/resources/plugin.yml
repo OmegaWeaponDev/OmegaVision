@@ -1,5 +1,5 @@
-name: OmegaVision
-version: 1.0.1
+name: ${project.name}
+version: ${project.version}
 api-version: 1.13
 description: OmegaVision allows the user to toggle nightvision on and off.
 

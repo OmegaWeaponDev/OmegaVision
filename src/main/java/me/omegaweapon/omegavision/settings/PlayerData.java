@@ -12,7 +12,7 @@ public class PlayerData {
 	private static File playerFile;
 
 	public static void setupPlayerData() {
-		playerFile = new File(Bukkit.getPluginManager().getPlugin("Omegavision").getDataFolder(), "playerData.yml");
+		playerFile = new File(Bukkit.getPluginManager().getPlugin("OmegaVision").getDataFolder(), "playerData.yml");
 
 		if(!playerFile.exists()) {
 			try {

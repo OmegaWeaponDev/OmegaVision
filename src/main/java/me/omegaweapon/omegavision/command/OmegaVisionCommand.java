@@ -2,6 +2,7 @@ package me.omegaweapon.omegavision.command;
 
 import me.omegaweapon.omegavision.OmegaVision;
 import me.omegaweapon.omegavision.settings.PlayerData;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 public class OmegaVisionCommand implements CommandExecutor {
 	OmegaVision plugin;
@@ -32,8 +34,8 @@ public class OmegaVisionCommand implements CommandExecutor {
 		String nightvisionRemoved = ChatColor.translateAlternateColorCodes('&', plugin.getMessagesConfig().getString("NightVision_Removed"));
 
 		if(commandSender instanceof Player) {
-			if(command.getName().equalsIgnoreCase("omegavision") && commandSender.hasPermission("omegavision.toggle")) {
-				Player player = (Player) commandSender;
+			Player player = (Player) commandSender;
+			if(command.getName().equalsIgnoreCase("omegavision") && (commandSender.hasPermission("omegavision.toggle") || player.isOp())) {
 				if(args.length != 1) {
 					player.sendMessage(prefix + ChatColor.translateAlternateColorCodes('&', "&b /ausvision toggle - Toggle your nightvision on or off"));
 					player.sendMessage(prefix + ChatColor.translateAlternateColorCodes('&', "&b /ausvision reload - Reload the plugin"));
@@ -42,7 +44,7 @@ public class OmegaVisionCommand implements CommandExecutor {
 					if(!player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
 						player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1, ambient, particles, nightVisionIcon));
 						player.sendMessage(prefix + " " + nightvisionApplied);
-						if(player.hasPermission("omegavision.login") && nightVisionLogin.equals(true)) {
+						if(nightVisionLogin.equals(true) && (player.hasPermission("omegavision.login") || player.isOp())) {
 							PlayerData.getPlayerData().createSection(player.getUniqueId().toString());
 							PlayerData.getPlayerData().set(player.getUniqueId().toString() + "." + "NightVision", true);
 							PlayerData.savePlayerData();
@@ -51,14 +53,15 @@ public class OmegaVisionCommand implements CommandExecutor {
 					} else {
 						player.removePotionEffect(PotionEffectType.NIGHT_VISION);
 						player.sendMessage(prefix + " " + nightvisionRemoved);
-						if(nightVisionLogin.equals(true) && player.hasPermission("omegavision.login")) {
+						if(nightVisionLogin.equals(true) && (player.hasPermission("omegavision.login") || player.isOp())) {
 							PlayerData.getPlayerData().createSection(player.getUniqueId().toString());
 							PlayerData.getPlayerData().set(player.getUniqueId().toString() + "." + "NightVision", false);
 							PlayerData.savePlayerData();
 						}
-						return true;
 					}
+					return true;
 				} else if(args[0].equalsIgnoreCase("reload")) {
+					if(player.hasPermission("omegavision.reload") || player.isOp())
 					plugin.reloadConfig();
 					PlayerData.reloadPlayerData();
 					player.sendMessage(prefix + " " + reloadCommand);
