@@ -45,7 +45,6 @@ public abstract class OmegaUpdater extends BukkitRunnable {
 
 	public static String[] getUpdateMessage() {
 		final PluginDescriptionFile pdf = OmegaVision.getInstance().getDescription();
-		final String prefix = ChatColor.translateAlternateColorCodes('&', OmegaVision.getInstance().getMessagesConfig().getString("Prefix"));
 
 		return new String[] {
 			pdf.getName() + " has been updated!",

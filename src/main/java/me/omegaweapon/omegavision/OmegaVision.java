@@ -72,10 +72,6 @@ public class OmegaVision extends JavaPlugin {
 		return messagesConfig;
 	}
 
-	public File getMessagesFile() {
-		return messagesFile;
-	}
-
 	public static OmegaVision getInstance() {
 		return instance;
 	}
