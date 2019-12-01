@@ -7,7 +7,7 @@
   <groupId>me.omegaweapon</groupId>
   <artifactId>omegavision</artifactId>
   <name>OmegaVision</name>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
 
   <properties>
     <main.class>me.omegaweapon.omegavision.OmegaVision</main.class>
