@@ -16,6 +16,9 @@ public class OmegaVision extends JavaPlugin {
 	private File messagesFile = new File(getDataFolder(), "messages.yml");
 	private FileConfiguration messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
 
+	private File configFile = new File(getDataFolder(), "config.yml");
+	private FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+
 	@Override
 	public void onEnable() {
 		instance = this;

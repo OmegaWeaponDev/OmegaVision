@@ -6,8 +6,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.bukkit.ChatColor;
-import org.bukkit.plugin.PluginDescriptionFile;
+import me.omegaweapon.omegavision.settings.utils.MessageUtils;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class OmegaUpdater extends BukkitRunnable {
@@ -44,14 +43,7 @@ public abstract class OmegaUpdater extends BukkitRunnable {
 	}
 
 	public static String[] getUpdateMessage() {
-		final PluginDescriptionFile pdf = OmegaVision.getInstance().getDescription();
-
-		return new String[] {
-			pdf.getName() + " has been updated!",
-			"Your current version: " + pdf.getVersion(),
-			"Latest version: " + ChatColor.RED + getLatestVersion(),
-			"Get the update here: https://spigotmc.org/resources/" + getProjectId()
-		};
+		return MessageUtils.getUpdateMessage();
 	}
 
 	public static int getProjectId() {
