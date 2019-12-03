@@ -11,6 +11,8 @@ public class MessageUtils {
 	private static String reloadCommand = ColourUtils.Colourize(OmegaVision.getInstance().getMessagesConfig().getString("Reload_Message"));
 	private static String nightvisionApplied = ColourUtils.Colourize(OmegaVision.getInstance().getMessagesConfig().getString("NightVision_Applied"));
 	private static String nightvisionRemoved = ColourUtils.Colourize(OmegaVision.getInstance().getMessagesConfig().getString("NightVision_Removed"));
+	private static String actionbarNightVisionApplied = ColourUtils.Colourize(OmegaVision.getInstance().getMessagesConfig().getString("ActionBar_NightVision_Applied"));
+	private static String actionbarNightVisionRemoved = ColourUtils.Colourize(OmegaVision.getInstance().getMessagesConfig().getString("ActionBar_NightVision_Removed"));
 
 	private static String[] updateMessage = new String[] {
 		getPrefix() + ChatColor.RED + OmegaVision.getInstance().getDescription().getName() + ChatColor.DARK_AQUA + " has been updated!",
@@ -30,6 +32,15 @@ public class MessageUtils {
 	public static String getReloadCommand() {
 		return reloadCommand;
 	}
+
+	public static String getActionbarNightVisionApplied() {
+		return actionbarNightVisionApplied;
+	}
+
+	public static String getActionbarNightVisionRemoved() {
+		return actionbarNightVisionRemoved;
+	}
+
 
 	public static String getNightvisionApplied() {
 		return nightvisionApplied;

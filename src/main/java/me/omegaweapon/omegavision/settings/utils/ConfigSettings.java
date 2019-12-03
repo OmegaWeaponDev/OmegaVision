@@ -10,6 +10,12 @@ public class ConfigSettings {
 	private static Boolean nightVisionIcon = OmegaVision.getInstance().getConfig().getBoolean("NightVision_Icon");
 	private static Boolean updateNotify = OmegaVision.getInstance().getConfig().getBoolean("Update_Notify");
 	private static Boolean keepNightVision = OmegaVision.getInstance().getConfig().getBoolean("Keep_NightVision_On_Death");
+	private static Boolean actionBarMessages = OmegaVision.getInstance().getConfig().getBoolean("ActionBar_Message");
+
+	public static Boolean getActionBarMessages() {
+		return actionBarMessages;
+	}
+
 
 	public static Boolean getKeepNightVision() {
 		return keepNightVision;
