@@ -17,9 +17,15 @@ NightVision_Applied: "&9Night Vision has been applied!"
 # Sets the message for when players have night vision removed.
 NightVision_Removed: "&cNight Vision has been removed!"
 
+# Sets the actionbar message that is displayed when nightvision is applied!
 ActionBar_NightVision_Applied: "&9Nightvision has been applied!"
 
-ActionBar_Nightvision_Removed: "&cNightvision has been removed!"
+# Sets the actionbar message that is displayed when nightvision is removed!
+ActionBar_NightVision_Removed: "&cNightvision has been removed!"
+
+# Sets the message players get when they drink milk bucket
+# to remove the particle and icon when using nightvision
+Bucket_Message: "&9Particle Effects and the icon have been removed!"
 
 # Sets the messages for when players don't have permission to use nightvision.
 No_Permission: "&cSorry, but you don't have permission to do that"

@@ -2,93 +2,108 @@ package me.omegaweapon.omegavision.events;
 
 import me.omegaweapon.omegavision.OmegaUpdater;
 import me.omegaweapon.omegavision.OmegaVision;
+import me.omegaweapon.omegavision.command.MainCommand;
+import me.omegaweapon.omegavision.settings.ConfigFile;
+import me.omegaweapon.omegavision.settings.MessagesFile;
 import me.omegaweapon.omegavision.settings.PlayerData;
-import me.omegaweapon.omegavision.settings.utils.ConfigSettings;
-import me.omegaweapon.omegavision.settings.utils.MessageUtils;
+import me.omegaweapon.omegavision.utils.ColourUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-
 public class PlayerListener implements Listener {
-	OmegaVision plugin;
-	String version = Bukkit.getVersion();
+  private OmegaVision plugin;
+  
+  String[] UPDATE_MESSAGE = new String[] {
+    MessagesFile.PREFIX + ChatColor.RED + OmegaVision.getInstance().getDescription().getName() + ChatColor.DARK_AQUA + " has been updated!",
+    MessagesFile.PREFIX + ChatColor.DARK_AQUA + "Your current version: " + ChatColor.RED + OmegaVision.getInstance().getDescription().getVersion(),
+    MessagesFile.PREFIX + ChatColor.DARK_AQUA + "Latest version: " + ChatColor.RED + OmegaUpdater.getLatestVersion(),
+    MessagesFile.PREFIX + ChatColor.DARK_AQUA + "Get the update here: " + ChatColor.RED + " https://spigotmc.org/resources/" + OmegaUpdater.getProjectId()
+  };
+  
+  public PlayerListener(OmegaVision pl) {
+    this.plugin = pl;
+  }
+  
+  @EventHandler
+  public void onPlayerJoin(PlayerJoinEvent playerJoinEvent) {
+    Player player = playerJoinEvent.getPlayer();
+    Boolean nightVision = PlayerData.getPlayerData().getBoolean(player.getUniqueId().toString() + ".NightVision");
+    
+    // Apply/Remove nightvision on join
+    if(ConfigFile.NIGHT_VISION_LOGIN.equals(true) && nightVision.equals(true) && (player.hasPermission("omegavision.login") || player.isOp())) {
+      player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1, ConfigFile.PARTICLE_AMBIENT, ConfigFile.PARTICLE_EFFECTS, ConfigFile.NIGHTVISION_ICON));
+      MainCommand.getPlayerMap().put(player.getUniqueId(), player.getName());
+      player.sendMessage(ColourUtils.Colourize(MessagesFile.PREFIX + " " + MessagesFile.NIGHTVISION_APPLIED));
+    } else {
+      player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+      MainCommand.getPlayerMap().remove(player.getUniqueId());
+    }
+  
+    // Sends Update message depending on config setting.
+    // Update Checker
+    if(player.hasPermission("omegavision.update")) {
+      new OmegaUpdater(73013) {
+    
+        @Override
+        public void onUpdateAvailable() {
+          player.sendMessage(ColourUtils.Colourize(MessagesFile.PREFIX + "&9 A new update has been released!"));
+          player.sendMessage(ColourUtils.Colourize(MessagesFile.PREFIX + "&9 Your current version is: &c" + OmegaVision.getInstance().getDescription().getVersion()));
+          player.sendMessage(ColourUtils.Colourize(MessagesFile.PREFIX + "&9 The latest version is: &c" + OmegaUpdater.getLatestVersion()));
+          player.sendMessage(ColourUtils.Colourize(MessagesFile.PREFIX + "&9 You can update here: &chttps://www.spigotmc.org/resources/omegavision." + OmegaUpdater.getProjectId()));
+        }
+      }.runTaskAsynchronously(OmegaVision.getInstance());
+    }
 
-	public PlayerListener(OmegaVision plugin) {
-		this.plugin = plugin;
-	}
-
-	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent playerJoinEvent) {
-		Player player = playerJoinEvent.getPlayer();
-
-		Boolean nightVision = PlayerData.getPlayerData().getBoolean(player.getUniqueId() + ".NightVision");
-
-		// Applies or removes nightvision onjoin
-		if(nightVision.equals(true) && ConfigSettings.getNightVisionLogin().equals(true)) {
-			if(version.contains("1.7") || version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11") || version.contains("1.12")) {
-				player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
-				player.sendMessage(MessageUtils.getPrefix() + MessageUtils.getNightvisionApplied());
-			} else {
-				player.addPotionEffect(
-					new PotionEffect(
-						PotionEffectType.NIGHT_VISION,
-						Integer.MAX_VALUE,
-						1,
-						ConfigSettings.getAmbient(),
-						ConfigSettings.getParticles(),
-						ConfigSettings.getNightVisionIcon())
-				);
-				player.sendMessage(MessageUtils.getPrefix() + MessageUtils.getNightvisionApplied());
-			}
-		} else if (nightVision.equals(false) ||  ConfigSettings.getNightVisionLogin().equals(false)) {
-			player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-			if(player.hasPermission("omegavision.login")) {
-				PlayerData.getPlayerData().createSection(player.getUniqueId().toString());
-				PlayerData.getPlayerData().set(player.getUniqueId().toString() + "." + "NightVision", false);
-				PlayerData.savePlayerData();
-			}
-		}
-
-		// Sends Update message depending on config setting.
-		if(ConfigSettings.getUpdateNotify().equals(true) && player.hasPermission("omegavision.update")) {
-			if (OmegaUpdater.isUpdateAvailable()) {
-				player.sendMessage(MessageUtils.getUpdateMessage());
-			}
-		}
-	}
-
-	@EventHandler
-	public void onPlayerDeath(PlayerRespawnEvent e) {
-		Player player = e.getPlayer();
-		Boolean nightVision = PlayerData.getPlayerData().getBoolean(player.getUniqueId() + ".NightVision");
-
-		// Add nightvision to player after the respawn, depending on config and playerdata settings
-		if(ConfigSettings.getKeepNightVision().equals(true) && nightVision.equals(true) && player.hasPermission("omegavision.death")) {
-			Bukkit.getScheduler().runTaskLater(plugin, () -> {
-					if(version.contains("1.7") || version.contains("1.8") || version.contains("1.9") || version.contains("1.10") || version.contains("1.11") || version.contains("1.12")) {
-						player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1));
-						player.sendMessage(MessageUtils.getPrefix() + MessageUtils.getNightvisionApplied());
-					} else {
-						player.addPotionEffect(
-							new PotionEffect(
-								PotionEffectType.NIGHT_VISION,
-								Integer.MAX_VALUE,
-								1,
-								ConfigSettings.getAmbient(),
-								ConfigSettings.getParticles(),
-								ConfigSettings.getNightVisionIcon())
-						);
-						player.sendMessage(MessageUtils.getPrefix() + MessageUtils.getNightvisionApplied());
-					}
-			}, (1));
-			player.sendMessage(MessageUtils.getPrefix() + MessageUtils.getNightvisionApplied());
-		}
-	}
+  }
+  
+  @EventHandler
+  public void onPlayerQuit(PlayerQuitEvent playerQuitEvent) {
+    Player player = playerQuitEvent.getPlayer();
+    
+    MainCommand.getPlayerMap().remove(player.getUniqueId());
+  }
+  
+  @EventHandler
+  public void onMilkBucketUse(PlayerItemConsumeEvent playerItemConsumeEvent) {
+    Player player = playerItemConsumeEvent.getPlayer();
+    
+    if(player.hasPermission("omegavision.bucket") || player.isOp()) {
+      if(playerItemConsumeEvent.getItem().getType().equals(Material.MILK_BUCKET)) {
+        if(player.hasPotionEffect(PotionEffectType.NIGHT_VISION) && ConfigFile.BUCKET_USAGE.equals(true)) {
+          playerItemConsumeEvent.setCancelled(true);
+          
+          for(PotionEffect effects : player.getActivePotionEffects()) {
+            player.removePotionEffect(effects.getType());
+          }
+          player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1, false, false , false));
+          if(ConfigFile.BUCKET_EMPTY.equals(true)) {
+            player.getInventory().getItemInMainHand().setType(Material.BUCKET);
+          }
+          player.sendMessage(ColourUtils.Colourize(MessagesFile.PREFIX + " " + MessagesFile.BUCKET_MESSAGE));
+        }
+      }
+    }
+  }
+  
+  @EventHandler
+  public void onPlayerDeath(PlayerRespawnEvent e) {
+    Player player = e.getPlayer();
+    Boolean nightVision = PlayerData.getPlayerData().getBoolean(player.getUniqueId() + ".NightVision");
+  
+    if(ConfigFile.KEEP_NIGHTVISION_ON_DEATH.equals(true) && nightVision.equals(true) && player.hasPermission("omegavision.death")) {
+      Bukkit.getScheduler().runTaskLater(plugin, () -> {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1, ConfigFile.PARTICLE_AMBIENT, ConfigFile.PARTICLE_EFFECTS, ConfigFile.NIGHTVISION_ICON));
+      }, (1));
+    }
+  }
 }

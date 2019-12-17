@@ -1,4 +1,4 @@
-package me.omegaweapon.omegavision.settings.utils;
+package me.omegaweapon.omegavision.utils;
 
 import org.bukkit.ChatColor;
 

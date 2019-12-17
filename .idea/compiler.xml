@@ -10,5 +10,8 @@
         <module name="OmegaVision" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="OmegaVision" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

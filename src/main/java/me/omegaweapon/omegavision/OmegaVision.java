@@ -1,60 +1,51 @@
 package me.omegaweapon.omegavision;
 
-import me.omegaweapon.omegavision.command.OmegaVisionCommand;
+import me.omegaweapon.omegavision.command.CommandUtil;
+import me.omegaweapon.omegavision.command.MainCommand;
 import me.omegaweapon.omegavision.events.PlayerListener;
+import me.omegaweapon.omegavision.settings.ConfigFile;
+import me.omegaweapon.omegavision.settings.MessagesFile;
 import me.omegaweapon.omegavision.settings.PlayerData;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.logging.Logger;
 
 public class OmegaVision extends JavaPlugin {
 	private static OmegaVision instance;
-	private File messagesFile = new File(getDataFolder(), "messages.yml");
-	private FileConfiguration messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
-
-	private File configFile = new File(getDataFolder(), "config.yml");
-	private FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
 	@Override
 	public void onEnable() {
 		instance = this;
-
-		// Logs a message to console, saying that the plugin has enabled correctly.
-		getLogger().info("OmegaVision has been enabled.");
-
-		// Creates the config.yml
-		this.saveDefaultConfig();
-
-		// Creates the playerdata.yml file
-		PlayerData.setupPlayerData();
-
-		// Checks if the messages file exists, if not, creates it.
-		if(!messagesFile.exists()) {
-			saveResource("messages.yml", false);
-		}
-
-		// Register the main command
-		this.getCommand("omegavision").setExecutor(new OmegaVisionCommand(this));
-
-		// Registers the playerlistener event
-		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
-
-		// Plugin Updater
 		Logger logger = this.getLogger();
-
+		
+		// Logs a message to console, saying that the plugin has enabled correctly.
+		logger.info("OmegaVision has been enabled.");
+		
+		// Register the command
+		CommandUtil.registerCommand(new MainCommand(this));
+		
+		// Register the player Listener
+		Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
+		
+		// Setup the files
+		if(!getDataFolder().exists()) {
+			getDataFolder().mkdir();
+		}
+		
+		ConfigFile.init();
+		MessagesFile.init();
+		PlayerData.setupPlayerData();
+		
+		// Update Checker
 		new OmegaUpdater(73013) {
-			final PluginDescriptionFile pdf = OmegaVision.getInstance().getDescription();
-
+			
 			@Override
 			public void onUpdateAvailable() {
-				logger.info(pdf.getName() + " has been updated!");
-				logger.info("Your current version: " + pdf.getVersion());
-				logger.info("Latest version: " + getLatestVersion());
-				logger.info("Get the update here: https://spigotmc.org/resources/" + getProjectId());
+				logger.info("A new update has been released!");
+				logger.info("Your current version is: " + getDescription().getVersion());
+				logger.info("The latest version is: " + OmegaUpdater.getLatestVersion());
+				logger.info("You can update here: https://www.spigotmc.org/resources/omegavision." + OmegaUpdater.getProjectId());
 			}
 		}.runTaskAsynchronously(this);
 	}
@@ -64,15 +55,11 @@ public class OmegaVision extends JavaPlugin {
 		instance = null;
 		super.onDisable();
 	}
-
-	@Override
-	public void reloadConfig() {
-		super.reloadConfig();
-		messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
-	}
-
-	public FileConfiguration getMessagesConfig() {
-		return messagesConfig;
+	
+	public void onReload() {
+		ConfigFile.init();
+		MessagesFile.init();
+		PlayerData.reloadPlayerData();
 	}
 
 	public static OmegaVision getInstance() {

@@ -24,10 +24,15 @@ public class PlayerData {
 		}
 		playerData  = YamlConfiguration.loadConfiguration(playerFile);
 		playerData.options().header(
-			"" +
-				"\n This file contains all the stored nightvision data for all" +
-				"\n the players with the permission omegavision.login" +
-				"\n "
+			" -------------------------------------------------------------------------------------------\n" +
+			" \n" +
+			" Welcome to OmegaVision 's main configuration file.\n" +
+			" \n" +
+			" Here you'll find of the settings and options that you can\n" +
+			" customize to your server needs. Most features are customizable\n" +
+			" to an extent.\n" +
+			" \n" +
+			" -------------------------------------------------------------------------------------------"
 		);
 	}
 

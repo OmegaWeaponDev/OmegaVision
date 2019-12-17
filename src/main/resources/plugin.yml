@@ -1,39 +1,8 @@
 name: ${project.name}
 version: ${project.version}
-api-version: 1.13
-description: OmegaVision allows the user to toggle nightvision on and off.
-
-main: me.omegaweapon.omegavision.OmegaVision
+api-version: 1.14
+description: ${project.description}
+main: ${main.class}
 author: OmegaWeapon_
-
-commands:
-  omegavision:
-    description: The main command for OmegaVision.
-    usage: /omegavision toggle
-    aliases: [ov, nv, ovision]
-
-permissions:
-  omegavision.*:
-    description: Gives full access to omegavision commands.
-    default: false
-    children:
-      omegavision.toggle: true
-      omegavision.login: true
-      omegavision.reload: true
-      omegavision.update: true
-      omegavision.death: true
-  omegavision.toggle:
-    description: Lets the player toggle nightvision on and off.
-    default: false
-  omegavision.login:
-    description: Lets the player keep nightvision on if they logout/login
-    default: false
-  omegavision.reload:
-    description: Lets the player use the reload command
-    default: false
-  omegavision.update:
-    description: Recieve update messages for the plugin
-    default: false
-  omegavision.death:
-    description: Lets the player keep nightvision if they die
-    default: false
+authors:
+  - UltimaWeapon_
