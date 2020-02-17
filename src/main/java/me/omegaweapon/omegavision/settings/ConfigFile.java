@@ -18,15 +18,11 @@ public class ConfigFile extends FileManager {
 		});
 	}
 	
-	public static Boolean NIGHT_VISION_LOGIN;
-	public static Boolean PARTICLE_EFFECTS;
-	public static Boolean PARTICLE_AMBIENT;
-	public static Boolean NIGHTVISION_ICON;
-	public static Boolean ACTIONBAR_MESSAGES;
-	public static Boolean BUCKET_USAGE;
-	public static Boolean BUCKET_EMPTY;
-	public static Boolean KEEP_NIGHTVISION_ON_DEATH;
-	public static Boolean UPDATE_NOTIFY;
+	public static Boolean NIGHT_VISION_LOGIN, PARTICLE_EFFECTS, PARTICLE_AMBIENT, NIGHTVISION_ICON, ACTIONBAR_MESSAGES,
+		BUCKET_USAGE, BUCKET_EMPTY, KEEP_NIGHTVISION_ON_DEATH, UPDATE_NOTIFY,
+	BLINDNESS_EFFECT;
+	
+	public static Integer BLINDNESS_TIMER, BLINDNESS_DURATION;
 	
 	private void onLoad() {
 		NIGHT_VISION_LOGIN = getBoolean("Night_Vision_Login");
@@ -38,6 +34,10 @@ public class ConfigFile extends FileManager {
 		BUCKET_EMPTY = getBoolean("Bucket_Empty");
 		KEEP_NIGHTVISION_ON_DEATH = getBoolean("Keep_NightVision_On_Death");
 		UPDATE_NOTIFY = getBoolean("Update_Notify");
+		BLINDNESS_EFFECT = getBoolean("Blindness_Effect.Enabled");
+		
+		BLINDNESS_TIMER = getInt("Blindness_Effect.Timer");
+		BLINDNESS_DURATION = getInt("Blindness_Effect.Duration");
 	}
 	
 	

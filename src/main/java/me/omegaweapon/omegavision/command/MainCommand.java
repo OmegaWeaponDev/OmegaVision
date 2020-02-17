@@ -98,9 +98,9 @@ public class MainCommand extends Command {
 								player.sendMessage(ColourUtils.Colourize(MessagesFile.PREFIX + " " + "&c" + playerMap.get(onlinePlayers.getUniqueId())));
 							}
 						}
+					} else {
+						player.sendMessage(ColourUtils.Colourize(MessagesFile.PREFIX + " " + MessagesFile.NO_PERMISSION));
 					}
-				} else {
-					player.sendMessage(ColourUtils.Colourize(MessagesFile.PREFIX + " " + MessagesFile.NO_PERMISSION));
 				}
 			}
 			

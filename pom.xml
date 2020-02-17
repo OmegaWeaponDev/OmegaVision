@@ -7,7 +7,7 @@
   <groupId>me.omegaweapon</groupId>
   <artifactId>omegavision</artifactId>
   <name>OmegaVision</name>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
   <description>OmegaVision allows the user to toggle nightvision on and off.</description>
 
   <properties>
@@ -35,7 +35,7 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.14.4-R0.1-SNAPSHOT</version>
+      <version>1.15-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

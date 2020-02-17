@@ -8,7 +8,6 @@ import me.omegaweapon.omegavision.settings.MessagesFile;
 import me.omegaweapon.omegavision.settings.PlayerData;
 import me.omegaweapon.omegavision.utils.ColourUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,13 +21,6 @@ import org.bukkit.potion.PotionEffectType;
 
 public class PlayerListener implements Listener {
   private OmegaVision plugin;
-  
-  String[] UPDATE_MESSAGE = new String[] {
-    MessagesFile.PREFIX + ChatColor.RED + OmegaVision.getInstance().getDescription().getName() + ChatColor.DARK_AQUA + " has been updated!",
-    MessagesFile.PREFIX + ChatColor.DARK_AQUA + "Your current version: " + ChatColor.RED + OmegaVision.getInstance().getDescription().getVersion(),
-    MessagesFile.PREFIX + ChatColor.DARK_AQUA + "Latest version: " + ChatColor.RED + OmegaUpdater.getLatestVersion(),
-    MessagesFile.PREFIX + ChatColor.DARK_AQUA + "Get the update here: " + ChatColor.RED + " https://spigotmc.org/resources/" + OmegaUpdater.getProjectId()
-  };
   
   public PlayerListener(OmegaVision pl) {
     this.plugin = pl;
@@ -51,7 +43,7 @@ public class PlayerListener implements Listener {
   
     // Sends Update message depending on config setting.
     // Update Checker
-    if(player.hasPermission("omegavision.update")) {
+    if(player.hasPermission("omegavision.update") || player.isOp()) {
       new OmegaUpdater(73013) {
     
         @Override

@@ -27,6 +27,9 @@ ActionBar_NightVision_Removed: "&cNightvision has been removed!"
 # to remove the particle and icon when using nightvision
 Bucket_Message: "&9Particle Effects and the icon have been removed!"
 
+# Sets the message players get when they go blind.
+Blindness_Message: "&cYou have been using nightvision for too long, you are now blind"
+
 # Sets the messages for when players don't have permission to use nightvision.
 No_Permission: "&cSorry, but you don't have permission to do that"
 

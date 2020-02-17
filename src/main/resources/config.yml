@@ -6,6 +6,9 @@
 #  customize to your server needs. Most features are customizable
 #  to an extent.
 #
+# For help you can visit the wiki at: https://bitbucket.org/oweapon/omegavision/wiki/Home
+# If you have any issues, report them here: https://bitbucket.org/oweapon/omegavision/issues
+#
 # -------------------------------------------------------------------------------------------
 
 # If set to true, players with permission omegavision.login will login with nightvision
@@ -35,6 +38,15 @@ Bucket_Empty: true
 
 # If set to true, players will keep nightvision when they die.
 Keep_NightVision_On_Death: true
+
+# If true, players who use nightvision will get blinded for a period of time.
+Blindness_Effect:
+  # Determines whether you want to enable this feature
+  Enabled: true
+  # How long nightvision must be active for before blindness kicks in (In seconds).
+  Timer: 10
+  # How long the blindness will last (In seconds).
+  Duration: 20
 
 # If set to true, those with the permission omegavision.update will recieve messages
 # when the plugin updates on spigot
