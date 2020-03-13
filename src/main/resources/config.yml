@@ -43,9 +43,9 @@ Keep_NightVision_On_Death: true
 Blindness_Effect:
   # Determines whether you want to enable this feature
   Enabled: true
-  # How long nightvision must be active for before blindness kicks in (In seconds).
+  # How long nightvision must be active for before blindness kicks in (In minutes).
   Timer: 10
-  # How long the blindness will last (In seconds).
+  # How long the blindness will last (In minutes).
   Duration: 20
 
 # If set to true, those with the permission omegavision.update will recieve messages

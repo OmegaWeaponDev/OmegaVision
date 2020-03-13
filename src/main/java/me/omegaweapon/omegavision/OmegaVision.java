@@ -1,11 +1,11 @@
 package me.omegaweapon.omegavision;
 
-import me.omegaweapon.omegavision.command.CommandUtil;
 import me.omegaweapon.omegavision.command.MainCommand;
 import me.omegaweapon.omegavision.events.PlayerListener;
 import me.omegaweapon.omegavision.settings.ConfigFile;
 import me.omegaweapon.omegavision.settings.MessagesFile;
 import me.omegaweapon.omegavision.settings.PlayerData;
+import me.omegaweapon.omegavision.utils.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,7 +23,7 @@ public class OmegaVision extends JavaPlugin {
 		logger.info("OmegaVision has been enabled.");
 		
 		// Register the command
-		CommandUtil.registerCommand(new MainCommand(this));
+		Utilities.registerCommand(new MainCommand(this));
 		
 		// Register the player Listener
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);

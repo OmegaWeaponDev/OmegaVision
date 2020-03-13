@@ -6,7 +6,7 @@ import me.omegaweapon.omegavision.command.MainCommand;
 import me.omegaweapon.omegavision.settings.ConfigFile;
 import me.omegaweapon.omegavision.settings.MessagesFile;
 import me.omegaweapon.omegavision.settings.PlayerData;
-import me.omegaweapon.omegavision.utils.ColourUtils;
+import me.omegaweapon.omegavision.utils.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -35,7 +35,7 @@ public class PlayerListener implements Listener {
     if(ConfigFile.NIGHT_VISION_LOGIN.equals(true) && nightVision.equals(true) && (player.hasPermission("omegavision.login") || player.isOp())) {
       player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1, ConfigFile.PARTICLE_AMBIENT, ConfigFile.PARTICLE_EFFECTS, ConfigFile.NIGHTVISION_ICON));
       MainCommand.getPlayerMap().put(player.getUniqueId(), player.getName());
-      player.sendMessage(ColourUtils.Colourize(MessagesFile.PREFIX + " " + MessagesFile.NIGHTVISION_APPLIED));
+      player.sendMessage(Utilities.Colourize(MessagesFile.PREFIX + " " + MessagesFile.NIGHTVISION_APPLIED));
     } else {
       player.removePotionEffect(PotionEffectType.NIGHT_VISION);
       MainCommand.getPlayerMap().remove(player.getUniqueId());
@@ -48,10 +48,10 @@ public class PlayerListener implements Listener {
     
         @Override
         public void onUpdateAvailable() {
-          player.sendMessage(ColourUtils.Colourize(MessagesFile.PREFIX + "&9 A new update has been released!"));
-          player.sendMessage(ColourUtils.Colourize(MessagesFile.PREFIX + "&9 Your current version is: &c" + OmegaVision.getInstance().getDescription().getVersion()));
-          player.sendMessage(ColourUtils.Colourize(MessagesFile.PREFIX + "&9 The latest version is: &c" + OmegaUpdater.getLatestVersion()));
-          player.sendMessage(ColourUtils.Colourize(MessagesFile.PREFIX + "&9 You can update here: &chttps://www.spigotmc.org/resources/omegavision." + OmegaUpdater.getProjectId()));
+          player.sendMessage(Utilities.Colourize(MessagesFile.PREFIX + "&9 A new update has been released!"));
+          player.sendMessage(Utilities.Colourize(MessagesFile.PREFIX + "&9 Your current version is: &c" + OmegaVision.getInstance().getDescription().getVersion()));
+          player.sendMessage(Utilities.Colourize(MessagesFile.PREFIX + "&9 The latest version is: &c" + OmegaUpdater.getLatestVersion()));
+          player.sendMessage(Utilities.Colourize(MessagesFile.PREFIX + "&9 You can update here: &chttps://www.spigotmc.org/resources/omegavision." + OmegaUpdater.getProjectId()));
         }
       }.runTaskAsynchronously(OmegaVision.getInstance());
     }
@@ -81,7 +81,7 @@ public class PlayerListener implements Listener {
           if(ConfigFile.BUCKET_EMPTY.equals(true)) {
             player.getInventory().getItemInMainHand().setType(Material.BUCKET);
           }
-          player.sendMessage(ColourUtils.Colourize(MessagesFile.PREFIX + " " + MessagesFile.BUCKET_MESSAGE));
+          player.sendMessage(Utilities.Colourize(MessagesFile.PREFIX + " " + MessagesFile.BUCKET_MESSAGE));
         }
       }
     }
