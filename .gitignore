@@ -1,5 +1,4 @@
+/.idea/
+/out/
+/target/
 OmegaVision.iml
-target
-.idea
-out
-plugin.yml
