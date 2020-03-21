@@ -1,68 +1,91 @@
 package me.omegaweapon.omegavision;
 
+import me.omegaweapon.omegavision.command.ListCommand;
 import me.omegaweapon.omegavision.command.MainCommand;
+import me.omegaweapon.omegavision.command.ToggleCommand;
 import me.omegaweapon.omegavision.events.PlayerListener;
-import me.omegaweapon.omegavision.settings.ConfigFile;
-import me.omegaweapon.omegavision.settings.MessagesFile;
-import me.omegaweapon.omegavision.settings.PlayerData;
-import me.omegaweapon.omegavision.utils.Utilities;
-import org.bukkit.Bukkit;
+import me.ou.library.Utilities;
+import me.ou.library.configs.ConfigCreator;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.logging.Logger;
-
 public class OmegaVision extends JavaPlugin {
-	private static OmegaVision instance;
-
-	@Override
-	public void onEnable() {
-		instance = this;
-		Logger logger = this.getLogger();
-		
-		// Logs a message to console, saying that the plugin has enabled correctly.
-		logger.info("OmegaVision has been enabled.");
-		
-		// Register the command
-		Utilities.registerCommand(new MainCommand(this));
-		
-		// Register the player Listener
-		Bukkit.getPluginManager().registerEvents(new PlayerListener(this), this);
-		
-		// Setup the files
-		if(!getDataFolder().exists()) {
-			getDataFolder().mkdir();
-		}
-		
-		ConfigFile.init();
-		MessagesFile.init();
-		PlayerData.setupPlayerData();
-		
-		// Update Checker
-		new OmegaUpdater(73013) {
-			
-			@Override
-			public void onUpdateAvailable() {
-				logger.info("A new update has been released!");
-				logger.info("Your current version is: " + getDescription().getVersion());
-				logger.info("The latest version is: " + OmegaUpdater.getLatestVersion());
-				logger.info("You can update here: https://www.spigotmc.org/resources/omegavision." + OmegaUpdater.getProjectId());
-			}
-		}.runTaskAsynchronously(this);
-	}
-
-	@Override
-	public void onDisable() {
-		instance = null;
-		super.onDisable();
-	}
-	
-	public void onReload() {
-		ConfigFile.init();
-		MessagesFile.init();
-		PlayerData.reloadPlayerData();
-	}
-
-	public static OmegaVision getInstance() {
-		return instance;
-	}
+  private static OmegaVision instance;
+  private static final ConfigCreator configFile = new ConfigCreator("config.yml");
+  private static final ConfigCreator messagesFile = new ConfigCreator("messages.yml");
+  private static final ConfigCreator playerData = new ConfigCreator("playerData.yml");
+  
+  @Override
+  public void onEnable() {
+    instance = this;
+    Utilities.setInstance(this);
+    
+    // Logs a message to console, saying that the plugin has enabled correctly.
+    Utilities.logInfo(true,"OmegaVision has been enabled.");
+    
+    getConfigFile().createConfig();
+    getMessagesFile().createConfig();
+    getPlayerData().createConfig();
+  
+    getPlayerData().getConfig().options().header(
+      " -------------------------------------------------------------------------------------------\n" +
+        " \n" +
+        " Welcome to OmegaVision's Player Data file.\n" +
+        " \n" +
+        " This file contains all the uuids and nightivision status\n" +
+        " for all the players who have the permission omegavision.login\n" +
+        " \n" +
+        " -------------------------------------------------------------------------------------------"
+    );
+    
+    // Register the commands
+    Utilities.registerCommands(new MainCommand(), new ToggleCommand(), new ListCommand());
+    
+    // Register the player Listener
+    Utilities.registerEvent(new PlayerListener());
+    
+    // The Updater
+    new UpdateChecker(this, 73013).getVersion(version -> {
+      if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
+        Utilities.logInfo(true, "You are already running the latest version");
+      } else {
+       PluginDescriptionFile pdf = this.getDescription();
+       Utilities.logWarning(true,
+         "A new version of " + pdf.getName() + " is avaliable!",
+         "Current Version: " + pdf.getVersion() + " > New Version: " + version,
+         "Grab it here: https://spigotmc.org/resources/73013"
+       );
+      }
+    });
+  }
+  
+  @Override
+  public void onDisable() {
+    instance = null;
+    super.onDisable();
+  }
+  
+  public void onReload() {
+    configFile.reloadConfig();
+    messagesFile.reloadConfig();
+    playerData.reloadConfig();
+  }
+  
+  public static ConfigCreator getConfigFile() {
+    return configFile;
+  }
+  
+  public static ConfigCreator getMessagesFile() {
+    return messagesFile;
+  }
+  
+  public static ConfigCreator getPlayerData() {
+    return playerData;
+  }
+  
+  public static OmegaVision getInstance() {
+    return instance;
+  }
+  
+  
 }
