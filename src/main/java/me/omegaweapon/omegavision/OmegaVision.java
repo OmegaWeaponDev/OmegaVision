@@ -21,7 +21,7 @@ public class OmegaVision extends JavaPlugin {
     Utilities.setInstance(this);
     
     // Logs a message to console, saying that the plugin has enabled correctly.
-    Utilities.logInfo(true,"OmegaVision has been enabled.");
+    Utilities.logInfo(true,"OmegaVision has been enabled!");
     
     getConfigFile().createConfig();
     getMessagesFile().createConfig();
