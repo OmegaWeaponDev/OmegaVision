@@ -28,7 +28,7 @@ public class MainCommand extends PlayerCommand {
 	}
 	
 	@Override
-	protected void onCommand(Player player, String[] strings) {
+	protected void onCommand(final Player player, final String[] strings) {
 		
 		if (strings.length == 0) {
 			Utilities.message(player, prefix + "Running version: &c" + OmegaVision.getInstance().getDescription().getVersion());

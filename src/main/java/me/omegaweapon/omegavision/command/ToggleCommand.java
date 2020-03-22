@@ -112,6 +112,11 @@ public class ToggleCommand extends PlayerCommand {
         // Update the playerData.yml to reflect the nightvision being removed.
         if(OmegaVision.getPlayerData().getConfig().contains(player.getUniqueId().toString())) {
           OmegaVision.getPlayerData().getConfig().set(player.getUniqueId().toString() + ".NightVision", false);
+          try{
+            OmegaVision.getPlayerData().saveConfig();
+          } catch(Exception ex) {
+            ex.printStackTrace();
+          }
           
           // Send an actionbar message to say nightvision has been removed if they are enabled in config
           Utilities.sendActionBar(player, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " " + OmegaVision.getMessagesFile().getConfig().getString("ActionBar_NightVision_Removed"));
@@ -147,6 +152,11 @@ public class ToggleCommand extends PlayerCommand {
               // Change the nightvision status to true in the file.
               OmegaVision.getPlayerData().getConfig().set(player.getUniqueId().toString() + ".NightVision", true);
             }
+            try{
+              OmegaVision.getPlayerData().saveConfig();
+            } catch(Exception ex) {
+              ex.printStackTrace();
+            }
             
             // Send the player a confirmation message that the player has got nightvision
             Utilities.message(player, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " " + OmegaVision.getMessagesFile().getConfig().getString("Nightvision_Applied"));
@@ -169,6 +179,11 @@ public class ToggleCommand extends PlayerCommand {
               }
               // Change the nightvision status to false in the file.
               OmegaVision.getPlayerData().getConfig().set(target.getUniqueId().toString() + ".NightVision", false);
+              try{
+                OmegaVision.getPlayerData().saveConfig();
+              } catch(Exception ex) {
+                ex.printStackTrace();
+              }
             }
           }
         }
