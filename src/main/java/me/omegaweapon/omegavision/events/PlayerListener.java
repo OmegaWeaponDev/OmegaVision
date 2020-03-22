@@ -101,7 +101,7 @@ public class PlayerListener implements Listener {
         Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100, 1,
           OmegaVision.getConfigFile().getConfig().getBoolean("Particle_Ambient"),
           OmegaVision.getConfigFile().getConfig().getBoolean("Particle_Effects"),
-          OmegaVision.getConfigFile().getConfig().getBoolean("Particle_Icon")
+          OmegaVision.getConfigFile().getConfig().getBoolean("NightVision_Icon")
         );
       }, (1));
     }

@@ -23,7 +23,7 @@ Particle_Effects: true
 Particle_Ambient: true
 
 # If set to true, an icon will display on the screen when nightvision is applied
-Particle_Icon: true
+NightVision_Icon: true
 
 # If set to true, players will get an actionbar message when they toggle nightvision
 ActionBar_Messages: true

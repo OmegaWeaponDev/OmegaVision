@@ -45,7 +45,7 @@ public class ToggleCommand extends PlayerCommand {
         Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100, 1,
           OmegaVision.getConfigFile().getConfig().getBoolean("Particle_Ambient"),
           OmegaVision.getConfigFile().getConfig().getBoolean("Particle_Effects"),
-          OmegaVision.getConfigFile().getConfig().getBoolean("Particle_Icon")
+          OmegaVision.getConfigFile().getConfig().getBoolean("NightVision_Icon")
         );
         
         // Add the player to the maps
@@ -128,7 +128,11 @@ public class ToggleCommand extends PlayerCommand {
           // Check if the target does not already have nightvision applied
           if(!target.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
             // At nightvision to the target then send them a message
-            Utilities.addPotionEffect(target, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100, 1, true, true, true);
+            Utilities.addPotionEffect(target, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100, 1,
+              OmegaVision.getConfigFile().getConfig().getBoolean("Particle_Ambient"),
+              OmegaVision.getConfigFile().getConfig().getBoolean("Particle_Effects"),
+              OmegaVision.getConfigFile().getConfig().getBoolean("NightVision_Icon")
+            );
             Utilities.message(target, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " " + OmegaVision.getMessagesFile().getConfig().getString("Nightvision_Applied"));
             
             // Add the targeted player to the playerMap
