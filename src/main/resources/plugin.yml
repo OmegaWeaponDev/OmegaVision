@@ -3,6 +3,5 @@ version: ${project.version}
 api-version: 1.15
 description: ${project.description}
 main: ${main.class}
-author: OmegaWeapon_
-authors:
-  - UltimaWeapon_
+author: ${pl.author}
+authors: ${pl.authors}

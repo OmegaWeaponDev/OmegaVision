@@ -37,8 +37,8 @@
     <!--
       Listing the Author or Authors of the plugin. Use in the plugin.yml file.
     -->
-    <pl.author>UltimaWeapon_</pl.author>
-    <pl.authors>[OmegaWeapon_, Someone]</pl.authors>
+    <pl.author>OmegaWeapon_</pl.author>
+    <pl.authors>UltimaWeapon_</pl.authors>
 
     <!--
       Set the Spigot API Version to stop backwards compatibility checks.
