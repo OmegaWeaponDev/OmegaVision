@@ -11,7 +11,7 @@
 #
 # -------------------------------------------------------------------------------------------
 
-# If set to true, players with permission omegavision.login will login with nightvision
+# If set to true, players with permission `omegavision.login` will login with nightvision
 # enabled, if they logged out without it still enabled.
 Night_Vision_Login: true
 
@@ -33,17 +33,18 @@ ActionBar_Messages: true
 Bucket_Usage: true
 
 # If set to true, once players use a milk bucket to remove potion effects from nightvision
-# the bucket will be emptied so they need to refill it again to use it.
+# the bucket will be emptied so they need to refill it again to use it
 Bucket_Empty: true
 
-# If set to true, players will keep nightvision when they die.
+# If set to true, players will keep nightvision when they die
 Keep_NightVision_On_Death: true
 
-# If true, players who use nightvision will get blinded for a period of time.
+# If true, players who use nightvision will get blinded for a period of time
+# Bypass: `omegavision.blindness.bypass`
 Blindness_Effect:
   # Determines whether you want to enable this feature
   Enabled: true
-  # How long nightvision must be active for before blindness kicks in (In minutes).
+  # How long nightvision must be active for before blindness kicks in (in minutes)
   Timer: 10
   # How long the blindness will last (In minutes).
   Duration: 20

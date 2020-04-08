@@ -5,6 +5,10 @@
 #  Here you'll find all of the messages that you can
 #  customize to your server needs.
 #
+#  Placeholders:
+#   - %limitRemaining% - How many times they can use the command before the limit is reached
+#   - %cooldownRemaining% - How long before they can use the command again
+#
 # -------------------------------------------------------------------------------------------
 
 # Sets the plugins prefix to use in all the messages.
