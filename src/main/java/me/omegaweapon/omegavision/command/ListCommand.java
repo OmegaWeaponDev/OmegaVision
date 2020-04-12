@@ -7,10 +7,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Arrays;
+
 public class ListCommand extends PlayerCommand {
   
   public ListCommand() {
-    super("nvlist");
+    super("nightvisionlist");
     
     // Set the permission and the permission message for the command
     setPermission("omegavision.list");
@@ -18,7 +20,12 @@ public class ListCommand extends PlayerCommand {
     
     // Set command usage and description
     setDescription("Get a list of all the current players who have nightvision enabled.");
-    setUsage("nvlist");
+
+    // Set the aliases for the command
+    setAliases(Arrays.asList(
+      "nvl",
+      "nvlist"
+    ));
   }
   
   @Override

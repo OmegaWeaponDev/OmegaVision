@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -17,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class ToggleCommand extends PlayerCommand {
 
   public ToggleCommand() {
-    super("nv");
+    super("nightvision");
 
     // Set the permission and permission message
     setPermission("omegavision.toggle");
@@ -25,6 +26,9 @@ public class ToggleCommand extends PlayerCommand {
 
     // Set the description message
     setDescription("The nightvision toggle command");
+
+    // Set aliases for the toggle command
+    setAliases(Arrays.asList("nv", "nvision"));
   }
 
   @Override
@@ -41,8 +45,9 @@ public class ToggleCommand extends PlayerCommand {
       if (strings[0].equalsIgnoreCase("toggle")) {
         // Make sure the player does not have nightvision enabled
         if(!player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
-          // If limit check is true, they enable nightvision
+          // If don't have nightvision, then enable nightvision
           NightVisionToggle.nightVisionEnable(player);
+
         } else {
           // They already have nightvision, so disable it
           NightVisionToggle.nightvisionDisable(player);

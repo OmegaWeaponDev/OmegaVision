@@ -19,8 +19,8 @@ public class MainCommand extends PlayerCommand {
 		
 		// Set the description message
 		setDescription("The main commands for the OmegaVision plugin");
-		
-		// Set the command aliases
+
+		// Set aliases for the main command
 		setAliases(Arrays.asList(
 			"ov",
 			"ovision"
@@ -31,7 +31,7 @@ public class MainCommand extends PlayerCommand {
 	protected void onCommand(final Player player, final String[] strings) {
 		
 		if (strings.length == 0) {
-			Utilities.message(player, prefix + "Running version: &c" + OmegaVision.getInstance().getDescription().getVersion());
+			Utilities.message(player, prefix + " Running version: &c" + OmegaVision.getInstance().getDescription().getVersion());
 		}
 		
 		if (strings.length == 1) {

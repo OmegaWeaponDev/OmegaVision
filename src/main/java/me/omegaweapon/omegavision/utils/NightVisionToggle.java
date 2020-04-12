@@ -56,6 +56,7 @@ public class NightVisionToggle {
   public static void nightvisionDisable(Player player) {
     // Remove the nightvision effect from the player
     Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
+    Utilities.message(player, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " " + OmegaVision.getMessagesFile().getConfig().getString("NightVision_Removed"));
 
     // Trigger the blindness method
     if(OmegaVision.getConfigFile().getConfig().getBoolean("Blindness_Effect.Enabled") && player.isOnline()) {
