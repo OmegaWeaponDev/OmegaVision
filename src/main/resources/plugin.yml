@@ -6,3 +6,51 @@ main: ${main.class}
 
 author: ${pl.author}
 authors: ${pl.authors}
+
+commands:
+  omegavision:
+    description: The main command for omegavision
+    usage: /omegavision
+    aliases: [ov, ovision, omegav]
+  nightvision:
+    description: The Nightvision toggle command
+    usage: /nightvision toggle
+    aliases: [nv, nvision, nightv]
+  nightvisionlist:
+    description: The Nightvision List command
+    usage: /nightvisionlist
+    aliases: [nvlist, nvisionlist, nvl]
+
+permissions:
+  omegavision.*:
+    description: Grants the user access to all commands
+    default: false
+    children:
+      - omegavision.reload
+      - omegavision.update
+      - omegavision.toggle
+      - omegavision.toggle.others
+      - omegavision.bucket
+      - omegavision.blindess.bypass
+      - omegavision.list
+  omegavision.reload:
+    description: Grants the user access to the reload command
+    default: false
+  omegavision.update:
+    description: Allows the user to recieve the update messages in-game
+    default: false
+  omegavision.toggle:
+    description: Grants the user access to the toggle command
+    default: false
+  omegavision.toggle.others:
+    description: Grants the user access to the toggle others command
+    default: false
+  omegavision.bucket:
+    description: Allows the user to use buckets to remove the potion effects from nightvision
+    default: false
+  omegavision.blindness.bypass:
+    description: Allows the user to bypass the blindness effect
+    default: false
+  omegavision.list:
+    description: Grants the user access to the nightivison list command
+    default: false
