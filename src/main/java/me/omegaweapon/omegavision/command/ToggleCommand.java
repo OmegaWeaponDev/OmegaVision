@@ -17,20 +17,6 @@ import java.util.concurrent.TimeUnit;
 
 public class ToggleCommand extends PlayerCommand {
 
-  public ToggleCommand() {
-    super("nightvision");
-
-    // Set the permission and permission message
-    setPermission("omegavision.toggle");
-    setPermissionMessage(Utilities.colourise(OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " " + OmegaVision.getConfigFile().getConfig().getString("No_Permission")));
-
-    // Set the description message
-    setDescription("The nightvision toggle command");
-
-    // Set aliases for the toggle command
-    setAliases(Arrays.asList("nv", "nvision"));
-  }
-
   @Override
   protected void onCommand(final Player player, final String[] strings) {
 
@@ -46,11 +32,19 @@ public class ToggleCommand extends PlayerCommand {
         // Make sure the player does not have nightvision enabled
         if(!player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
           // If don't have nightvision, then enable nightvision
-          NightVisionToggle.nightVisionEnable(player);
+          if(Utilities.checkPermission(player, "omegavision.toggle", true)) {
+            NightVisionToggle.nightVisionEnable(player);
+          } else {
+            Utilities.message(player, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " " + OmegaVision.getMessagesFile().getConfig().getString("No_Permission"));
+          }
 
         } else {
           // They already have nightvision, so disable it
-          NightVisionToggle.nightvisionDisable(player);
+          if(Utilities.checkPermission(player, "omegavision.toggle", true)) {
+            NightVisionToggle.nightvisionDisable(player);
+          } else {
+            Utilities.message(player, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " " + OmegaVision.getMessagesFile().getConfig().getString("No_Permission"));
+          }
         }
       }
     }

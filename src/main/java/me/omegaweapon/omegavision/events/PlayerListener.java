@@ -61,6 +61,7 @@ public class PlayerListener implements Listener {
     Player player = playerItemConsumeEvent.getPlayer();
   
     if(Utilities.checkPermission(player, "omegavision.bucket", true)) {
+
       // Make sure they are holding a milkbucket
       if(playerItemConsumeEvent.getItem().getType().equals(Material.MILK_BUCKET)) {
         // Check if they have nightvision and the bucket_usage config setting is true

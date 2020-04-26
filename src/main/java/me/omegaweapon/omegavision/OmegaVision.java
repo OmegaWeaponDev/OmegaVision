@@ -10,23 +10,39 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class OmegaVision extends JavaPlugin {
-  private static OmegaVision instance;
   private static final ConfigCreator configFile = new ConfigCreator("config.yml");
   private static final ConfigCreator messagesFile = new ConfigCreator("messages.yml");
   private static final ConfigCreator playerData = new ConfigCreator("playerData.yml");
+  private static OmegaVision instance;
+  
+  public static ConfigCreator getConfigFile() {
+    return configFile;
+  }
+  
+  public static ConfigCreator getMessagesFile() {
+    return messagesFile;
+  }
+  
+  public static ConfigCreator getPlayerData() {
+    return playerData;
+  }
+  
+  public static OmegaVision getInstance() {
+    return instance;
+  }
   
   @Override
   public void onEnable() {
     instance = this;
     Utilities.setInstance(this);
-    
+
     // Logs a message to console, saying that the plugin has enabled correctly.
     Utilities.logInfo(true,"OmegaVision has been enabled!");
-    
+
     getConfigFile().createConfig();
     getMessagesFile().createConfig();
     getPlayerData().createConfig();
-  
+
     getPlayerData().getConfig().options().header(
       " -------------------------------------------------------------------------------------------\n" +
         " \n" +
@@ -37,13 +53,15 @@ public class OmegaVision extends JavaPlugin {
         " \n" +
         " -------------------------------------------------------------------------------------------"
     );
-    
+
     // Register the commands
-    Utilities.registerCommands(new MainCommand(), new ToggleCommand(), new ListCommand());
-    
+    Utilities.registerCommand("omegavision", new MainCommand());
+    Utilities.registerCommand("nightvision", new ToggleCommand());
+    Utilities.registerCommand("nightvisionlist", new ListCommand());
+
     // Register the player Listener
     Utilities.registerEvent(new PlayerListener());
-    
+
     // The Updater
     new UpdateChecker(this, 73013).getVersion(version -> {
       if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
@@ -69,22 +87,6 @@ public class OmegaVision extends JavaPlugin {
     configFile.reloadConfig();
     messagesFile.reloadConfig();
     playerData.reloadConfig();
-  }
-  
-  public static ConfigCreator getConfigFile() {
-    return configFile;
-  }
-  
-  public static ConfigCreator getMessagesFile() {
-    return messagesFile;
-  }
-  
-  public static ConfigCreator getPlayerData() {
-    return playerData;
-  }
-  
-  public static OmegaVision getInstance() {
-    return instance;
   }
   
   
