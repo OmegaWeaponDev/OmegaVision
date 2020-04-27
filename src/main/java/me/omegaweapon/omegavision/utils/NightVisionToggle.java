@@ -48,7 +48,7 @@ public class NightVisionToggle {
 
     // If enabled, send the player an action bar when toggling nightvision
     if (OmegaVision.getConfigFile().getConfig().getBoolean("ActionBar_Messages")) {
-      Utilities.sendActionBar(player, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " " + OmegaVision.getMessagesFile().getConfig().getString("ActionBar_NightVision_Applied"));
+      Utilities.sendActionBar(player, MessageHandler.prefix() + " " + MessageHandler.nightvisionActionBarApplied());
     }
 
   }
@@ -56,7 +56,7 @@ public class NightVisionToggle {
   public static void nightvisionDisable(Player player) {
     // Remove the nightvision effect from the player
     Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
-    Utilities.message(player, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " " + OmegaVision.getMessagesFile().getConfig().getString("NightVision_Removed"));
+    Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.nightvisionRemoved());
 
     // Trigger the blindness method
     if(OmegaVision.getConfigFile().getConfig().getBoolean("Blindness_Effect.Enabled") && player.isOnline()) {
@@ -84,11 +84,11 @@ public class NightVisionToggle {
 
   public static void nightvisionEnableOthers(final Player player, final Player target) {
     nightVisionEnable(target);
-    Utilities.message(player, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " " + OmegaVision.getMessagesFile().getConfig().getString("NightVision_Applied"));
+    Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.nightvisionApplied());
   }
 
   public static void nightvisionDisableOthers(Player player, Player target) {
     nightvisionDisable(target);
-    Utilities.message(player, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " " + OmegaVision.getMessagesFile().getConfig().getString("NightVision_Removed"));
+    Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.nightvisionRemoved());
   }
 }

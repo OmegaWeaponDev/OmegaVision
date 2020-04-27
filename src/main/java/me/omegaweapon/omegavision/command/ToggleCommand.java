@@ -1,6 +1,7 @@
 package me.omegaweapon.omegavision.command;
 
 import me.omegaweapon.omegavision.OmegaVision;
+import me.omegaweapon.omegavision.utils.MessageHandler;
 import me.omegaweapon.omegavision.utils.NightVisionConditions;
 import me.omegaweapon.omegavision.utils.NightVisionToggle;
 import me.ou.library.Utilities;
@@ -21,8 +22,8 @@ public class ToggleCommand extends PlayerCommand {
   protected void onCommand(final Player player, final String[] strings) {
 
     if (strings.length == 0) {
-      Utilities.message(player, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " &bToggle Command: &c/nv toggle");
-      Utilities.message(player, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " &bToggle Other Command: &c/nv toggle <playername>");
+      Utilities.message(player, MessageHandler.prefix() + " &bToggle Command: &c/nv toggle");
+      Utilities.message(player, MessageHandler.prefix() + " &bToggle Other Command: &c/nv toggle <playername>");
       return;
     }
 
@@ -35,7 +36,7 @@ public class ToggleCommand extends PlayerCommand {
           if(Utilities.checkPermission(player, "omegavision.toggle", true)) {
             NightVisionToggle.nightVisionEnable(player);
           } else {
-            Utilities.message(player, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " " + OmegaVision.getMessagesFile().getConfig().getString("No_Permission"));
+            Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.noPermission());
           }
 
         } else {
@@ -43,7 +44,7 @@ public class ToggleCommand extends PlayerCommand {
           if(Utilities.checkPermission(player, "omegavision.toggle", true)) {
             NightVisionToggle.nightvisionDisable(player);
           } else {
-            Utilities.message(player, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " " + OmegaVision.getMessagesFile().getConfig().getString("No_Permission"));
+            Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.noPermission());
           }
         }
       }
@@ -65,9 +66,9 @@ public class ToggleCommand extends PlayerCommand {
             NightVisionToggle.nightvisionDisableOthers(player, target);
           }
         } else if(target == null) {
-          Utilities.message(player, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " &cSorry, but that player does not exist." );
+          Utilities.message(player, MessageHandler.prefix() + " &cSorry, but that player does not exist." );
         } else {
-          Utilities.message(player, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " " + OmegaVision.getMessagesFile().getConfig().getString("No_Permission"));
+          Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.noPermission());
         }
       }
     }

@@ -21,7 +21,7 @@ public class NightVisionConditions {
         if((timeRemoved - timeApplied) >= configTimer) {
           Utilities.addPotionEffect(player, PotionEffectType.BLINDNESS, configDuration, 1, true, true, true);
           NightVisionToggle.nightvisionAppliedTime.remove(player.getUniqueId());
-          Utilities.message(player, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " " + OmegaVision.getMessagesFile().getConfig().getString("Blindness_Message"));
+          Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.blindnessMessage());
         }
       }
     }

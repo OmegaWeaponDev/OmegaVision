@@ -3,6 +3,7 @@ package me.omegaweapon.omegavision.events;
 import me.omegaweapon.omegavision.OmegaVision;
 import me.omegaweapon.omegavision.UpdateChecker;
 import me.omegaweapon.omegavision.command.ToggleCommand;
+import me.omegaweapon.omegavision.utils.MessageHandler;
 import me.omegaweapon.omegavision.utils.NightVisionToggle;
 import me.ou.library.Utilities;
 import org.bukkit.Bukkit;
@@ -81,7 +82,7 @@ public class PlayerListener implements Listener {
             player.getInventory().getItemInMainHand().setType(Material.BUCKET);
           }
           // Send the player a message to inform them that the milk bucket has worked
-          Utilities.message(player, OmegaVision.getMessagesFile().getConfig().getString("Prefix") + " " + OmegaVision.getMessagesFile().getConfig().getString("Bucket_Message"));
+          Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.bucketMessage());
         }
       }
     }
