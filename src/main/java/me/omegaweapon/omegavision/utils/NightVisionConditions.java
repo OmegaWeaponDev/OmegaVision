@@ -15,18 +15,31 @@ public class NightVisionConditions {
       return;
     }
 
-    if(OmegaVision.getPlayerData().getConfig().isSet(player.getUniqueId().toString())) {
+    if(!OmegaVision.getPlayerData().getConfig().isConfigurationSection(player.getUniqueId().toString())) {
+      return;
+    }
 
-      long timeRemoved = TimeUnit.MINUTES.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
-      int configTimer = OmegaVision.getConfigFile().getConfig().getInt("Blindness_Effect.Timer");
-      int configDuration = OmegaVision.getConfigFile().getConfig().getInt("Blindness_Effect.Duration");
-      long timeApplied = TimeUnit.MINUTES.convert(NightVisionToggle.nightvisionAppliedTime.get(player.getUniqueId()), TimeUnit.MILLISECONDS);
+    if(!NightVisionToggle.nightvisionAppliedTime.containsKey(player.getUniqueId())) {
+      return;
+    }
 
-      if((timeRemoved - timeApplied) >= configTimer) {
-        Utilities.addPotionEffect(player, PotionEffectType.BLINDNESS, configDuration, 1, true, true, true);
-        NightVisionToggle.nightvisionAppliedTime.remove(player.getUniqueId());
-        Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.blindnessMessage());
-      }
+    long timeRemoved = TimeUnit.MINUTES.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+    int configTimer = OmegaVision.getConfigFile().getConfig().getInt("Blindness_Effect.Timer");
+    int configDuration = OmegaVision.getConfigFile().getConfig().getInt("Blindness_Effect.Duration");
+    long timeApplied = TimeUnit.MINUTES.convert(NightVisionToggle.nightvisionAppliedTime.get(player.getUniqueId()), TimeUnit.MILLISECONDS);
+
+
+    Utilities.message(player,
+      "timeRemoved = " + timeRemoved,
+      "configTimer = " + configTimer,
+      "configDuration = " + configDuration,
+      "timeApplied = " + timeApplied
+    );
+
+    if((timeRemoved - timeApplied) >= configTimer) {
+      Utilities.addPotionEffect(player, PotionEffectType.BLINDNESS, configDuration, 1, true, true, true);
+      NightVisionToggle.nightvisionAppliedTime.remove(player.getUniqueId());
+      Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.blindnessMessage());
     }
   }
 

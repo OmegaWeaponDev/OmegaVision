@@ -75,7 +75,6 @@ public class NightVisionToggle {
       NightVisionConditions.nightvisionBlindness(player);
     }
 
-
     // Remove the player from the playerMap
     playerMap.remove(player.getUniqueId());
 
