@@ -6,8 +6,8 @@
 #  customize to your server needs.
 #
 #  Placeholders:
-#   - %limitRemaining% - How many times they can use the command before the limit is reached
-#   - %cooldownRemaining% - How long before they can use the command again
+#   - %currentLimitAmount% - How many times they have used the nightvision command
+#   - %maxLimitAmount% - The max limit number set in the config.yml
 #
 # -------------------------------------------------------------------------------------------
 
@@ -33,6 +33,17 @@ Bucket_Message: "&9Particle Effects and the icon have been removed!"
 
 # Sets the message players get when they go blind.
 Blindness_Message: "&cYou have been using nightvision for too long, you are now blind"
+
+# Set the different messages for the nightvision command limits
+Night_Vision_Limit:
+  # Sets the message players get when the limit has been reached
+  Limit_Reached: "&cSorry, you have reached the limit for the nightvision command!"
+  # Sets the message players get when their limit amount has been reset
+  Limit_Reset: "&bYour limit's have been reset! You can use the nightvision command again!"
+  # Sets the messages players get when their limit count has been increased
+  Limit_Amount_Increased: "&bYour limit amount now stands at: &c%currentLimitAmount% / %maxLimitAmount%"
+  # Sets the message players get when they use the limit check command
+  Limit_Check: "&bYour limit amount currently stands at: &c%currentLimitAmount% / %maxLimitAmount%"
 
 # Sets the messages for when players don't have permission to use nightvision.
 No_Permission: "&cSorry, but you don't have permission to do that"

@@ -1,5 +1,6 @@
 package me.omegaweapon.omegavision;
 
+import me.omegaweapon.omegavision.command.LimitCommand;
 import me.omegaweapon.omegavision.command.ListCommand;
 import me.omegaweapon.omegavision.command.MainCommand;
 import me.omegaweapon.omegavision.command.ToggleCommand;
@@ -19,18 +20,30 @@ public class OmegaVision extends JavaPlugin {
     return configFile;
   }
   
+  @Override
+  public void onDisable() {
+    instance = null;
+    super.onDisable();
+  }
+  
+  public void onReload() {
+    configFile.reloadConfig();
+    messagesFile.reloadConfig();
+    playerData.reloadConfig();
+  }
+
   public static ConfigCreator getMessagesFile() {
     return messagesFile;
   }
-  
+
   public static ConfigCreator getPlayerData() {
     return playerData;
   }
-  
+
   public static OmegaVision getInstance() {
     return instance;
   }
-  
+
   @Override
   public void onEnable() {
     instance = this;
@@ -58,6 +71,7 @@ public class OmegaVision extends JavaPlugin {
     Utilities.registerCommand("omegavision", new MainCommand());
     Utilities.registerCommand("nightvision", new ToggleCommand());
     Utilities.registerCommand("nightvisionlist", new ListCommand());
+    Utilities.registerCommand("nvlimit", new LimitCommand());
 
     // Register the player Listener
     Utilities.registerEvent(new PlayerListener());
@@ -76,18 +90,4 @@ public class OmegaVision extends JavaPlugin {
       }
     });
   }
-  
-  @Override
-  public void onDisable() {
-    instance = null;
-    super.onDisable();
-  }
-  
-  public void onReload() {
-    configFile.reloadConfig();
-    messagesFile.reloadConfig();
-    playerData.reloadConfig();
-  }
-  
-  
 }

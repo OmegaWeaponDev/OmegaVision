@@ -13,8 +13,8 @@ import java.util.Arrays;
 public class ListCommand extends PlayerCommand {
   
   @Override
-  protected void onCommand(final Player player, final String[] strings) {
-    if(Utilities.checkPermission(player, "omegavision.list", true)) {
+  protected void execute(final Player player, final String[] strings) {
+    if(Utilities.checkPermission(player, true, "omegavision.list")) {
       Utilities.message(player, MessageHandler.prefix() + " &bThe following players have nightvision enabled:");
       for(Player onlinePlayers : Bukkit.getServer().getOnlinePlayers()) {
         if(onlinePlayers.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {

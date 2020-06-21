@@ -14,12 +14,16 @@ commands:
     aliases: [ov, ovision, omegav]
   nightvision:
     description: The Nightvision toggle command
-    usage: /nightvision toggle
+    usage: /nightvision
     aliases: [nv, nvision, nightv]
   nightvisionlist:
     description: The Nightvision List command
     usage: /nightvisionlist
     aliases: [nvlist, nvisionlist, nvl]
+  nvlimit:
+    description: The NightVision Limit Command
+    usage: /nvlimit
+    aliases: [nvl, nightvisionlimit]
 
 permissions:
   omegavision.*:
@@ -33,6 +37,17 @@ permissions:
       - omegavision.bucket
       - omegavision.blindess.bypass
       - omegavision.list
+      - omegavision.limit.check
+      - omegavision.limit.checkothers
+      - omegavision.limit.reset
+      - omegavision.limit.bypass
+  omegavision.admin:
+    description: Grants the user the reload command, reset command and update messages in-game
+    default: false
+    children:
+      - omegavision.reload
+      - omegavision.update
+      - omegavision.reset
   omegavision.reload:
     description: Grants the user access to the reload command
     default: false
@@ -53,4 +68,16 @@ permissions:
     default: false
   omegavision.list:
     description: Grants the user access to the nightivison list command
+    default: false
+  omegavision.limit.check:
+    description: Grants the user access to the check limit command
+    default: false
+  omegavision.limit.checkothers:
+    description: Grants the user access to check the limit for other players
+    default: false
+  omegavision.limit.bypass:
+    description: Allows to user to bypass the command limits
+    default: false
+  omegavision.limit.reset:
+    description: Grants the user access to the limit reset command
     default: false

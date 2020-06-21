@@ -2,7 +2,6 @@ package me.omegaweapon.omegavision.events;
 
 import me.omegaweapon.omegavision.OmegaVision;
 import me.omegaweapon.omegavision.UpdateChecker;
-import me.omegaweapon.omegavision.command.ToggleCommand;
 import me.omegaweapon.omegavision.utils.MessageHandler;
 import me.omegaweapon.omegavision.utils.NightVisionToggle;
 import me.ou.library.Utilities;
@@ -19,6 +18,8 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.concurrent.TimeUnit;
+
 public class PlayerListener implements Listener {
   
   @EventHandler
@@ -27,15 +28,15 @@ public class PlayerListener implements Listener {
     Boolean nightVision = OmegaVision.getPlayerData().getConfig().getBoolean(player.getUniqueId().toString() + ".NightVision");
     
     // Apply / Remove nightvision on player join depending on permissions & config settings
-    if(OmegaVision.getConfigFile().getConfig().getBoolean("Night_Vision_Login") && nightVision.equals(true) && Utilities.checkPermission(player, "omegavision.login", true)) {
+    if(OmegaVision.getConfigFile().getConfig().getBoolean("Night_Vision_Login") && nightVision.equals(true) && Utilities.checkPermission(player, true, "omegavision.login")) {
       // Add the potion effect to the player and send them a message
       NightVisionToggle.nightVisionEnable(player);
-    } else {
+    } else if(OmegaVision.getConfigFile().getConfig().getBoolean("Night_Vision_Login") && nightVision.equals(false) && Utilities.checkPermission(player, true, "omegavision.login")) {
       NightVisionToggle.nightvisionDisable(player);
     }
   
     // Send the player a message on join if there is an update for the plugin
-    if(Utilities.checkPermission(player, "omegavision.update", true)) {
+    if(Utilities.checkPermission(player, true, "omegavision.update")) {
       new UpdateChecker(OmegaVision.getInstance(), 73013).getVersion(version -> {
         if (!OmegaVision.getInstance().getDescription().getVersion().equalsIgnoreCase(version)) {
           PluginDescriptionFile pdf = OmegaVision.getInstance().getDescription();
@@ -47,6 +48,23 @@ public class PlayerListener implements Listener {
         }
       });
     }
+
+    if(OmegaVision.getConfigFile().getConfig().getBoolean("Night_Vision_Limit.Enabled")) {
+      if(!player.hasPermission("omegavision.limit.bypass") && (NightVisionToggle.nightvisionLimitReached.get(player.getUniqueId()) != null)) {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(OmegaVision.getInstance(), () -> {
+          int configResetTimer = OmegaVision.getConfigFile().getConfig().getInt("Night_Vision_Limit.Reset_Timer");
+
+          Long resetTimer = TimeUnit.MILLISECONDS.convert(configResetTimer, TimeUnit.MINUTES);
+          Long limitReachedTime = NightVisionToggle.nightvisionLimitReached.get(player.getUniqueId());
+
+          if(System.currentTimeMillis() >= (limitReachedTime + resetTimer)) {
+            OmegaVision.getPlayerData().getConfig().set(player.getUniqueId().toString() + ".Limit", 0);
+            OmegaVision.getPlayerData().saveConfig();
+          }
+        }, 20L, 20L * 60L);
+      }
+    }
+
   }
   
   @EventHandler
@@ -61,7 +79,7 @@ public class PlayerListener implements Listener {
   public void onMilkBucketUse(PlayerItemConsumeEvent playerItemConsumeEvent) {
     Player player = playerItemConsumeEvent.getPlayer();
   
-    if(Utilities.checkPermission(player, "omegavision.bucket", true)) {
+    if(Utilities.checkPermission(player, true, "omegavision.bucket")) {
 
       // Make sure they are holding a milkbucket
       if(playerItemConsumeEvent.getItem().getType().equals(Material.MILK_BUCKET)) {
@@ -93,7 +111,7 @@ public class PlayerListener implements Listener {
     Player player = e.getPlayer();
     Boolean nightVision = OmegaVision.getPlayerData().getConfig().getBoolean(player.getUniqueId().toString() + ".NightVision");
   
-    if(OmegaVision.getConfigFile().getConfig().getBoolean("Keep_NightVision_On_Death") && nightVision.equals(true) && Utilities.checkPermission(player, "omegavision.death", true)) {
+    if(OmegaVision.getConfigFile().getConfig().getBoolean("Keep_NightVision_On_Death") && nightVision.equals(true) && Utilities.checkPermission(player, true, "omegavision.death")) {
       Bukkit.getScheduler().runTaskLater(OmegaVision.getInstance(), () -> {
         Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100, 1,
           OmegaVision.getConfigFile().getConfig().getBoolean("Particle_Ambient"),

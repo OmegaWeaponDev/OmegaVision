@@ -12,8 +12,14 @@ import java.util.UUID;
 public class NightVisionToggle {
   public static Map<UUID, String> playerMap = new HashMap<>();
   public static Map<UUID, Long> nightvisionAppliedTime = new HashMap<>();
+  public static Map<UUID, Long> nightvisionLimitReached = new HashMap<>();
 
   public static void nightVisionEnable(Player player) {
+
+    if(nightvisionLimitReached.containsKey(player.getUniqueId())) {
+      Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.limitReached());
+      return;
+    }
 
     // Add the nightvision effect to the player
     Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100, 1,
@@ -33,7 +39,7 @@ public class NightVisionToggle {
     if (player.hasPermission("omegavision.login")) {
 
       // Check if they have been added to the file, if not, add them
-      if (!OmegaVision.getPlayerData().getConfig().contains(player.getUniqueId().toString())) {
+      if (!OmegaVision.getPlayerData().getConfig().isConfigurationSection(player.getUniqueId().toString())) {
         OmegaVision.getPlayerData().getConfig().createSection(player.getUniqueId().toString());
       }
 
@@ -50,6 +56,12 @@ public class NightVisionToggle {
     if (OmegaVision.getConfigFile().getConfig().getBoolean("ActionBar_Messages")) {
       Utilities.sendActionBar(player, MessageHandler.prefix() + " " + MessageHandler.nightvisionActionBarApplied());
     }
+
+    if(!Utilities.checkPermission(player, true, "omegavision.limit.bypass")) {
+      Utilities.message(player, "NVCommand Debug Permission Check");
+      limitIncrease(player);
+    }
+
 
   }
 
@@ -80,6 +92,11 @@ public class NightVisionToggle {
         ex.printStackTrace();
       }
     }
+
+    // If enabled, send the player an action bar when toggling nightvision
+    if (OmegaVision.getConfigFile().getConfig().getBoolean("ActionBar_Messages")) {
+      Utilities.sendActionBar(player, MessageHandler.prefix() + " " + MessageHandler.nightvisionActionBarRemoved());
+    }
   }
 
   public static void nightvisionEnableOthers(final Player player, final Player target) {
@@ -90,5 +107,32 @@ public class NightVisionToggle {
   public static void nightvisionDisableOthers(Player player, Player target) {
     nightvisionDisable(target);
     Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.nightvisionRemoved());
+  }
+
+  private static int limitCheck(final Player player) {
+    int playerLimitAmount = OmegaVision.getPlayerData().getConfig().getInt(player.getUniqueId().toString() + ".Limit");
+
+    if(OmegaVision.getPlayerData().getConfig().getInt(player.getUniqueId().toString() + ".Limit") > 0) {
+      return playerLimitAmount ;
+    }
+
+    return 0;
+  }
+
+  private static void limitIncrease(final Player player) {
+    int playerLimitAmount = limitCheck(player);
+
+    if((playerLimitAmount + 1) > OmegaVision.getConfigFile().getConfig().getInt("Night_Vision_Limit.Limit")) {
+      Utilities.message(player, MessageHandler.prefix() + MessageHandler.limitReached());
+      nightvisionLimitReached.put(player.getUniqueId(), System.currentTimeMillis());
+      return;
+    }
+
+    if(playerLimitAmount < OmegaVision.getConfigFile().getConfig().getInt("Night_Vision_Limit.Limit")) {
+      OmegaVision.getPlayerData().getConfig().set(player.getUniqueId().toString() + ".Limit", playerLimitAmount + 1);
+      OmegaVision.getPlayerData().saveConfig();
+
+      Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.limitIncreased(player));
+    }
   }
 }
