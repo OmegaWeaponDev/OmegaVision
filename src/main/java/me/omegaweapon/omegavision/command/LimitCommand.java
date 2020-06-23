@@ -20,12 +20,15 @@ public class LimitCommand extends GlobalCommand {
         helpCommand(player);
       }
 
-      if(strings.length == 1) {
+      if(strings.length >= 1) {
         switch(strings[0]) {
           case "check":
             limitCheckCommand(player, strings);
             break;
           case "reset":
+            if(strings.length != 2) {
+              break;
+            }
             limitResetCommand(player, strings);
             break;
           default:
@@ -40,12 +43,15 @@ public class LimitCommand extends GlobalCommand {
         helpCommand(commandSender);
       }
 
-      if(strings.length == 1) {
+      if(strings.length >= 1) {
         switch(strings[0]) {
           case "check":
             limitCheckCommand(commandSender, strings);
             break;
           case "reset":
+            if(strings.length != 2) {
+              break;
+            }
             limitResetCommand(commandSender, strings);
             break;
           default:
@@ -101,7 +107,8 @@ public class LimitCommand extends GlobalCommand {
           OmegaVision.getPlayerData().getConfig().set(target.getUniqueId().toString() + ".Limit", 0);
           OmegaVision.getPlayerData().saveConfig();
 
-          Utilities.message(player, MessageHandler.prefix() + MessageHandler.limitResetOthers(target));
+          Utilities.message(target, MessageHandler.prefix() + " " + MessageHandler.limitReset());
+          Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.limitResetOthers(target));
         } else if(target == null) {
           Utilities.message(player, MessageHandler.prefix() + "&cSorry, that player does not exist or is offline!");
         }
@@ -113,6 +120,7 @@ public class LimitCommand extends GlobalCommand {
         OmegaVision.getPlayerData().getConfig().set(target.getUniqueId().toString() + ".Limit", 0);
         OmegaVision.getPlayerData().saveConfig();
 
+        Utilities.message(target, MessageHandler.prefix() + " " + MessageHandler.limitReset());
         Utilities.logInfo(true, MessageHandler.limitResetOthers(target));
       } else if(target == null ) {
         Utilities.logInfo(true, MessageHandler.prefix() + "&cSorry, that player does not exist or is offline!");

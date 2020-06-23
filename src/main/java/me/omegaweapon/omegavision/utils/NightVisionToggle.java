@@ -58,7 +58,6 @@ public class NightVisionToggle {
     }
 
     if(!Utilities.checkPermission(player, true, "omegavision.limit.bypass")) {
-      Utilities.message(player, "NVCommand Debug Permission Check");
       limitIncrease(player);
     }
 

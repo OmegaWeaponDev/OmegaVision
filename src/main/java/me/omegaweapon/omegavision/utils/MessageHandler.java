@@ -92,9 +92,10 @@ public class MessageHandler {
     if(OmegaVision.getMessagesFile().getConfig().getString("Night_Vision_Limit.Limit_Check") == null) {
       return "&bYour limit amount currently stands at: &c" + playerLimitAmount + " / &c" + configLimitAmount;
     } else {
-      return OmegaVision.getMessagesFile().getConfig().getString("Night_Vision_Limit.Limit_Check")
-        .replace("%currentLimitAmount%", String.valueOf(playerLimitAmount))
-        .replace("%maxLimitAmount%", String.valueOf(configLimitAmount));
+      String limitCheckMessage = OmegaVision.getMessagesFile().getConfig().getString("Night_Vision_Limit.Limit_Check");
+      String formattedLimitCheckMessage = limitCheckMessage.replace("%maxLimitAmount%", String.valueOf(configLimitAmount));
+
+      return formattedLimitCheckMessage.replace("%currentLimitAmount%", String.valueOf(playerLimitAmount));
     }
   }
 
@@ -124,7 +125,10 @@ public class MessageHandler {
     if(OmegaVision.getMessagesFile().getConfig().getString("Night_Vision_Limit.Limit_Amount_Increased") == null) {
       return "&bYour limit amount now stands at: &c" + playerLimitAmount + " / " + configLimitAmount;
     } else {
-      return OmegaVision.getMessagesFile().getConfig().getString("Night_Vision_Limit.Limit_Amount_Increased");
+      String limitCheckMessage = OmegaVision.getMessagesFile().getConfig().getString("Night_Vision_Limit.Limit_Amount_Increased");
+      String formattedLimitCheckMessage = limitCheckMessage.replace("%maxLimitAmount%", String.valueOf(configLimitAmount));
+
+      return formattedLimitCheckMessage.replace("%currentLimitAmount%", String.valueOf(playerLimitAmount));
     }
   }
 }
