@@ -110,7 +110,7 @@ public class LimitCommand extends GlobalCommand {
           Utilities.message(target, MessageHandler.prefix() + " " + MessageHandler.limitReset());
           Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.limitResetOthers(target));
         } else if(target == null) {
-          Utilities.message(player, MessageHandler.prefix() + "&cSorry, that player does not exist or is offline!");
+          Utilities.message(player, MessageHandler.prefix() + " &cSorry, that player does not exist or is offline!");
         }
       }
     } else {

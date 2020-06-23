@@ -50,7 +50,13 @@ public class OmegaVision extends JavaPlugin {
     Utilities.setInstance(this);
 
     // Logs a message to console, saying that the plugin has enabled correctly.
-    Utilities.logInfo(true,"OmegaVision has been enabled!");
+    Utilities.logInfo(true,
+      "  ____ _   __",
+      " / __ \\ | / /   OmegaVision v" + OmegaVision.getInstance().getDescription().getVersion() + " by OmegaWeaponDev",
+      "/ /_/ / |/ /    A modern nightvision plugin",
+      "\\____/|___/     Currently supporting Spigot 1.13 - 1.15.2",
+      ""
+    );
 
     getConfigFile().createConfig();
     getMessagesFile().createConfig();

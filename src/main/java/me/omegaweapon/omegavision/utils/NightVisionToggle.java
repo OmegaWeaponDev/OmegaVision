@@ -16,7 +16,7 @@ public class NightVisionToggle {
 
   public static void nightVisionEnable(Player player) {
 
-    if(nightvisionLimitReached.containsKey(player.getUniqueId())) {
+    if(nightvisionLimitReached.containsKey(player.getUniqueId()) && OmegaVision.getPlayerData().getConfig().getInt(player.getUniqueId().toString() + ".Limit") == OmegaVision.getConfigFile().getConfig().getInt("Night_Vision_Limit.Limit")) {
       Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.limitReached());
       return;
     }
@@ -57,11 +57,11 @@ public class NightVisionToggle {
       Utilities.sendActionBar(player, MessageHandler.prefix() + " " + MessageHandler.nightvisionActionBarApplied());
     }
 
-    if(!Utilities.checkPermission(player, true, "omegavision.limit.bypass")) {
-      limitIncrease(player);
+    if(OmegaVision.getConfigFile().getConfig().getBoolean("Night_Vision_Limit.Enabled")) {
+      if(!Utilities.checkPermission(player, true, "omegavision.limit.bypass")) {
+        limitIncrease(player);
+      }
     }
-
-
   }
 
   public static void nightvisionDisable(Player player) {
