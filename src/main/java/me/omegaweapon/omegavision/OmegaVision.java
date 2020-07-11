@@ -9,6 +9,7 @@ import me.ou.library.Utilities;
 import me.ou.library.configs.ConfigCreator;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bstats.bukkit.Metrics;
 
 public class OmegaVision extends JavaPlugin {
   private static final ConfigCreator configFile = new ConfigCreator("config.yml");
@@ -81,6 +82,10 @@ public class OmegaVision extends JavaPlugin {
 
     // Register the player Listener
     Utilities.registerEvent(new PlayerListener());
+
+    // Setup bStats
+    final int bstatsPluginId = 7489;
+    Metrics metrics = new Metrics(getInstance(), bstatsPluginId);
 
     // The Updater
     new UpdateChecker(this, 73013).getVersion(version -> {

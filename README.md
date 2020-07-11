@@ -8,9 +8,9 @@ For further information about this plugin, please see the [wiki](https://github.
 
 ## **Installation**
 
-OmegaVision currently supports all the spigot versions from 1.13 upto 1.15.2
+OmegaVision currently supports all the spigot versions from 1.13 to 1.16.1
 
-Installing OmegaVision is a very simple task. All you are required to do is download the latest version and drop the OmegaVision-{version number}.jar into your servers plugins folder then restart the server. 
+Installing OmegaVision is a very simple task. All you are required to do is to download the latest version and drop the OmegaVision-{version number}.jar into your servers plugins folder then restart the server. 
 
 You will then get all the config.yml and messages.yml that you are able to customize all the messages and settings to meet all your servers needs. 
 
@@ -18,7 +18,7 @@ You will then get all the config.yml and messages.yml that you are able to custo
 
 ## **Features**
 
-Below you can find all the different features that i've implemented into the plugin. If you have any features that you're wanting added to this plugin. Please send me a feature request via the [issues](https://github.com/OmegaWeaponDev/OmegaVision/issues) page, as that allows me to keep track of all the suggestions in one location.
+Below you can find all the different features that I've implemented into the plugin. If you have any features that you're wanting added to this plugin. Please send me a feature request via the [issues](https://github.com/OmegaWeaponDev/OmegaVision/issues) page, as that allows me to keep track of all the suggestions in one location.
 
 | Feature | Description |
 | ------- | ----------- |
@@ -33,7 +33,7 @@ Below you can find all the different features that i've implemented into the plu
 ***
 ## **Commands & Permissions**
 
-Below you will find a list of all the commands and all the permissions that OmegaVision has to offer. There will be a discription for each of the commands and permissions so you're able to tell what each of them do.
+Below you will find a list of all the commands and all the permissions that OmegaVision has to offer. There will be a description for each of the commands and permissions so you're able to tell what each of them do.
 
 ### Commands
 Note: The `/nvlimit` and `/omegavision` commands can be used from the console. All the others require you to be in-game
@@ -70,9 +70,9 @@ Note: If you have the permission `omegavision.*` you will get all the permission
 
 ***
 
-## **Configuation**
+## **Configuration**
 
-Sometimes when adding new features I am needing to add / change some settings in the config.yml & messages.yml. This means that you may need to re-generate the file. If you aren't wanting to do this you are more than welcome to check out the Default Config File on github and find the settings that have been added or changed and add them into your config.yml without having to restart the server.
+Sometimes when adding new features I'm to adding or changing some settings in the config.yml & messages.yml. This means that you may need to re-generate the file. If you aren't wanting to do this you are more than welcome to check out the Default Config File on github and find the settings that have been added or changed and add them into your config.yml without having to restart the server.
 
 Default Configuration file: [config.yml](https://github.com/OmegaWeaponDev/OmegaVision/wiki/Configuration)
 
@@ -80,19 +80,19 @@ Default Messages File: [messages.yml](https://github.com/OmegaWeaponDev/OmegaVis
 
 ## **Support**
 
-Everyone makes mistakes, there will be times when you may come accross a bug or an issue with the plugin that needs to be resolved. I currently have 3 amazing ways that you are able to recieve support for all of my plugins.
+Everyone makes mistakes, there will be times when you may come across a bug, or an issue with the plugin that needs to be resolved. I currently have 3 amazing ways that you are able to recieve support for all of my plugins.
 
 ### SpigotMC Forums:
 
-If you would like to recieve support via the SpigotMC Forums you are more than welcome to leave a message at: https://www.spigotmc.org/threads/omegavision.405434/ and wait for myself or some one else to help you out!
+If you would like to receive support via the SpigotMC Forums you are more than welcome to leave a message at: https://www.spigotmc.org/threads/omegavision.405434/ and wait for myself or some one else to help you out!
 
 ### GitHub: 
 
-If you feel more comfortable leaving an issue on github to recieve help for your issue than you're more than welcome to check out the OmegaVision Repo on github and leave an Issue and i'll get to it at the earliest chance I get. https://github.com/OmegaWeaponDev/OmegaVision/issues
+If you feel more comfortable leaving an issue on github to receive help for your issue than you're more than welcome to check out the OmegaVision Repo on github and leave an Issue and i'll get to it at the earliest chance I get. https://github.com/OmegaWeaponDev/OmegaVision/issues
 
 ### Discord:
 
-I have been busy working on an amazing discord server that you are more than welcome to join and recieve some direct support from myself or others in the community that also use my plugins. 
+I have been busy working on an amazing discord server that you are more than welcome to join and receive some direct support from myself or others in the community that also use my plugins. 
 
 You can join this discord server here: https://discord.gg/9nZTPcp
 
