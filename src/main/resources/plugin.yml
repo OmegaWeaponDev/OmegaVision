@@ -1,6 +1,6 @@
 name: ${project.name}
 version: ${project.version}
-api-version: 1.15
+api-version: ${pl.apiver}
 description: ${project.description}
 main: ${main.class}
 
@@ -38,16 +38,10 @@ permissions:
       - omegavision.blindess.bypass
       - omegavision.list
       - omegavision.limit.check
+      - omegavision.limit.*
       - omegavision.limit.checkothers
       - omegavision.limit.reset
       - omegavision.limit.bypass
-  omegavision.admin:
-    description: Grants the user the reload command, reset command and update messages in-game
-    default: false
-    children:
-      - omegavision.reload
-      - omegavision.update
-      - omegavision.reset
   omegavision.reload:
     description: Grants the user access to the reload command
     default: false
@@ -80,4 +74,7 @@ permissions:
     default: false
   omegavision.limit.reset:
     description: Grants the user access to the limit reset command
+    default: false
+  omegavision.limit.*:
+    description: Grants the user access to all the limit commands
     default: false

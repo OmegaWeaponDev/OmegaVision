@@ -57,7 +57,6 @@ Note: If you have the permission `omegavision.*` you will get all the permission
 | ----------- | ----------- |
 | `omegavision.toggle` | Gives the player permission to use the toggle and main command |
 | `omegavision.toggle.others` | Give the player permission to toggle nightvision for other players |
-| `omegavision.admin`| Lets the player use the main command for the plugin |
 | `omegavision.login` | lets the user keep nightvision when they login/logout |
 | `omegavision.death` | Lets the user keep nightivison when they die |
 | `omegavision.update` | Lets the user receive plugin update messages |
@@ -67,6 +66,7 @@ Note: If you have the permission `omegavision.*` you will get all the permission
 | `omegavision.limit.check` | Allows the user to check how close they are to reaching the limit |
 | `omegavision.limit.checkothers` | Allows the user to check how close another person is to reaching the limit |
 | `omegavision.limit.reset` | Allows the user to reset a players limit |
+| `omegavsiion.limit.*` | Gives the user all the omegavision limit permissions
 
 ***
 

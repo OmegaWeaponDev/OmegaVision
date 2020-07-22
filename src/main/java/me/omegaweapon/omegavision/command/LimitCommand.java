@@ -6,60 +6,33 @@ import me.ou.library.Utilities;
 import me.ou.library.commands.GlobalCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class LimitCommand extends GlobalCommand {
 
   @Override
-  protected void execute(CommandSender commandSender, String[] strings) {
-    if(commandSender instanceof Player) {
-      Player player = (Player) commandSender;
+  protected void execute(CommandSender sender, String[] strings) {
 
-      if(strings.length == 0) {
-        helpCommand(player);
-      }
-
-      if(strings.length >= 1) {
-        switch(strings[0]) {
-          case "check":
-            limitCheckCommand(player, strings);
-            break;
-          case "reset":
-            if(strings.length != 2) {
-              break;
-            }
-            limitResetCommand(player, strings);
-            break;
-          default:
-            helpCommand(player);
-            break;
-        }
-      }
+    if(strings.length == 0) {
+      helpCommand(sender);
+      return;
     }
 
-    if(commandSender instanceof ConsoleCommandSender) {
-      if(strings.length == 0) {
-        helpCommand(commandSender);
-      }
-
-      if(strings.length >= 1) {
-        switch(strings[0]) {
-          case "check":
-            limitCheckCommand(commandSender, strings);
-            break;
-          case "reset":
-            if(strings.length != 2) {
-              break;
-            }
-            limitResetCommand(commandSender, strings);
-            break;
-          default:
-            helpCommand(commandSender);
-            break;
+    switch(strings[0]) {
+      case "check":
+        limitCheckCommand(sender, strings);
+        break;
+      case "reset":
+        if(strings.length != 2) {
+          break;
         }
-      }
+        limitResetCommand(sender, strings);
+        break;
+      default:
+        helpCommand(sender);
+        break;
     }
+
   }
 
   private void limitCheckCommand(final CommandSender sender, final String[] strings) {
@@ -68,32 +41,59 @@ public class LimitCommand extends GlobalCommand {
 
 
       if(strings.length == 1) {
-        if(Utilities.checkPermission(player, true, "omegavision.limit.check")) {
-          Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.limitCheck(player));
+
+        if(!Utilities.checkPermissions(player, true, "omegavision.limit.check", "omegavision.limit.*", "omegavision.*")) {
+          Utilities.message(player, MessageHandler.playerMessage("No_Permission", "&cSorry, you do not have permission to use that command."));
+          return;
         }
+
+        if(!strings[0].equalsIgnoreCase("check")) {
+          helpCommand(sender);
+          return;
+        }
+
+        Utilities.message(player, MessageHandler.limitCheck(player));
+        return;
       }
 
       if(strings.length == 2) {
         Player target = Bukkit.getPlayer(strings[1]);
 
-        if(target != null && Utilities.checkPermission(player, true, "omegavision.limit.checkothers")) {
-
-          Utilities.message(player, MessageHandler.limitCheckOther(target));
-        } else if(!player.hasPermission("omegavision.limit.checkothers")) {
-          Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.noPermission());
-        } else if(target == null) {
-          Utilities.message(player, MessageHandler.prefix() + "&cSorry, that player does not exist or is offline!");
+        if(!strings[0].equalsIgnoreCase("check")) {
+          helpCommand(sender);
+          return;
         }
-      }
 
-    } else {
-      Player target = Bukkit.getPlayer(strings[1]);
+        if(target == null) {
+          Utilities.message(player, MessageHandler.pluginPrefix() + " &cSorry, that player does not exist.");
+          return;
+        }
 
-      if(target != null && strings.length == 2) {
-        Utilities.logInfo(true, MessageHandler.limitCheckOther(target));
-      } else {
-        Utilities.logInfo(true, MessageHandler.prefix() + "&cSorry, that player does not exist or is offline!");
+        if(!Utilities.checkPermissions(player, true, "omegavision.limit.checkothers", "omegavision.limit.*", "omegavision.*")) {
+          Utilities.message(player, MessageHandler.playerMessage("No_Permission", "&cSorry, you do not have permission to use that command."));
+          return;
+        }
+
+        Utilities.message(player, MessageHandler.limitCheckOther(target));
+        return;
       }
+      return;
+    }
+
+    Player target = Bukkit.getPlayer(strings[1]);
+
+    if(!strings[0].equalsIgnoreCase("check")) {
+      helpCommand(sender);
+      return;
+    }
+
+    if(target == null) {
+      Utilities.logInfo(true, "Sorry, that player does not exist.");
+      return;
+    }
+
+    if(strings.length == 2) {
+      Utilities.logInfo(true, MessageHandler.limitCheckOther(target));
     }
   }
 
@@ -102,30 +102,36 @@ public class LimitCommand extends GlobalCommand {
       Player player = (Player) sender;
       Player target = Bukkit.getPlayer(strings[1]);
 
-      if(Utilities.checkPermission(player, true, "omegavision.limit.reset")) {
-        if(strings.length == 2 && target != null) {
-          OmegaVision.getPlayerData().getConfig().set(target.getUniqueId().toString() + ".Limit", 0);
-          OmegaVision.getPlayerData().saveConfig();
-
-          Utilities.message(target, MessageHandler.prefix() + " " + MessageHandler.limitReset());
-          Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.limitResetOthers(target));
-        } else if(target == null) {
-          Utilities.message(player, MessageHandler.prefix() + " &cSorry, that player does not exist or is offline!");
-        }
+      if(!Utilities.checkPermissions(player, true, "omegavision.*", "omegavision.limit.*", "omegavision.limit.reset")) {
+        Utilities.message(player, MessageHandler.playerMessage("No_Permission", "&cSorry, you do not have permission to use that command."));
+        return;
       }
-    } else {
-      Player target = Bukkit.getPlayer(strings[1]);
 
-      if(strings.length == 2 && target != null) {
-        OmegaVision.getPlayerData().getConfig().set(target.getUniqueId().toString() + ".Limit", 0);
-        OmegaVision.getPlayerData().saveConfig();
-
-        Utilities.message(target, MessageHandler.prefix() + " " + MessageHandler.limitReset());
-        Utilities.logInfo(true, MessageHandler.limitResetOthers(target));
-      } else if(target == null ) {
-        Utilities.logInfo(true, MessageHandler.prefix() + "&cSorry, that player does not exist or is offline!");
+      if(target == null) {
+        Utilities.message(player, MessageHandler.pluginPrefix() + "&cSorry, that user does not exist.");
+        return;
       }
+
+      if(strings.length != 2) {
+        helpCommand(sender);
+        return;
+      }
+
+      OmegaVision.getInstance().getPlayerData().getConfig().set(target.getUniqueId().toString() + ".Limit", 0);
+      OmegaVision.getInstance().getPlayerData().saveConfig();
+
+      Utilities.message(target, MessageHandler.playerMessage("Night_Vision_Limit.Limit_Reset", "&bYour limit's have been reset! You can use the nightvision command again!"));
+      Utilities.message(player, MessageHandler.pluginPrefix() + " " + MessageHandler.limitResetOthers(target));
+      return;
     }
+
+    Player target = Bukkit.getPlayer(strings[1]);
+
+    OmegaVision.getInstance().getPlayerData().getConfig().set(target.getUniqueId().toString() + ".Limit", 0);
+    OmegaVision.getInstance().getPlayerData().saveConfig();
+
+    Utilities.message(target, MessageHandler.playerMessage("Night_Vision_Limit.Limit_Reset", "&bYour limit's have been reset! You can use the nightvision command again!"));
+    Utilities.logInfo(true, MessageHandler.limitResetOthers(target));
   }
 
   private void helpCommand(final CommandSender sender) {
@@ -133,14 +139,15 @@ public class LimitCommand extends GlobalCommand {
       Player player = (Player) sender;
 
       Utilities.message(player,
-        MessageHandler.prefix() + " &bLimit Check command: &c/nvlimit check & /nvlimit check <player>",
-        MessageHandler.prefix() + " &bLimit Reset command: &c/nvlimit reset <player>"
+        MessageHandler.pluginPrefix() + " &bLimit Check command: &c/nvlimit check & /nvlimit check <player>",
+        MessageHandler.pluginPrefix() + " &bLimit Reset command: &c/nvlimit reset <player>"
       );
-    } else {
-      Utilities.logInfo(true,
-        "&bLimit Check command: &c/nvlimit check & /nvlimit check <player>",
-        "&bLimit Reset command: &c/nvlimit reset <player>"
-      );
+      return;
     }
+
+    Utilities.logInfo(true,
+      "Limit Check command: /nvlimit check & /nvlimit check <player>",
+      "Limit Reset command: /nvlimit reset <player>"
+    );
   }
 }

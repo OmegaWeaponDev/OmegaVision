@@ -11,6 +11,11 @@ public class MainCommand extends GlobalCommand {
 
 	@Override
 	protected void execute(final CommandSender sender, final String[] strings) {
+
+	  if(strings.length != 1) {
+	    invalidArgsCommand(sender);
+	    return;
+    }
 		
 		switch(strings[0]) {
 			case "version":
@@ -31,10 +36,11 @@ public class MainCommand extends GlobalCommand {
 	private void versionCommand(final CommandSender sender) {
 	  if(sender instanceof Player) {
 	    Player player = (Player) sender;
-      Utilities.message(player, MessageHandler.prefix() + "&b Running version: &c" + OmegaVision.getInstance().getDescription().getVersion());
-    } else {
-      Utilities.logInfo(true, "&bRunning version: &c" + OmegaVision.getInstance().getDescription().getVersion());
+      Utilities.message(player, MessageHandler.pluginPrefix() + "&b OmegaVision &cv" + OmegaVision.getInstance().getDescription().getVersion() + " &bBy OmegaWeaponDev");
+      return;
     }
+
+	  Utilities.logInfo(true, "&bRunning version: &c" + OmegaVision.getInstance().getDescription().getVersion());
 	}
 
 	private void helpCommand(final CommandSender sender) {
@@ -42,33 +48,36 @@ public class MainCommand extends GlobalCommand {
       Player player = (Player) sender;
 
       Utilities.message(player,
-        MessageHandler.prefix() + " &bToggle command: &c/nv & /nv <player>",
-        MessageHandler.prefix() + " &bList command: &c/nvlist",
-        MessageHandler.prefix() + " &bReload command: &c/omegavision reload"
+        MessageHandler.pluginPrefix() + " &bToggle command: &c/nv & /nv <player>",
+        MessageHandler.pluginPrefix() + " &bList command: &c/nvlist",
+        MessageHandler.pluginPrefix() + " &bReload command: &c/omegavision reload"
       );
-    } else {
-      Utilities.logInfo(true,
-        "&bToggle command: &c/nv & /nv <player>",
-        "&bList command: &c/nvlist",
-        "&bReload command: &c/omegavision reload"
-      );
+      return;
     }
+
+    Utilities.logInfo(true,
+      "&bToggle command: &c/nv & /nv <player>",
+      "&bList command: &c/nvlist",
+      "&bReload command: &c/omegavision reload"
+    );
 	}
 
 	private void reloadCommand(final CommandSender sender) {
     if(sender instanceof Player) {
       Player player = (Player) sender;
 
-      if(Utilities.checkPermission(player, true, "omegavision.reload")) {
-        OmegaVision.getInstance().onReload();
-        Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.reloadMessage());
-      } else {
-        Utilities.message(player, MessageHandler.prefix() + " " + MessageHandler.noPermission());
+      if(!Utilities.checkPermissions(player, true, "omegavision.reload", "omegavision.*")) {
+        Utilities.message(player, MessageHandler.playerMessage("No_Permission", "&cSorry, you do not have permission to use this command."));
+        return;
       }
-    } else {
+
       OmegaVision.getInstance().onReload();
-      Utilities.logInfo(true, MessageHandler.reloadMessage());
+      Utilities.message(player, MessageHandler.playerMessage("Reload_Message", "&cOmegaVision has successfully been reloaded"));
+      return;
     }
+
+    OmegaVision.getInstance().onReload();
+    Utilities.logInfo(true, MessageHandler.consoleMessage("Reload_Message", "OmegaVision has successfully been reloaded"));
 	}
 
   private void invalidArgsCommand(final CommandSender sender) {
@@ -76,14 +85,15 @@ public class MainCommand extends GlobalCommand {
       Player player = (Player) sender;
 
       Utilities.message(player,
-        MessageHandler.prefix() + " &bRunning version: &c" + OmegaVision.getInstance().getDescription().getVersion(),
-        MessageHandler.prefix() + " &c/omegavision help &bto display all the commands"
+        MessageHandler.pluginPrefix() + "&b OmegaVision &cv" + OmegaVision.getInstance().getDescription().getVersion() + " &bBy OmegaWeaponDev",
+        MessageHandler.pluginPrefix() + " &c/omegavision help &bto display all the commands"
       );
-    } else {
-      Utilities.logInfo(true,
-        "&bRunning version: &c" + OmegaVision.getInstance().getDescription().getVersion(),
-        "&c/omegavision help &bto display all the commands"
-      );
+      return;
     }
+
+    Utilities.logInfo(true,
+      "&bRunning version: &c" + OmegaVision.getInstance().getDescription().getVersion(),
+      "&c/omegavision help &bto display all the commands"
+    );
   }
 }
