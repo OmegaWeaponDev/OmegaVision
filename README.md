@@ -2,17 +2,7 @@
 
 OmegaVision is a simple modern plugin that allows players to toggle their nightvision on or off with a simple command. You are also able to enable or disable all the features easily inside the config.yml. All the messages are also fully customizable.
 
-For further information about this plugin, please see the [wiki](https://github.com/OmegaWeaponDev/OmegaVision/wiki)
-
-***
-
-## **Installation**
-
-OmegaVision currently supports all the spigot versions from 1.13 to 1.16.1
-
-Installing OmegaVision is a very simple task. All you are required to do is to download the latest version and drop the OmegaVision-{version number}.jar into your servers plugins folder then restart the server. 
-
-You will then get all the config.yml and messages.yml that you are able to customize all the messages and settings to meet all your servers needs. 
+For further information about this plugin, please see the [wiki](https://github.com/OmegaWeaponDev/OmegaVision/wiki). Where you are able to find all the in depth information about OmegaVision, all the commands and permissions as well.
 
 ***
 
@@ -31,52 +21,6 @@ Below you can find all the different features that I've implemented into the plu
 | Limit command usage | Apply a configurable limit to how many times a player can use the nightvision command to enable nightvision
 
 ***
-## **Commands & Permissions**
-
-Below you will find a list of all the commands and all the permissions that OmegaVision has to offer. There will be a description for each of the commands and permissions so you're able to tell what each of them do.
-
-### Commands
-Note: The `/nvlimit` and `/omegavision` commands can be used from the console. All the others require you to be in-game
-
-
-| Command | Description | Permission | Aliases |
-| ----------- | ----------- | ----------- | ----------- |
-| `/omegavision`  | Gives you a simple list of the commands and what they do. | `omegavision.admin` | `/ov`, `/ovision` |
-| `/nightvision toggle` | Allows you to toggle nightvision for yourself. | `omegavision.toggle` | `/nvision toggle`, `/nv toggle` |
-| `/nightvision toggle <playername>` | Allows you to toggle nightvision for other players. | `omegavision.toggle.others` | "same as above"
-| `/omegavision reload` | Allows the user to reload all the files. | `omegavision.reload` |
-| `/nightvisionlist` | Get a list of all users how have nightvision | `omegavision.list` | `/nvlist` |
-| `/nvlimit check` | Check how close you are to reaching the limit | `omegavision.limit.check ` | 
-| `/nvlimit check <playername>` | Check how close another person is to reaching the limit | `omegavision.limit.checkothers` |
-| `/nvlimit reset <playername>` | Reset a players nightvision limit | `omegavision.limit.reset` |
-
-### Permissions
-Note: If you have the permission `omegavision.*` you will get all the permissions below.
-
-| Permissions | Description |
-| ----------- | ----------- |
-| `omegavision.toggle` | Gives the player permission to use the toggle and main command |
-| `omegavision.toggle.others` | Give the player permission to toggle nightvision for other players |
-| `omegavision.login` | lets the user keep nightvision when they login/logout |
-| `omegavision.death` | Lets the user keep nightivison when they die |
-| `omegavision.update` | Lets the user receive plugin update messages |
-| `omegavision.list` | Lets the user generate a list of all players who have nightvision |
-| `omegavision.blindness.bypass`| Bypass the blindness effect after using nightvision for a set time |
-| `omegavision.limit.bypass` | Allow users to bypass the limits set in the config.yml |
-| `omegavision.limit.check` | Allows the user to check how close they are to reaching the limit |
-| `omegavision.limit.checkothers` | Allows the user to check how close another person is to reaching the limit |
-| `omegavision.limit.reset` | Allows the user to reset a players limit |
-| `omegavsiion.limit.*` | Gives the user all the omegavision limit permissions
-
-***
-
-## **Configuration**
-
-Sometimes when adding new features I'm to adding or changing some settings in the config.yml & messages.yml. This means that you may need to re-generate the file. If you aren't wanting to do this you are more than welcome to check out the Default Config File on github and find the settings that have been added or changed and add them into your config.yml without having to restart the server.
-
-Default Configuration file: [config.yml](https://github.com/OmegaWeaponDev/OmegaVision/wiki/Configuration)
-
-Default Messages File: [messages.yml](https://github.com/OmegaWeaponDev/OmegaVision/wiki/Messages)
 
 ## Installation, Downloading & Updating
 
