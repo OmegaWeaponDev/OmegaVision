@@ -1,4 +1,4 @@
-![Banner](https://i.imgur.com/lsCI3wT.png)
+![Banner](https://i.imgur.com/wUjbVQx.png)
 
 OmegaVision is a simple modern plugin that allows players to toggle their nightvision on or off with a simple command. You are also able to enable or disable all the features easily inside the config.yml. All the messages are also fully customizable.
 
