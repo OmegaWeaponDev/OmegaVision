@@ -78,34 +78,42 @@ Default Configuration file: [config.yml](https://github.com/OmegaWeaponDev/Omega
 
 Default Messages File: [messages.yml](https://github.com/OmegaWeaponDev/OmegaVision/wiki/Messages)
 
+## Installation, Downloading & Updating
+
+### Downloading:
+
+You can always find the latest version by visiting the [spigot](https://www.spigotmc.org/resources/omegavision.73013/) 
+page. This plugin works on all Bukkit/Spigot/Paper servers from version 1.13 and above.
+
+### Installing:
+
+When it comes to installing the plugin, Simply drop the OmegaVision-[version number].jar into your servers plugin folder and then start your server.
+
+### Updating: 
+
+Updating is very easy, all you're needing to do is download the new version of the plugin and replace the old version in your plugins folder.
+
+I have implemented an Auto Config Updater that will automatically update all the files if I have changed them in any way.
+
+***
+
 ## **Support**
 
-Everyone makes mistakes, there will be times when you may come across a bug, or an issue with the plugin that needs to be resolved. I currently have 3 amazing ways that you are able to recieve support for all of my plugins.
+If at any stage you come across a sneaky bug that I was unable to locate during testing please do not hesitate to get in contact with me so I am able to squash it quickly for you. When you are finding yourself in need to contact me about any of my plugins, if it is relating to a bug, please try and provide as much detail as possible, including server version, plugin version and the steps taken to get the bug. This allows me to focus on the bug a lot quicker and allows me to get an update released sooner in order to resolve the bug.
 
-### SpigotMC Forums:
+### **Discord**
+![IMG](https://i.imgur.com/yQIZDR6.png)
 
-If you would like to receive support via the SpigotMC Forums you are more than welcome to leave a message at: https://www.spigotmc.org/threads/omegavision.405434/ and wait for myself or some one else to help you out!
+I have spent some time setting up a discord server that you are welcome to join at any time. Here you are able to seek help, have a chat, be informed of any updates or announcements and just be apart of a great community. You can join the community or invite your friends to the discord community by using this link: https://discord.gg/9nZTPcp
 
-### GitHub: 
+### **Spigot**
 
-If you feel more comfortable leaving an issue on github to receive help for your issue than you're more than welcome to check out the OmegaVision Repo on github and leave an Issue and i'll get to it at the earliest chance I get. https://github.com/OmegaWeaponDev/OmegaVision/issues
+Of course, we have the normal contact method of using the SpigotMC website. You can locate my profile here: https://www.spigotmc.org/members/omegaweapondev.14953/ Feel free to privately message me about anything related to any of my plugins. 
 
-### Discord:
+### **GitHub**
 
-I have been busy working on an amazing discord server that you are more than welcome to join and receive some direct support from myself or others in the community that also use my plugins. 
-
-You can join this discord server here: https://discord.gg/9nZTPcp
-
-***
-
-## **Suggestions**
-
-As a developer it can sometimes be challenging for me to always come up with new ideas and features that you amazing people would like to see in my plugins. So, I encourage you to step forward with any ideas that you may have regarding my plugins or any plugins that you think I should try and develop. 
-
-The best place for you to share these ideas with me would be GitHub: https://github.com/OmegaWeaponDev/OmegaVision/issues. This will allow me to easily keep track of all the suggestions without them getting lost in a discord server or on the spigot forums.
+As you can tell, I also have set everything here on git hub as well. So if you need any support feel free to post a issue for the related plugin
 
 ***
 
-## **Leave A Review**
-
-If you have liked this plugin and found it to be helpful please leave a review so others will be able to find it and try it out for themselves as well. This will really help me out as it will make this plugin stand out amongst others and show people how much you like the plugin.
+Lastly, I would like to say Thank you for supporting my plugins and supporting me as a developer. While I am still somewhat new to plugin development I try to provide the best support and the best plugins for you guys (and girls). Again, Thank you. 
