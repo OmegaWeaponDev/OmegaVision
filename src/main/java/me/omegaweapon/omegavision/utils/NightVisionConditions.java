@@ -2,6 +2,7 @@ package me.omegaweapon.omegavision.utils;
 
 import me.omegaweapon.omegavision.OmegaVision;
 import me.ou.library.Utilities;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
@@ -34,6 +35,10 @@ public class NightVisionConditions {
       Utilities.addPotionEffect(player, PotionEffectType.BLINDNESS, configDuration, 1, true, true, true);
       NightVisionToggle.nightvisionAppliedTime.remove(player.getUniqueId());
       Utilities.message(player, MessageHandler.playerMessage("Blindness_Message", "&cYou have been using nightvision for too long, you are now blind"));
+    }
+
+    if(configFile.getBoolean("Sound_Effects.Blindess_Effect.Enabled")) {
+      player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Blindness_Effect.Sound")), 1, 1);
     }
   }
 

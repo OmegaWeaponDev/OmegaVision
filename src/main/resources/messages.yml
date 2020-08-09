@@ -21,6 +21,12 @@ NightVision_Applied: "&9Night Vision has been applied!"
 # Sets the message for when players have night vision removed.
 NightVision_Removed: "&cNight Vision has been removed!"
 
+# Sets the message all players get when night vision has been applied globally
+NightVision_Applied_Global: "&9Night Vision has been applied for all players!"
+
+# Sets the message all players get when night vision has been removed globally
+NightVision_Removed_Global: "&cNight Vision has been removed for all players!"
+
 # Sets the actionbar message that is displayed when nightvision is applied!
 ActionBar_NightVision_Applied: "&9Nightvision has been applied!"
 
@@ -50,3 +56,6 @@ No_Permission: "&cSorry, but you don't have permission to do that"
 
 # Sets the reload message
 Reload_Message: "&cOmegaVision has successfully been reloaded"
+
+# DO NOT EDIT THIS!
+Config_Version: 1.1

@@ -1,15 +1,16 @@
 package me.omegaweapon.omegavision;
 
-import me.omegaweapon.omegavision.command.LimitCommand;
-import me.omegaweapon.omegavision.command.ListCommand;
-import me.omegaweapon.omegavision.command.MainCommand;
-import me.omegaweapon.omegavision.command.ToggleCommand;
+import me.omegaweapon.omegavision.command.*;
 import me.omegaweapon.omegavision.events.PlayerListener;
 import me.ou.library.Utilities;
 import me.ou.library.configs.ConfigCreator;
+import me.ou.library.configs.ConfigUpdater;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bstats.bukkit.Metrics;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 public class OmegaVision extends JavaPlugin {
   private static OmegaVision instance;
@@ -20,15 +21,6 @@ public class OmegaVision extends JavaPlugin {
 
   public static OmegaVision getInstance() {
     return instance;
-  }
-
-  @Override
-  public void onEnable() {
-    initialSetup();
-    setupConfigs();
-    setupCommands();
-    setupEvents();
-    spigotUpdater();
   }
 
   private void initialSetup() {
@@ -70,17 +62,14 @@ public class OmegaVision extends JavaPlugin {
     );
   }
 
-  private void setupCommands() {
-    // Register the commands
-    Utilities.logInfo(true, "Registering Commands...");
-
-    Utilities.setCommand().put("omegavision", new MainCommand());
-    Utilities.setCommand().put("nightvision", new ToggleCommand());
-    Utilities.setCommand().put("nightvisionlist", new ListCommand());
-    Utilities.setCommand().put("nvlimit", new LimitCommand());
-
-    Utilities.registerCommands();
-    Utilities.logInfo(true, "Commands Registered: " + Utilities.setCommand().size());
+  @Override
+  public void onEnable() {
+    initialSetup();
+    setupConfigs();
+    configUpdater();
+    setupCommands();
+    setupEvents();
+    spigotUpdater();
   }
 
   private void setupEvents() {
@@ -104,6 +93,21 @@ public class OmegaVision extends JavaPlugin {
     });
   }
 
+  private void setupCommands() {
+    // Register the commands
+    Utilities.logInfo(true, "Registering Commands...");
+
+    Utilities.setCommand().put("omegavision", new MainCommand());
+    Utilities.setCommand().put("nightvision", new ToggleCommand());
+    Utilities.setCommand().put("nightvisionlist", new ListCommand());
+    Utilities.setCommand().put("nvlimit", new LimitCommand());
+    Utilities.setCommand().put("nvtemp", new ToggleTempCommand());
+    Utilities.setCommand().put("nvall", new ToggleAllCommand());
+
+    Utilities.registerCommands();
+    Utilities.logInfo(true, "Commands Registered: " + Utilities.setCommand().size());
+  }
+
   @Override
   public void onDisable() {
     instance = null;
@@ -115,6 +119,28 @@ public class OmegaVision extends JavaPlugin {
     configFile.reloadConfig();
     messagesFile.reloadConfig();
     playerData.reloadConfig();
+  }
+
+  private void configUpdater() {
+    Utilities.logInfo(true, "Attempting to update the config files....");
+
+    try {
+      if(getConfigFile().getConfig().getDouble("Config_Version") != 1.1) {
+        getConfigFile().getConfig().set("Config_Version", 1.1);
+        getConfigFile().saveConfig();
+        ConfigUpdater.update(OmegaVision.getInstance(), "config.yml", getConfigFile().getFile(), Arrays.asList("none"));
+      }
+
+      if(getMessagesFile().getConfig().getDouble("Config_Version") != 1.1) {
+        getMessagesFile().getConfig().set("Config_Version", 1.1);
+        getMessagesFile().saveConfig();
+        ConfigUpdater.update(OmegaVision.getInstance(), "messages.yml", getMessagesFile().getFile(), Arrays.asList("none"));
+      }
+      onReload();
+      Utilities.logInfo(true, "Config Files have successfully been updated!");
+    } catch(IOException ex) {
+      ex.printStackTrace();
+    }
   }
 
   public ConfigCreator getConfigFile() {

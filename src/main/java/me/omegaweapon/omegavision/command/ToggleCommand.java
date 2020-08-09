@@ -7,6 +7,8 @@ import me.omegaweapon.omegavision.utils.NightVisionToggle;
 import me.ou.library.Utilities;
 import me.ou.library.commands.PlayerCommand;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -56,11 +58,11 @@ public class ToggleCommand extends PlayerCommand {
       }
 
       if (!target.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
-        NightVisionToggle.nightvisionEnableOthers(player, target);
+        NightVisionToggle.nightvisionEnableOthers(target);
         return;
       }
 
-      NightVisionToggle.nightvisionDisableOthers(player, target);
+      NightVisionToggle.nightvisionDisableOthers(target);
     }
   }
 }

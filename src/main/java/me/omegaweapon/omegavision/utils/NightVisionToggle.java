@@ -2,6 +2,7 @@ package me.omegaweapon.omegavision.utils;
 
 import me.omegaweapon.omegavision.OmegaVision;
 import me.ou.library.Utilities;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -58,6 +59,10 @@ public class NightVisionToggle {
         limitIncrease(player);
       }
     }
+
+    if(OmegaVision.getInstance().getConfigFile().getConfig().getBoolean("Sound_Effects.Night_Vision_Enable.Enabled")) {
+      player.playSound(player.getLocation(), Sound.valueOf(OmegaVision.getInstance().getConfigFile().getConfig().getString("Sound_Effects.Night_Vision_Enable.Sound")), 1, 1);
+    }
   }
 
   public static void nightvisionDisable(Player player) {
@@ -88,18 +93,30 @@ public class NightVisionToggle {
       OmegaVision.getInstance().getPlayerData().getConfig().createSection(player.getUniqueId().toString());
     }
 
+    if(OmegaVision.getInstance().getConfigFile().getConfig().getBoolean("Sound_Effects.Night_Vision_Disable.Enabled")) {
+      player.playSound(player.getLocation(), Sound.valueOf(OmegaVision.getInstance().getConfigFile().getConfig().getString("Sound_Effects.Night_Vision_Disable.Sound")), 1, 1);
+    }
+
     OmegaVision.getInstance().getPlayerData().getConfig().set(player.getUniqueId().toString() + ".NightVision.Enabled", false);
     OmegaVision.getInstance().getPlayerData().saveConfig();
   }
 
-  public static void nightvisionEnableOthers(final Player player, final Player target) {
+  public static void nightvisionEnableOthers(final Player target) {
     nightVisionEnable(target);
     Utilities.message(target, MessageHandler.playerMessage("NightVision_Applied", "&9Night Vision has been applied!"));
+
+    if(OmegaVision.getInstance().getConfigFile().getConfig().getBoolean("Sound_Effects.Night_Vision_Enable.Enabled")) {
+      target.playSound(target.getLocation(), Sound.valueOf(OmegaVision.getInstance().getConfigFile().getConfig().getString("Sound_Effects.Night_Vision_Enable.Sound")), 1, 1);
+    }
   }
 
-  public static void nightvisionDisableOthers(Player player, Player target) {
+  public static void nightvisionDisableOthers(final Player target) {
     nightvisionDisable(target);
     Utilities.message(target, MessageHandler.playerMessage("NightVision_Removed", "&cNight Vision has been removed!"));
+
+    if(OmegaVision.getInstance().getConfigFile().getConfig().getBoolean("Sound_Effects.Night_Vision_Disable.Enable")) {
+      target.playSound(target.getLocation(), Sound.valueOf(OmegaVision.getInstance().getConfigFile().getConfig().getString("Sound_Effects.Night_Vision_Disable.Sound")), 1, 1);
+    }
   }
 
   private static int limitCheck(final Player player) {
@@ -118,6 +135,10 @@ public class NightVisionToggle {
     if((playerLimitAmount + 1) > OmegaVision.getInstance().getConfigFile().getConfig().getInt("Night_Vision_Limit.Limit")) {
       Utilities.message(player, MessageHandler.playerMessage("Night_Vision_Limit.Limit_Reached", "&cSorry, you have reached the limit for the nightvision command!"));
       nightvisionLimitReached.put(player.getUniqueId(), System.currentTimeMillis());
+
+      if(OmegaVision.getInstance().getConfigFile().getConfig().getBoolean("Sound_Effects.Limit_Reached.Enabled")) {
+        player.playSound(player.getLocation(), Sound.valueOf(OmegaVision.getInstance().getConfigFile().getConfig().getString("Sound_Effects.Limit_Reached.Sound")), 1, 1);
+      }
       return;
     }
 

@@ -49,6 +49,30 @@ Blindness_Effect:
   # How long the blindness will last (In minutes).
   Duration: 20
 
+# Play a special sound to a player when certain things happen
+# You can find all the sound effects here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+Sound_Effects:
+  # The sound players hear when they enable night vision
+  Night_Vision_Enable:
+    Enabled: true
+    Sound: ENTITY_SPLASH_POTION_BREAK
+  # The sound players hear when they disable night vision
+  Night_Vision_Disable:
+    Enabled: true
+    Sound: BLOCK_ANVIL_BREAK
+  # The sound players here when they have reached the max command limit
+  Limit_Reached:
+    Enabled: true
+    Sound: ITEM_SHIELD_BLOCK
+  # The sound players here when their limit has reset
+  Limit_Reset:
+    Enabled: true
+    Sound: ENTITY_PLAYER_LEVELUP
+  # The sound players here when the blindness effect has been applied
+  Blindness_Effect:
+    Enabled: true
+    Sound: ENTITY_WITCH_THROW
+
 # Set the limit for how many times a player can use the nightvision toggle command
 # Use the permission `omegavision.limit.bypass` to bypass the limit
 # Applies to toggling it on, not off
@@ -64,3 +88,6 @@ Night_Vision_Limit:
 # If set to true, those with the permission omegavision.update will recieve messages
 # when the plugin updates on spigot
 Update_Notify: true
+
+# DO NOT EDIT THIS!
+Config_Version: 1.1

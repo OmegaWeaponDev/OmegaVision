@@ -7,6 +7,7 @@ import me.omegaweapon.omegavision.utils.NightVisionToggle;
 import me.ou.library.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -165,5 +166,9 @@ public class PlayerListener implements Listener {
       configFile.set(player.getUniqueId().toString() + ".Limit", 0);
       OmegaVision.getInstance().getPlayerData().saveConfig();
     }, 20L, 20L * 60L);
+
+    if(OmegaVision.getInstance().getConfigFile().getConfig().getBoolean("Sound_Effects.Limit_Reset.Enabled")) {
+      player.playSound(player.getLocation(), Sound.valueOf(OmegaVision.getInstance().getConfigFile().getConfig().getString("Sound_Effects.Limit_Reset.Sound")), 1, 1);
+    }
   }
 }

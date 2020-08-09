@@ -10,20 +10,22 @@ authors: ${pl.authors}
 commands:
   omegavision:
     description: The main command for omegavision
-    usage: /omegavision
     aliases: [ov, ovision, omegav]
   nightvision:
     description: The Nightvision toggle command
-    usage: /nightvision
     aliases: [nv, nvision, nightv]
   nightvisionlist:
     description: The Nightvision List command
-    usage: /nightvisionlist
     aliases: [nvlist, nvisionlist, nvl]
   nvlimit:
     description: The NightVision Limit Command
-    usage: /nvlimit
     aliases: [nvl, nightvisionlimit]
+  nvtemp:
+    description: The NightVision Temp Toggle command
+    aliases: [nvt, nightvisiontemp]
+  nvall:
+    description: The NightVision Toggle All command
+    aliases: [nva, nightvisionall]
 
 permissions:
   omegavision.*:
@@ -34,6 +36,9 @@ permissions:
       - omegavision.update
       - omegavision.toggle
       - omegavision.toggle.others
+      - omegavision.toggle.all
+      - omegavision.toggle.temp
+      - omegavision.toggle.*
       - omegavision.bucket
       - omegavision.blindess.bypass
       - omegavision.list
@@ -42,6 +47,22 @@ permissions:
       - omegavision.limit.checkothers
       - omegavision.limit.reset
       - omegavision.limit.bypass
+  omegavision.limit.*:
+    description: Grants the user access to all the limit commands
+    default: false
+    children:
+      - omegavision.limit.check
+      - omegavision.limit.checkothers
+      - omegavision.limit.bypass
+      - omegavision.limit.reset
+  omegavision.toggle.*:
+    description: Grants the user access to all the toggle commands
+    default: false
+    children:
+      - omegavision.toggle
+      - omegavision.toggle.others
+      - omegavision.toggle.all
+      - omegavision.toggle.temp
   omegavision.reload:
     description: Grants the user access to the reload command
     default: false
@@ -53,6 +74,12 @@ permissions:
     default: false
   omegavision.toggle.others:
     description: Grants the user access to the toggle others command
+    default: false
+  omegavision.toggle.all:
+    description: Grants the user access to the toggle all command
+    default: false
+  omegavision.toggle.temp:
+    description: Granst the user access to the toggle temp command
     default: false
   omegavision.bucket:
     description: Allows the user to use buckets to remove the potion effects from nightvision
@@ -74,7 +101,4 @@ permissions:
     default: false
   omegavision.limit.reset:
     description: Grants the user access to the limit reset command
-    default: false
-  omegavision.limit.*:
-    description: Grants the user access to all the limit commands
     default: false
