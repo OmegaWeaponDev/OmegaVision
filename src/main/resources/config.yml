@@ -6,8 +6,8 @@
 #  customize to your server needs. Most features are customizable
 #  to an extent.
 #
-# For help you can visit the wiki at: https://bitbucket.org/oweapon/omegavision/wiki/Home
-# If you have any issues, report them here: https://bitbucket.org/oweapon/omegavision/issues
+#  For help you can visit the wiki at: https://github.com/OmegaWeaponDev/OmegaVision/wiki
+#  If you have any issues, report them here: https://github.com/OmegaWeaponDev/OmegaVision/issues
 #
 # -------------------------------------------------------------------------------------------
 
@@ -90,4 +90,4 @@ Night_Vision_Limit:
 Update_Notify: true
 
 # DO NOT EDIT THIS!
-Config_Version: 1.1
+Config_Version: 1.2

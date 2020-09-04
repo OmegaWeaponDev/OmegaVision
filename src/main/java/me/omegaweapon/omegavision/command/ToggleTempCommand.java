@@ -13,6 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 
 
 public class ToggleTempCommand extends GlobalCommand {
+  private final MessageHandler messageHandler = new MessageHandler(OmegaVision.getInstance().getMessagesFile().getConfig());
 
   @Override
   public void execute(final CommandSender commandSender, final String[] strings) {
@@ -29,14 +30,14 @@ public class ToggleTempCommand extends GlobalCommand {
 
     if(strings.length != 2) {
       Utilities.message(player,
-        MessageHandler.pluginPrefix() + "&b OmegaVision &cv" + OmegaVision.getInstance().getDescription().getVersion() + " &bBy OmegaWeaponDev",
-        MessageHandler.pluginPrefix() + "&bTemp Toggle: &c/nvtemp <player> <time>"
+        messageHandler.getPrefix() + "&bOmegaVision &cv" + OmegaVision.getInstance().getDescription().getVersion() + " &bBy OmegaWeaponDev",
+        messageHandler.getPrefix() + "&bTemp Toggle: &c/nvtemp <player> <time>"
       );
       return;
     }
 
     if(!Utilities.checkPermissions(player, true, "omegavision.toggle.temp", "omegavision.*", "omegavision.toggle.*")) {
-      Utilities.message(player, MessageHandler.playerMessage("No_Permission", "&cSorry, you do not have permission to use that command."));
+      Utilities.message(player, messageHandler.string("No_Permission", "&cSorry, you do not have permission to use that command."));
       return;
     }
 
@@ -44,7 +45,7 @@ public class ToggleTempCommand extends GlobalCommand {
     Player target = Bukkit.getPlayer(strings[0]);
 
     if(target == null) {
-      Utilities.message(player, MessageHandler.pluginPrefix() + "&cSorry, that player is either offline or does not exist.");
+      Utilities.message(player, messageHandler.string("Invalid_Player", "&cSorry, that player is either offline or does not exist."));
       return;
     }
 
@@ -58,8 +59,8 @@ public class ToggleTempCommand extends GlobalCommand {
 
     if(strings.length != 2) {
       Utilities.logInfo(true,
-        MessageHandler.pluginPrefix() + "&b OmegaVision &cv" + OmegaVision.getInstance().getDescription().getVersion() + " &bBy OmegaWeaponDev",
-        MessageHandler.pluginPrefix() + "&bTemp Toggle: &c/nvtemp <player> <time>"
+        messageHandler.getPrefix() + "&bOmegaVision &cv" + OmegaVision.getInstance().getDescription().getVersion() + " &bBy OmegaWeaponDev",
+        messageHandler.getPrefix() + "&bTemp Toggle: &c/nvtemp <player> <time>"
       );
       return;
     }

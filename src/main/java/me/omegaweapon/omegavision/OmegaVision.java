@@ -2,6 +2,7 @@ package me.omegaweapon.omegavision;
 
 import me.omegaweapon.omegavision.command.*;
 import me.omegaweapon.omegavision.events.PlayerListener;
+import me.ou.library.SpigotUpdater;
 import me.ou.library.Utilities;
 import me.ou.library.configs.ConfigCreator;
 import me.ou.library.configs.ConfigUpdater;
@@ -18,10 +19,6 @@ public class OmegaVision extends JavaPlugin {
   private final ConfigCreator configFile = new ConfigCreator("config.yml");
   private final ConfigCreator messagesFile = new ConfigCreator("messages.yml");
   private final ConfigCreator playerData = new ConfigCreator("playerData.yml");
-
-  public static OmegaVision getInstance() {
-    return instance;
-  }
 
   private void initialSetup() {
 
@@ -77,35 +74,26 @@ public class OmegaVision extends JavaPlugin {
     Utilities.registerEvents(new PlayerListener());
   }
 
-  private void spigotUpdater() {
-    // The Updater
-    new UpdateChecker(this, 73013).getVersion(version -> {
-      if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-        Utilities.logInfo(true, "You are already running the latest version");
-      } else {
-        PluginDescriptionFile pdf = this.getDescription();
-        Utilities.logWarning(true,
-          "A new version of " + pdf.getName() + " is avaliable!",
-          "Current Version: " + pdf.getVersion() + " > New Version: " + version,
-          "Grab it here: https://spigotmc.org/resources/73013"
-        );
-      }
-    });
+  public static OmegaVision getInstance() {
+    return instance;
   }
 
-  private void setupCommands() {
-    // Register the commands
-    Utilities.logInfo(true, "Registering Commands...");
+  private void spigotUpdater() {
 
-    Utilities.setCommand().put("omegavision", new MainCommand());
-    Utilities.setCommand().put("nightvision", new ToggleCommand());
-    Utilities.setCommand().put("nightvisionlist", new ListCommand());
-    Utilities.setCommand().put("nvlimit", new LimitCommand());
-    Utilities.setCommand().put("nvtemp", new ToggleTempCommand());
-    Utilities.setCommand().put("nvall", new ToggleAllCommand());
+    // The Updater
+    new SpigotUpdater(this, 73013).getVersion(version -> {
+      if(this.getDescription().getVersion().equalsIgnoreCase(version)) {
+        Utilities.logInfo(true, "You are already running the latest version");
+        return;
+      }
 
-    Utilities.registerCommands();
-    Utilities.logInfo(true, "Commands Registered: " + Utilities.setCommand().size());
+      PluginDescriptionFile pdf = this.getDescription();
+      Utilities.logWarning(true,
+        "A new version of " + pdf.getName() + " is avaliable!",
+        "Current Version: " + pdf.getVersion() + " > New Version: " + version,
+        "Grab it here: https://spigotmc.org/resources/73013"
+      );
+    });
   }
 
   @Override
@@ -121,26 +109,19 @@ public class OmegaVision extends JavaPlugin {
     playerData.reloadConfig();
   }
 
-  private void configUpdater() {
-    Utilities.logInfo(true, "Attempting to update the config files....");
+  private void setupCommands() {
+    // Register the commands
+    Utilities.logInfo(true, "Registering Commands...");
 
-    try {
-      if(getConfigFile().getConfig().getDouble("Config_Version") != 1.1) {
-        getConfigFile().getConfig().set("Config_Version", 1.1);
-        getConfigFile().saveConfig();
-        ConfigUpdater.update(OmegaVision.getInstance(), "config.yml", getConfigFile().getFile(), Arrays.asList("none"));
-      }
+    Utilities.setCommand().put("omegavision", new MainCommand());
+    Utilities.setCommand().put("nightvision", new ToggleCommand());
+    Utilities.setCommand().put("nightvisionlist", new ListCommand());
+    Utilities.setCommand().put("nightvisionlimit", new LimitCommand());
+    Utilities.setCommand().put("nightvisiontemp", new ToggleTempCommand());
+    Utilities.setCommand().put("nightvisionall", new ToggleAllCommand());
 
-      if(getMessagesFile().getConfig().getDouble("Config_Version") != 1.1) {
-        getMessagesFile().getConfig().set("Config_Version", 1.1);
-        getMessagesFile().saveConfig();
-        ConfigUpdater.update(OmegaVision.getInstance(), "messages.yml", getMessagesFile().getFile(), Arrays.asList("none"));
-      }
-      onReload();
-      Utilities.logInfo(true, "Config Files have successfully been updated!");
-    } catch(IOException ex) {
-      ex.printStackTrace();
-    }
+    Utilities.registerCommands();
+    Utilities.logInfo(true, "Commands Registered: " + Utilities.setCommand().size());
   }
 
   public ConfigCreator getConfigFile() {
@@ -153,5 +134,27 @@ public class OmegaVision extends JavaPlugin {
 
   public ConfigCreator getPlayerData() {
     return playerData;
+  }
+
+  private void configUpdater() {
+    Utilities.logInfo(true, "Attempting to update the config files....");
+
+    try {
+      if(getConfigFile().getConfig().getDouble("Config_Version") != 1.2) {
+        getConfigFile().getConfig().set("Config_Version", 1.2);
+        getConfigFile().saveConfig();
+        ConfigUpdater.update(OmegaVision.getInstance(), "config.yml", getConfigFile().getFile(), Arrays.asList("none"));
+      }
+
+      if(getMessagesFile().getConfig().getDouble("Config_Version") != 1.2) {
+        getMessagesFile().getConfig().set("Config_Version", 1.2);
+        getMessagesFile().saveConfig();
+        ConfigUpdater.update(OmegaVision.getInstance(), "messages.yml", getMessagesFile().getFile(), Arrays.asList("none"));
+      }
+      onReload();
+      Utilities.logInfo(true, "Config Files have successfully been updated!");
+    } catch(IOException ex) {
+      ex.printStackTrace();
+    }
   }
 }

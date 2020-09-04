@@ -7,10 +7,13 @@ import me.ou.library.commands.GlobalCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
 public class ToggleAllCommand extends GlobalCommand {
+  private final MessageHandler messagesHandler = new MessageHandler(OmegaVision.getInstance().getMessagesFile().getConfig());
+  private final FileConfiguration playerData = OmegaVision.getInstance().getPlayerData().getConfig();
 
   @Override
   protected void execute(CommandSender commandSender, String[] strings) {
@@ -26,7 +29,7 @@ public class ToggleAllCommand extends GlobalCommand {
     Player player = (Player) commandSender;
 
     if(!Utilities.checkPermissions(player, true, "omegavision.toggle.all", "omegavision.*", "omegavision.toggle.*")) {
-      Utilities.message(player, MessageHandler.playerMessage("No_Permission", "&cSorry, you do not have permission to use that command"));
+      Utilities.message(player, messagesHandler.string("No_Permission", "&cSorry, you do not have permission to use that command"));
       return;
     }
 
@@ -34,14 +37,14 @@ public class ToggleAllCommand extends GlobalCommand {
       for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
         addNightVision(onlinePlayer);
       }
-      Utilities.broadcast(MessageHandler.playerMessage("NightVision_Applied_Global", "&9Night Vision has been applied for all players!"));
+      Utilities.broadcast(messagesHandler.string("NightVision_Applied_Global", "&9Night Vision has been applied for all players!"));
     }
 
     if(strings[0].equalsIgnoreCase("remove")) {
       for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
         removeNightVision(onlinePlayer);
       }
-      Utilities.broadcast(MessageHandler.playerMessage("NightVision_Removed_Global", "&9Night Vision has been removed for all players!"));
+      Utilities.broadcast(messagesHandler.string("NightVision_Removed_Global", "&9Night Vision has been removed for all players!"));
     }
   }
 
@@ -68,8 +71,8 @@ public class ToggleAllCommand extends GlobalCommand {
 
     Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100, 1, false, false, false);
 
-    if(OmegaVision.getInstance().getPlayerData().getConfig().isConfigurationSection(player.getUniqueId().toString())) {
-      OmegaVision.getInstance().getPlayerData().getConfig().set(player.getUniqueId().toString() + ".NightVision.Enabled", true);
+    if(playerData.isConfigurationSection(player.getUniqueId().toString())) {
+      playerData.set(player.getUniqueId().toString() + ".NightVision.Enabled", true);
       OmegaVision.getInstance().getPlayerData().saveConfig();
     }
   }
@@ -77,8 +80,8 @@ public class ToggleAllCommand extends GlobalCommand {
   private void removeNightVision(Player player) {
     Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
 
-    if(OmegaVision.getInstance().getPlayerData().getConfig().isConfigurationSection(player.getUniqueId().toString())) {
-      OmegaVision.getInstance().getPlayerData().getConfig().set(player.getUniqueId().toString() + ".NightVision.Enabled", false);
+    if(playerData.isConfigurationSection(player.getUniqueId().toString())) {
+      playerData.set(player.getUniqueId().toString() + ".NightVision.Enabled", false);
       OmegaVision.getInstance().getPlayerData().saveConfig();
     }
   }

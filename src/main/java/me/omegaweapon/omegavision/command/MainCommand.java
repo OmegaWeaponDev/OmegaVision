@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class MainCommand extends GlobalCommand {
+  private final MessageHandler messagesHandler = new MessageHandler(OmegaVision.getInstance().getMessagesFile().getConfig());
 
 	@Override
 	protected void execute(final CommandSender sender, final String[] strings) {
@@ -36,7 +37,7 @@ public class MainCommand extends GlobalCommand {
 	private void versionCommand(final CommandSender sender) {
 	  if(sender instanceof Player) {
 	    Player player = (Player) sender;
-      Utilities.message(player, MessageHandler.pluginPrefix() + "&b OmegaVision &cv" + OmegaVision.getInstance().getDescription().getVersion() + " &bBy OmegaWeaponDev");
+      Utilities.message(player, messagesHandler.getPrefix() + "&bOmegaVision &cv" + OmegaVision.getInstance().getDescription().getVersion() + " &bBy OmegaWeaponDev");
       return;
     }
 
@@ -48,9 +49,9 @@ public class MainCommand extends GlobalCommand {
       Player player = (Player) sender;
 
       Utilities.message(player,
-        MessageHandler.pluginPrefix() + " &bToggle command: &c/nv & /nv <player>",
-        MessageHandler.pluginPrefix() + " &bList command: &c/nvlist",
-        MessageHandler.pluginPrefix() + " &bReload command: &c/omegavision reload"
+        messagesHandler.getPrefix() + "&bToggle command: &c/nv & /nv <player>",
+        messagesHandler.getPrefix() + "&bList command: &c/nvlist",
+        messagesHandler.getPrefix() + "&bReload command: &c/omegavision reload"
       );
       return;
     }
@@ -66,18 +67,18 @@ public class MainCommand extends GlobalCommand {
     if(sender instanceof Player) {
       Player player = (Player) sender;
 
-      if(!Utilities.checkPermissions(player, true, "omegavision.reload", "omegavision.*")) {
-        Utilities.message(player, MessageHandler.playerMessage("No_Permission", "&cSorry, you do not have permission to use this command."));
+      if(!Utilities.checkPermissions(player, true, "omegavision.reload", "omegavision.admin")) {
+        Utilities.message(player, messagesHandler.string("No_Permission", "&cSorry, you do not have permission to use this command."));
         return;
       }
 
       OmegaVision.getInstance().onReload();
-      Utilities.message(player, MessageHandler.playerMessage("Reload_Message", "&cOmegaVision has successfully been reloaded"));
+      Utilities.message(player, messagesHandler.string("Reload_Message", "&cOmegaVision has successfully been reloaded"));
       return;
     }
 
     OmegaVision.getInstance().onReload();
-    Utilities.logInfo(true, MessageHandler.consoleMessage("Reload_Message", "OmegaVision has successfully been reloaded"));
+    Utilities.logInfo(true, messagesHandler.console("Reload_Message", "OmegaVision has successfully been reloaded"));
 	}
 
   private void invalidArgsCommand(final CommandSender sender) {
@@ -85,8 +86,8 @@ public class MainCommand extends GlobalCommand {
       Player player = (Player) sender;
 
       Utilities.message(player,
-        MessageHandler.pluginPrefix() + "&b OmegaVision &cv" + OmegaVision.getInstance().getDescription().getVersion() + " &bBy OmegaWeaponDev",
-        MessageHandler.pluginPrefix() + " &c/omegavision help &bto display all the commands"
+        messagesHandler.getPrefix() + "&bOmegaVision &cv" + OmegaVision.getInstance().getDescription().getVersion() + " &bBy OmegaWeaponDev",
+        messagesHandler.getPrefix() + "&c/omegavision help &bto display all the commands"
       );
       return;
     }

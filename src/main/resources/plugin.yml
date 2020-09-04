@@ -16,19 +16,19 @@ commands:
     aliases: [nv, nvision, nightv]
   nightvisionlist:
     description: The Nightvision List command
-    aliases: [nvlist, nvisionlist, nvl]
-  nvlimit:
+    aliases: [nvlist]
+  nightvisionlimit:
     description: The NightVision Limit Command
-    aliases: [nvl, nightvisionlimit]
-  nvtemp:
+    aliases: [nvlimit]
+  nightvisiontemp:
     description: The NightVision Temp Toggle command
-    aliases: [nvt, nightvisiontemp]
-  nvall:
+    aliases: [nvt, nvtemp]
+  nightvisionall:
     description: The NightVision Toggle All command
-    aliases: [nva, nightvisionall]
+    aliases: [nva, nvall]
 
 permissions:
-  omegavision.*:
+  omegavision.admin:
     description: Grants the user access to all commands
     default: false
     children:
@@ -38,16 +38,16 @@ permissions:
       - omegavision.toggle.others
       - omegavision.toggle.all
       - omegavision.toggle.temp
-      - omegavision.toggle.*
+      - omegavision.toggle.global
       - omegavision.bucket
       - omegavision.blindess.bypass
       - omegavision.list
       - omegavision.limit.check
-      - omegavision.limit.*
+      - omegavision.limit.all
       - omegavision.limit.checkothers
       - omegavision.limit.reset
       - omegavision.limit.bypass
-  omegavision.limit.*:
+  omegavision.limit.all:
     description: Grants the user access to all the limit commands
     default: false
     children:
@@ -55,13 +55,13 @@ permissions:
       - omegavision.limit.checkothers
       - omegavision.limit.bypass
       - omegavision.limit.reset
-  omegavision.toggle.*:
+  omegavision.toggle.all:
     description: Grants the user access to all the toggle commands
     default: false
     children:
       - omegavision.toggle
       - omegavision.toggle.others
-      - omegavision.toggle.all
+      - omegavision.toggle.global
       - omegavision.toggle.temp
   omegavision.reload:
     description: Grants the user access to the reload command
@@ -75,7 +75,7 @@ permissions:
   omegavision.toggle.others:
     description: Grants the user access to the toggle others command
     default: false
-  omegavision.toggle.all:
+  omegavision.toggle.global:
     description: Grants the user access to the toggle all command
     default: false
   omegavision.toggle.temp:

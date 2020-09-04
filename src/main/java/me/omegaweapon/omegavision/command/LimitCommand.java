@@ -6,9 +6,13 @@ import me.ou.library.Utilities;
 import me.ou.library.commands.GlobalCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class LimitCommand extends GlobalCommand {
+  private final MessageHandler messagesHandler = new MessageHandler(OmegaVision.getInstance().getMessagesFile().getConfig());
+  private final FileConfiguration playerData = OmegaVision.getInstance().getPlayerData().getConfig();
 
   @Override
   protected void execute(CommandSender sender, String[] strings) {
@@ -42,8 +46,8 @@ public class LimitCommand extends GlobalCommand {
 
       if(strings.length == 1) {
 
-        if(!Utilities.checkPermissions(player, true, "omegavision.limit.check", "omegavision.limit.*", "omegavision.*")) {
-          Utilities.message(player, MessageHandler.playerMessage("No_Permission", "&cSorry, you do not have permission to use that command."));
+        if(!Utilities.checkPermissions(player, true, "omegavision.limit.check", "omegavision.limit.all", "omegavision.admin")) {
+          Utilities.message(player, messagesHandler.string("No_Permission", "&cSorry, you do not have permission to use that command."));
           return;
         }
 
@@ -52,7 +56,9 @@ public class LimitCommand extends GlobalCommand {
           return;
         }
 
-        Utilities.message(player, MessageHandler.limitCheck(player));
+        Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Check", "Your limit amount currently stands at: %currentLimitAmount% / %maxLimitAmount%")
+          .replace("%currentLimitAmount%", String.valueOf(playerData.getInt(player.getUniqueId().toString() + ".Limit")))
+          .replace("maxLimitAmount", String.valueOf(OmegaVision.getInstance().getConfigFile().getConfig().getInt("Night_Vision_Limit.Limit"))));
         return;
       }
 
@@ -65,16 +71,20 @@ public class LimitCommand extends GlobalCommand {
         }
 
         if(target == null) {
-          Utilities.message(player, MessageHandler.pluginPrefix() + " &cSorry, that player does not exist.");
+          Utilities.message(player, messagesHandler.string("Invalid_Player", "&cSorry, that player cannot be found."));
           return;
         }
 
-        if(!Utilities.checkPermissions(player, true, "omegavision.limit.checkothers", "omegavision.limit.*", "omegavision.*")) {
-          Utilities.message(player, MessageHandler.playerMessage("No_Permission", "&cSorry, you do not have permission to use that command."));
+        if(!Utilities.checkPermissions(player, true, "omegavision.limit.checkothers", "omegavision.limit.all", "omegavision.admin")) {
+          Utilities.message(player, messagesHandler.string("No_Permission", "&cSorry, you do not have permission to use that command."));
           return;
         }
 
-        Utilities.message(player, MessageHandler.limitCheckOther(target));
+        Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Check_Others", "&c&player&'s limit amount currently stands at: %currentLimitAmount% / %maxLimitAmount%")
+          .replace("%player%", target.getName())
+          .replace("%currentLimitAmount%", String.valueOf(playerData.getInt(player.getUniqueId().toString() + ".Limit")))
+          .replace("maxLimitAmount", String.valueOf(OmegaVision.getInstance().getConfigFile().getConfig().getInt("Night_Vision_Limit.Limit")))
+        );
         return;
       }
       return;
@@ -88,12 +98,15 @@ public class LimitCommand extends GlobalCommand {
     }
 
     if(target == null) {
-      Utilities.logInfo(true, "Sorry, that player does not exist.");
+      Utilities.logInfo(true, messagesHandler.console("Invalid_Player", "&cSorry, that player cannot be found."));
       return;
     }
 
     if(strings.length == 2) {
-      Utilities.logInfo(true, MessageHandler.limitCheckOther(target));
+      Utilities.logInfo(true, messagesHandler.console("Night_Vision_Limit.Limit_Check_Others", "&c&player&'s limit amount currently stands at: %currentLimitAmount% / %maxLimitAmount%")
+        .replace("%player%", target.getName())
+        .replace("%currentLimitAmount%", String.valueOf(playerData.getInt(target.getUniqueId().toString() + ".Limit")))
+        .replace("maxLimitAmount", String.valueOf(OmegaVision.getInstance().getConfigFile().getConfig().getInt("Night_Vision_Limit.Limit"))));
     }
   }
 
@@ -103,12 +116,12 @@ public class LimitCommand extends GlobalCommand {
       Player target = Bukkit.getPlayer(strings[1]);
 
       if(!Utilities.checkPermissions(player, true, "omegavision.*", "omegavision.limit.*", "omegavision.limit.reset")) {
-        Utilities.message(player, MessageHandler.playerMessage("No_Permission", "&cSorry, you do not have permission to use that command."));
+        Utilities.message(player, messagesHandler.string("No_Permission", "&cSorry, you do not have permission to use that command."));
         return;
       }
 
       if(target == null) {
-        Utilities.message(player, MessageHandler.pluginPrefix() + "&cSorry, that user does not exist.");
+        Utilities.message(player, messagesHandler.string("Invalid_Player", "&cSorry, that player cannot be found."));
         return;
       }
 
@@ -120,8 +133,7 @@ public class LimitCommand extends GlobalCommand {
       OmegaVision.getInstance().getPlayerData().getConfig().set(target.getUniqueId().toString() + ".Limit", 0);
       OmegaVision.getInstance().getPlayerData().saveConfig();
 
-      Utilities.message(target, MessageHandler.playerMessage("Night_Vision_Limit.Limit_Reset", "&bYour limit's have been reset! You can use the nightvision command again!"));
-      Utilities.message(player, MessageHandler.pluginPrefix() + " " + MessageHandler.limitResetOthers(target));
+      Utilities.message(target, messagesHandler.string("Night_Vision_Limit.Limit_Reset", "&bYour limit's have been reset! You can use the nightvision command again!"));
       return;
     }
 
@@ -130,8 +142,7 @@ public class LimitCommand extends GlobalCommand {
     OmegaVision.getInstance().getPlayerData().getConfig().set(target.getUniqueId().toString() + ".Limit", 0);
     OmegaVision.getInstance().getPlayerData().saveConfig();
 
-    Utilities.message(target, MessageHandler.playerMessage("Night_Vision_Limit.Limit_Reset", "&bYour limit's have been reset! You can use the nightvision command again!"));
-    Utilities.logInfo(true, MessageHandler.limitResetOthers(target));
+    Utilities.message(target, messagesHandler.string("Night_Vision_Limit.Limit_Reset", "&bYour limit's have been reset! You can use the nightvision command again!"));
   }
 
   private void helpCommand(final CommandSender sender) {
@@ -139,8 +150,8 @@ public class LimitCommand extends GlobalCommand {
       Player player = (Player) sender;
 
       Utilities.message(player,
-        MessageHandler.pluginPrefix() + " &bLimit Check command: &c/nvlimit check & /nvlimit check <player>",
-        MessageHandler.pluginPrefix() + " &bLimit Reset command: &c/nvlimit reset <player>"
+        messagesHandler.getPrefix() + "&bLimit Check command: &c/nvlimit check & /nvlimit check <player>",
+        messagesHandler.getPrefix() + "&bLimit Reset command: &c/nvlimit reset <player>"
       );
       return;
     }

@@ -1,9 +1,9 @@
 package me.omegaweapon.omegavision.events;
 
 import me.omegaweapon.omegavision.OmegaVision;
-import me.omegaweapon.omegavision.UpdateChecker;
 import me.omegaweapon.omegavision.utils.MessageHandler;
 import me.omegaweapon.omegavision.utils.NightVisionToggle;
+import me.ou.library.SpigotUpdater;
 import me.ou.library.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -11,6 +11,7 @@ import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -23,19 +24,20 @@ import java.util.concurrent.TimeUnit;
 
 public class PlayerListener implements Listener {
   private final FileConfiguration configFile = OmegaVision.getInstance().getConfigFile().getConfig();
+  private final MessageHandler messageHandler = new MessageHandler(OmegaVision.getInstance().getMessagesFile().getConfig());
   
-  @EventHandler
+  @EventHandler(priority = EventPriority.HIGHEST)
   public void onPlayerJoin(PlayerJoinEvent playerJoinEvent) {
     Player player = playerJoinEvent.getPlayer();
 
     nightVisionLogin(player);
     nightVisionLimitReset(player);
 
-    if(!Utilities.checkPermissions(player, true, "omegavision.update", "omegavision.*")) {
+    if(!Utilities.checkPermissions(player, true, "omegavision.update", "omegavision.admin")) {
       return;
     }
 
-    new UpdateChecker(OmegaVision.getInstance(), 73013).getVersion(version -> {
+    new SpigotUpdater(OmegaVision.getInstance(), 73013).getVersion(version -> {
       if (!OmegaVision.getInstance().getDescription().getVersion().equalsIgnoreCase(version)) {
         PluginDescriptionFile pdf = OmegaVision.getInstance().getDescription();
         Utilities.message(player,
@@ -47,15 +49,16 @@ public class PlayerListener implements Listener {
     });
   }
   
-  @EventHandler
+  @EventHandler(priority = EventPriority.HIGHEST)
   public void onPlayerQuit(PlayerQuitEvent playerQuitEvent) {
     Player player = playerQuitEvent.getPlayer();
+    final NightVisionToggle nvToggle = new NightVisionToggle(player);
     
     // Remove the players from the map when they quit
-    NightVisionToggle.playerMap.remove(player.getUniqueId());
+    nvToggle.playerMap.remove(player.getUniqueId());
   }
   
-  @EventHandler
+  @EventHandler(priority = EventPriority.HIGHEST)
   public void onMilkBucketUse(PlayerItemConsumeEvent playerItemConsumeEvent) {
     Player player = playerItemConsumeEvent.getPlayer();
 
@@ -83,7 +86,7 @@ public class PlayerListener implements Listener {
     }
 
     Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100, 1, false, false, false);
-    Utilities.message(player, MessageHandler.playerMessage("Bucket_Message", "&9Particle Effects and the icon have been removed!"));
+    Utilities.message(player, messageHandler.string("Bucket_Message", "&9Particle Effects and the icon have been removed!"));
 
     if(!configFile.getBoolean("Bucket_Empty")) {
       return;
@@ -92,7 +95,7 @@ public class PlayerListener implements Listener {
     player.getInventory().getItemInMainHand().setType(Material.BUCKET);
   }
   
-  @EventHandler
+  @EventHandler(priority = EventPriority.HIGHEST)
   public void onPlayerDeath(PlayerRespawnEvent e) {
     Player player = e.getPlayer();
     Boolean nightVision = configFile.getBoolean(player.getUniqueId().toString() + ".NightVision");
@@ -120,6 +123,7 @@ public class PlayerListener implements Listener {
   }
 
   private void nightVisionLogin(final Player player) {
+    final NightVisionToggle nvToggle = new NightVisionToggle(player);
     Boolean nightVision = configFile.getBoolean(player.getUniqueId().toString() + ".NightVision");
 
     if(!configFile.getBoolean("Night_Vision_Login")) {
@@ -127,19 +131,20 @@ public class PlayerListener implements Listener {
     }
 
     if(!Utilities.checkPermissions(player, true, "omegavision.login", "omegavision.*")) {
-      NightVisionToggle.nightvisionDisable(player);
+      nvToggle.nightvisionDisable();
       return;
     }
 
     if(nightVision.equals(true)) {
-      NightVisionToggle.nightVisionEnable(player);
+      nvToggle.nightVisionEnable();
       return;
     }
 
-    NightVisionToggle.nightvisionDisable(player);
+    nvToggle.nightvisionDisable();
   }
 
   private void nightVisionLimitReset(final Player player) {
+    final NightVisionToggle nvToggle = new NightVisionToggle(player);
 
     if(!configFile.getBoolean("Night_Vision_Limit.Enabled")) {
       return;
@@ -149,7 +154,7 @@ public class PlayerListener implements Listener {
       return;
     }
 
-    if(NightVisionToggle.nightvisionLimitReached.get(player.getUniqueId()) == null) {
+    if(nvToggle.nightvisionLimitReached.get(player.getUniqueId()) == null) {
       return;
     }
 
@@ -157,7 +162,7 @@ public class PlayerListener implements Listener {
       int configResetTimer = configFile.getInt("Night_Vision_Limit.Reset_Timer");
 
       Long resetTimer = TimeUnit.MILLISECONDS.convert(configResetTimer, TimeUnit.MINUTES);
-      Long limitReachedTime = NightVisionToggle.nightvisionLimitReached.get(player.getUniqueId());
+      Long limitReachedTime = nvToggle.nightvisionLimitReached.get(player.getUniqueId());
 
       if(!(System.currentTimeMillis() >= (limitReachedTime + resetTimer))) {
         return;
@@ -167,8 +172,8 @@ public class PlayerListener implements Listener {
       OmegaVision.getInstance().getPlayerData().saveConfig();
     }, 20L, 20L * 60L);
 
-    if(OmegaVision.getInstance().getConfigFile().getConfig().getBoolean("Sound_Effects.Limit_Reset.Enabled")) {
-      player.playSound(player.getLocation(), Sound.valueOf(OmegaVision.getInstance().getConfigFile().getConfig().getString("Sound_Effects.Limit_Reset.Sound")), 1, 1);
+    if(configFile.getBoolean("Sound_Effects.Limit_Reset.Enabled")) {
+      player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Limit_Reset.Sound")), 1, 1);
     }
   }
 }

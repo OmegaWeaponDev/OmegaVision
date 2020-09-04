@@ -46,10 +46,15 @@ Night_Vision_Limit:
   Limit_Reached: "&cSorry, you have reached the limit for the nightvision command!"
   # Sets the message players get when their limit amount has been reset
   Limit_Reset: "&bYour limit's have been reset! You can use the nightvision command again!"
-  # Sets the messages players get when their limit count has been increased
+  # Sets the message players get when their limit count has been increased
   Limit_Amount_Increased: "&bYour limit amount now stands at: &c%currentLimitAmount% / %maxLimitAmount%"
   # Sets the message players get when they use the limit check command
   Limit_Check: "&bYour limit amount currently stands at: &c%currentLimitAmount% / %maxLimitAmount%"
+  # Sets the message players get when they check another players command limits
+  Limit_Check_Others: "&c&player&'s &blimit amount currently stands at: &c%currentLimitAmount% / %maxLimitAmount%"
+
+# Set the message player receive when a player is not found
+Invalid_Player: "&cSorry, that player cannot be found."
 
 # Sets the messages for when players don't have permission to use nightvision.
 No_Permission: "&cSorry, but you don't have permission to do that"
@@ -58,4 +63,4 @@ No_Permission: "&cSorry, but you don't have permission to do that"
 Reload_Message: "&cOmegaVision has successfully been reloaded"
 
 # DO NOT EDIT THIS!
-Config_Version: 1.1
+Config_Version: 1.2
