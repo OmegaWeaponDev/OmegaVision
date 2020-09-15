@@ -115,7 +115,7 @@ public class LimitCommand extends GlobalCommand {
       Player player = (Player) sender;
       Player target = Bukkit.getPlayer(strings[1]);
 
-      if(!Utilities.checkPermissions(player, true, "omegavision.*", "omegavision.limit.*", "omegavision.limit.reset")) {
+      if(!Utilities.checkPermissions(player, true, "omegavision.admin", "omegavision.limit.all", "omegavision.limit.reset")) {
         Utilities.message(player, messagesHandler.string("No_Permission", "&cSorry, you do not have permission to use that command."));
         return;
       }

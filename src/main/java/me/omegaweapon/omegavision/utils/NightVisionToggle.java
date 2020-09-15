@@ -47,7 +47,7 @@ public class NightVisionToggle {
     Utilities.message(player, messageHandler.string("NightVision_Applied", "&9Night Vision has been applied!"));
 
     // Add the players nightvision status to playerData.yml if they have the login permission
-    if(Utilities.checkPermissions(player, true,"omegavision.login", "omegavision.*")) {
+    if(Utilities.checkPermissions(player, true,"omegavision.login", "omegavision.admin")) {
 
       // Check if they have been added to the file, if not, add them
       if (!playerData.isConfigurationSection(player.getUniqueId().toString())) {
@@ -65,7 +65,7 @@ public class NightVisionToggle {
     }
 
     if(configFile.getBoolean("Night_Vision_Limit.Enabled")) {
-      if(!Utilities.checkPermissions(player, true, "omegavision.limit.bypass", "omegavision.limit.*", "omegavision.*")) {
+      if(!Utilities.checkPermissions(player, true, "omegavision.limit.bypass", "omegavision.limit.admin", "omegavision.admin")) {
         limitIncrease();
       }
     }
@@ -158,7 +158,10 @@ public class NightVisionToggle {
       playerData.set(player.getUniqueId().toString() + ".Limit", playerLimitAmount + 1);
       OmegaVision.getInstance().getPlayerData().saveConfig();
 
-      Utilities.message(player, messageHandler.string("Night_Vision_Limit.Limit_Amount_Increased", "&bYour limit amount now stands at: &c%currentLimitAmount% / %maxLimitAmount%"));
+      Utilities.message(player, messageHandler.string("Night_Vision_Limit.Limit_Amount_Increased", "&bYour limit amount now stands at: &c%currentLimitAmount% / %maxLimitAmount%")
+        .replace("%currentLimitAmount%", String.valueOf(playerLimitAmount))
+        .replace("maxLimitAmount", String.valueOf(configFile.getInt("Night_Vision_Limit.Limit")))
+      );
     }
   }
 }

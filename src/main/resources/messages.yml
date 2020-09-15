@@ -21,6 +21,9 @@ NightVision_Applied: "&9Night Vision has been applied!"
 # Sets the message for when players have night vision removed.
 NightVision_Removed: "&cNight Vision has been removed!"
 
+# Sets the message players get when they apply night vision temporary for someone.
+NightVision_Appplied_Temp: "&3 Night vision has now been temporarily applied for %player%"
+
 # Sets the message all players get when night vision has been applied globally
 NightVision_Applied_Global: "&9Night Vision has been applied for all players!"
 

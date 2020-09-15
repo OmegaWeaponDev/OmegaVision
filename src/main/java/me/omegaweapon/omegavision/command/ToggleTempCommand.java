@@ -2,7 +2,6 @@ package me.omegaweapon.omegavision.command;
 
 import me.omegaweapon.omegavision.OmegaVision;
 import me.omegaweapon.omegavision.utils.MessageHandler;
-import me.omegaweapon.omegavision.utils.NightVisionToggle;
 import me.ou.library.Utilities;
 import me.ou.library.commands.GlobalCommand;
 import org.bukkit.Bukkit;
@@ -36,7 +35,7 @@ public class ToggleTempCommand extends GlobalCommand {
       return;
     }
 
-    if(!Utilities.checkPermissions(player, true, "omegavision.toggle.temp", "omegavision.*", "omegavision.toggle.*")) {
+    if(!Utilities.checkPermissions(player, true, "omegavision.toggle.temp", "omegavision.admin", "omegavision.toggle.all")) {
       Utilities.message(player, messageHandler.string("No_Permission", "&cSorry, you do not have permission to use that command."));
       return;
     }
@@ -50,6 +49,7 @@ public class ToggleTempCommand extends GlobalCommand {
     }
 
     applyNightVision(tempTime, target);
+    Utilities.message(player, messageHandler.string("NightVision_Applied_Temp", "&3 Night vision has now been temporarily applied for %player%").replace("%player%", target.getName()));
   }
 
   private void consoleToggleTemp(final CommandSender commandSender, final String[] strings) {
@@ -73,6 +73,7 @@ public class ToggleTempCommand extends GlobalCommand {
     }
 
     applyNightVision(tempTime, target);
+    Utilities.logInfo(true, messageHandler.console("NightVision_Applied_Temp", "&3 Night vision has now been temporarily applied for %player%").replace("%player%", target.getName()));
   }
 
   private void applyNightVision(final Integer duration, final Player target) {

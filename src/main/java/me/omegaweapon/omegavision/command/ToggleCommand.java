@@ -20,7 +20,7 @@ public class ToggleCommand extends PlayerCommand {
 
     if(strings.length == 0) {
 
-      if(!Utilities.checkPermissions(player, true, "omegavision.toggle", "omegavision.*", "omegavision.toggle.*")) {
+      if(!Utilities.checkPermissions(player, true, "omegavision.toggle", "omegavision.admin", "omegavision.toggle.all")) {
         Utilities.message(player, messageHandler.string("No_Permission", "&cSorry, you do not have permission to use this command."));
         return;
       }
@@ -46,7 +46,7 @@ public class ToggleCommand extends PlayerCommand {
 
     if(strings.length == 1) {
 
-      if(!Utilities.checkPermissions(player, true, "omegavision.toggle.others", "omegavision.toggle.*", "omegavision.*")) {
+      if(!Utilities.checkPermissions(player, true, "omegavision.toggle.others", "omegavision.toggle.all", "omegavision.admin")) {
         Utilities.message(player, messageHandler.string("No_Permission", "&cSorry, you do not have permission to use this command."));
         return;
       }

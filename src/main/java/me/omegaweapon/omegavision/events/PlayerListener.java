@@ -71,7 +71,7 @@ public class PlayerListener implements Listener {
       return;
     }
 
-    if(!Utilities.checkPermissions(player, true, "omegavision.bucket", "omegavision.*")) {
+    if(!Utilities.checkPermissions(player, true, "omegavision.bucket", "omegavision.admin")) {
       return;
     }
   
@@ -104,7 +104,7 @@ public class PlayerListener implements Listener {
       return;
     }
 
-    if(!Utilities.checkPermissions(player, true, "omegavision.death", "omegavision.*")) {
+    if(!Utilities.checkPermissions(player, true, "omegavision.death", "omegavision.admin")) {
       return;
     }
 
@@ -130,7 +130,7 @@ public class PlayerListener implements Listener {
       return;
     }
 
-    if(!Utilities.checkPermissions(player, true, "omegavision.login", "omegavision.*")) {
+    if(!Utilities.checkPermissions(player, true, "omegavision.login", "omegavision.admin")) {
       nvToggle.nightvisionDisable();
       return;
     }
@@ -150,7 +150,7 @@ public class PlayerListener implements Listener {
       return;
     }
 
-    if(Utilities.checkPermissions(player, true, "omegavision.limit.*", "omegavision.limit.bypass", "omegavision.*")) {
+    if(Utilities.checkPermissions(player, true, "omegavision.limit.all", "omegavision.limit.bypass", "omegavision.admin")) {
       return;
     }
 
