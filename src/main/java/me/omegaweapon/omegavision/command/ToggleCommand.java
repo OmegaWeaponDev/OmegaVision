@@ -64,7 +64,7 @@ public class ToggleCommand extends PlayerCommand {
       }
 
       if (strings[1].equalsIgnoreCase("off")) {
-        nvToggle.nightvisionEnableOthers(target);
+        nvToggle.nightvisionDisableOthers(target);
       }
     }
   }
