@@ -17,6 +17,19 @@ public class ToggleAllCommand extends GlobalCommand {
 
   @Override
   protected void execute(CommandSender commandSender, String[] strings) {
+
+    if(strings.length == 0) {
+      Utilities.logWarning(true,
+        "You need to include add/remove to the command!"
+      );
+
+      if(commandSender instanceof Player) {
+        Player player = (Player) commandSender;
+        Utilities.message(player, "&cYou need to include add/remove to the command!");
+      }
+      return;
+    }
+
     playerToggleAll(commandSender, strings);
   }
 
