@@ -28,7 +28,7 @@ public class ToggleAllCommand extends GlobalCommand {
 
     Player player = (Player) commandSender;
 
-    if(!Utilities.checkPermissions(player, true, "omegavision.toggle.all", "omegavision.admin", "omegavision.toggle.all")) {
+    if(!Utilities.checkPermissions(player, true, "omegavision.toggle.global", "omegavision.admin", "omegavision.toggle.all")) {
       Utilities.message(player, messagesHandler.string("No_Permission", "&cSorry, you do not have permission to use that command"));
       return;
     }

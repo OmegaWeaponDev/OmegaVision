@@ -124,7 +124,7 @@ public class PlayerListener implements Listener {
 
   private void nightVisionLogin(final Player player) {
     final NightVisionToggle nvToggle = new NightVisionToggle(player);
-    Boolean nightVision = configFile.getBoolean(player.getUniqueId().toString() + ".NightVision");
+    Boolean nightVision = OmegaVision.getInstance().getPlayerData().getConfig().getBoolean(player.getUniqueId().toString() + ".NightVision");
 
     if(!configFile.getBoolean("Night_Vision_Login")) {
       return;

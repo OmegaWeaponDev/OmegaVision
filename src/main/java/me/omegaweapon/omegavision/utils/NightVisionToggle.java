@@ -113,12 +113,12 @@ public class NightVisionToggle {
     OmegaVision.getInstance().getPlayerData().saveConfig();
   }
 
-  public void nightvisionEnableOthers() {
+  public void nightvisionEnableOthers(final Player target) {
     nightVisionEnable();
-    Utilities.message(player, messageHandler.string("NightVision_Applied", "&9Night Vision has been applied!"));
+    Utilities.message(target, messageHandler.string("NightVision_Applied", "&9Night Vision has been applied!"));
 
     if(configFile.getBoolean("Sound_Effects.Night_Vision_Enable.Enabled")) {
-      player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Enable.Sound")), 1, 1);
+      player.playSound(target.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Enable.Sound")), 1, 1);
     }
   }
 

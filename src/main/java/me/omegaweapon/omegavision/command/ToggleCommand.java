@@ -44,7 +44,7 @@ public class ToggleCommand extends PlayerCommand {
       return;
     }
 
-    if(strings.length == 1) {
+    if(strings.length == 2) {
 
       if(!Utilities.checkPermissions(player, true, "omegavision.toggle.others", "omegavision.toggle.all", "omegavision.admin")) {
         Utilities.message(player, messageHandler.string("No_Permission", "&cSorry, you do not have permission to use this command."));
@@ -58,12 +58,14 @@ public class ToggleCommand extends PlayerCommand {
         return;
       }
 
-      if (!target.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
-        nvToggle.nightvisionEnableOthers();
+      if(strings[1].equalsIgnoreCase("on")) {
+        nvToggle.nightvisionEnableOthers(target);
         return;
       }
 
-      nvToggle.nightvisionDisableOthers(target);
+      if (strings[1].equalsIgnoreCase("off")) {
+        nvToggle.nightvisionEnableOthers(target);
+      }
     }
   }
 }

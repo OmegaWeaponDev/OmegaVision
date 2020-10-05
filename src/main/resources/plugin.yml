@@ -102,3 +102,6 @@ permissions:
   omegavision.limit.reset:
     description: Grants the user access to the limit reset command
     default: false
+  omegavision.login:
+    description: Allows the user access to keep nightvision on login
+    default: false
