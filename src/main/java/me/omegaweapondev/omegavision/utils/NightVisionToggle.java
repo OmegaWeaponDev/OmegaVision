@@ -1,6 +1,6 @@
-package me.omegaweapon.omegavision.utils;
+package me.omegaweapondev.omegavision.utils;
 
-import me.omegaweapon.omegavision.OmegaVision;
+import me.omegaweapondev.omegavision.OmegaVision;
 import me.ou.library.Utilities;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -113,21 +113,19 @@ public class NightVisionToggle {
     OmegaVision.getInstance().getPlayerData().saveConfig();
   }
 
-  public void nightvisionEnableOthers(final Player target) {
+  public void nightvisionEnableOthers() {
     nightVisionEnable();
-    Utilities.message(target, messageHandler.string("NightVision_Applied", "&9Night Vision has been applied!"));
 
     if(configFile.getBoolean("Sound_Effects.Night_Vision_Enable.Enabled")) {
-      player.playSound(target.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Enable.Sound")), 1, 1);
+      player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Enable.Sound")), 1, 1);
     }
   }
 
-  public void nightvisionDisableOthers(final Player target) {
+  public void nightvisionDisableOthers() {
     nightvisionDisable();
-    Utilities.message(target, messageHandler.string("NightVision_Removed", "&cNight Vision has been removed!"));
 
     if(configFile.getBoolean("Sound_Effects.Night_Vision_Disable.Enable")) {
-      target.playSound(target.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Disable.Sound")), 1, 1);
+      player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Disable.Sound")), 1, 1);
     }
   }
 

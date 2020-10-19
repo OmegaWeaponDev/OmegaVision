@@ -1,6 +1,6 @@
-package me.omegaweapon.omegavision.utils;
+package me.omegaweapondev.omegavision.utils;
 
-import me.omegaweapon.omegavision.OmegaVision;
+import me.omegaweapondev.omegavision.OmegaVision;
 import me.ou.library.Utilities;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;

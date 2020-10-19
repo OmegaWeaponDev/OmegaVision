@@ -21,6 +21,9 @@ NightVision_Applied: "&9Night Vision has been applied!"
 # Sets the message for when players have night vision removed.
 NightVision_Removed: "&cNight Vision has been removed!"
 
+# Sets the message for when night vision gets automatically disabled when entering a specific world
+NightVision_World_Disable: "&cYour nightvision has been disabled."
+
 # Sets the message players get when they apply night vision temporary for someone.
 NightVision_Appplied_Temp: "&3 Night vision has now been temporarily applied for %player%"
 
@@ -66,4 +69,4 @@ No_Permission: "&cSorry, but you don't have permission to do that"
 Reload_Message: "&cOmegaVision has successfully been reloaded"
 
 # DO NOT EDIT THIS!
-Config_Version: 1.2
+Config_Version: 1.3

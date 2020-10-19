@@ -1,8 +1,8 @@
-package me.omegaweapon.omegavision.events;
+package me.omegaweapondev.omegavision.events;
 
-import me.omegaweapon.omegavision.OmegaVision;
-import me.omegaweapon.omegavision.utils.MessageHandler;
-import me.omegaweapon.omegavision.utils.NightVisionToggle;
+import me.omegaweapondev.omegavision.OmegaVision;
+import me.omegaweapondev.omegavision.utils.MessageHandler;
+import me.omegaweapondev.omegavision.utils.NightVisionToggle;
 import me.ou.library.SpigotUpdater;
 import me.ou.library.Utilities;
 import org.bukkit.Bukkit;
@@ -13,10 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -122,9 +119,27 @@ public class PlayerListener implements Listener {
     }, (1));
   }
 
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void onWorldChange(PlayerChangedWorldEvent changedWorldEvent) {
+    final Player player = changedWorldEvent.getPlayer();
+
+    if(!configFile.getBoolean("World_Disable.Enabled")) {
+      return;
+    }
+
+    if(Utilities.checkPermissions(player, true, "omegavision.nightvision.worldbypass", "omegavision.admin")) {
+      return;
+    }
+
+    if(player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+      Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
+      Utilities.message(player, messageHandler.string("NightVision_World_Disable", "&cYour nightvision has been disabled."));
+    }
+  }
+
   private void nightVisionLogin(final Player player) {
     final NightVisionToggle nvToggle = new NightVisionToggle(player);
-    Boolean nightVision = OmegaVision.getInstance().getPlayerData().getConfig().getBoolean(player.getUniqueId().toString() + ".NightVision");
+    Boolean nightVision = OmegaVision.getInstance().getPlayerData().getConfig().getBoolean(player.getUniqueId().toString() + ".NightVision.Enabled");
 
     if(!configFile.getBoolean("Night_Vision_Login")) {
       return;

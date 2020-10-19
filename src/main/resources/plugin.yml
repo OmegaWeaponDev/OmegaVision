@@ -47,6 +47,7 @@ permissions:
       - omegavision.limit.checkothers
       - omegavision.limit.reset
       - omegavision.limit.bypass
+      - omegavision.nightvision.worldbypass
   omegavision.limit.all:
     description: Grants the user access to all the limit commands
     default: false
@@ -104,4 +105,7 @@ permissions:
     default: false
   omegavision.login:
     description: Allows the user access to keep nightvision on login
+    default: false
+  omegavision.nightvision.worldbypass:
+    description: Allows the user to keep nightvision on world change
     default: false

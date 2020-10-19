@@ -1,14 +1,13 @@
-package me.omegaweapon.omegavision.command;
+package me.omegaweapondev.omegavision.command;
 
-import me.omegaweapon.omegavision.OmegaVision;
-import me.omegaweapon.omegavision.utils.MessageHandler;
+import me.omegaweapondev.omegavision.OmegaVision;
+import me.omegaweapondev.omegavision.utils.MessageHandler;
 import me.ou.library.Utilities;
 import me.ou.library.commands.GlobalCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class LimitCommand extends GlobalCommand {
   private final MessageHandler messagesHandler = new MessageHandler(OmegaVision.getInstance().getMessagesFile().getConfig());

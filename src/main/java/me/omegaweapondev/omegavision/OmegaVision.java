@@ -1,7 +1,7 @@
-package me.omegaweapon.omegavision;
+package me.omegaweapondev.omegavision;
 
-import me.omegaweapon.omegavision.command.*;
-import me.omegaweapon.omegavision.events.PlayerListener;
+import me.omegaweapondev.omegavision.command.*;
+import me.omegaweapondev.omegavision.events.PlayerListener;
 import me.ou.library.SpigotUpdater;
 import me.ou.library.Utilities;
 import me.ou.library.configs.ConfigCreator;
@@ -82,7 +82,10 @@ public class OmegaVision extends JavaPlugin {
 
     // The Updater
     new SpigotUpdater(this, 73013).getVersion(version -> {
-      if(this.getDescription().getVersion().equalsIgnoreCase(version)) {
+      int spigotVersion = Integer.parseInt(version.replace(".", ""));
+      int pluginVersion = Integer.parseInt(this.getDescription().getVersion().replace(".", ""));
+
+      if(pluginVersion >= spigotVersion) {
         Utilities.logInfo(true, "You are already running the latest version");
         return;
       }
@@ -140,14 +143,14 @@ public class OmegaVision extends JavaPlugin {
     Utilities.logInfo(true, "Attempting to update the config files....");
 
     try {
-      if(getConfigFile().getConfig().getDouble("Config_Version") != 1.2) {
-        getConfigFile().getConfig().set("Config_Version", 1.2);
+      if(getConfigFile().getConfig().getDouble("Config_Version") != 1.3) {
+        getConfigFile().getConfig().set("Config_Version", 1.3);
         getConfigFile().saveConfig();
-        ConfigUpdater.update(OmegaVision.getInstance(), "config.yml", getConfigFile().getFile(), Arrays.asList("none"));
+        ConfigUpdater.update(OmegaVision.getInstance(), "config.yml", getConfigFile().getFile(), Arrays.asList("World_Disable.Worlds"));
       }
 
-      if(getMessagesFile().getConfig().getDouble("Config_Version") != 1.2) {
-        getMessagesFile().getConfig().set("Config_Version", 1.2);
+      if(getMessagesFile().getConfig().getDouble("Config_Version") != 1.3) {
+        getMessagesFile().getConfig().set("Config_Version", 1.3);
         getMessagesFile().saveConfig();
         ConfigUpdater.update(OmegaVision.getInstance(), "messages.yml", getMessagesFile().getFile(), Arrays.asList("none"));
       }

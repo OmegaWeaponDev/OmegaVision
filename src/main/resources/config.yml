@@ -85,9 +85,16 @@ Night_Vision_Limit:
   # The timer starts after the limit has been reached
   Reset_Timer: 5
 
+# If enabled, for any worlds listed here night vision will automatically be disabled,
+World_Disable:
+  Enabled: true
+  Worlds:
+    - world_nether
+    - world_the_end
+
 # If set to true, those with the permission omegavision.update will recieve messages
 # when the plugin updates on spigot
 Update_Notify: true
 
 # DO NOT EDIT THIS!
-Config_Version: 1.2
+Config_Version: 1.3

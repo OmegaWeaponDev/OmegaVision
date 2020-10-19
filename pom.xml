@@ -18,7 +18,7 @@
   <groupId>me.omegaweapon</groupId>
   <artifactId>omegavision</artifactId>
   <name>OmegaVision</name>
-  <version>2.3.5</version>
+  <version>2.3.7</version>
   <description>OmegaVision allows the user to toggle nightvision on and off.</description>
 
   <!--
@@ -32,7 +32,7 @@
       The full path to your plugin's main class, so that Spigot can find and load it.
       This is used in the plugin.yml for automatic input into the file.
     -->
-    <main.class>me.omegaweapon.omegavision.OmegaVision</main.class>
+    <main.class>me.omegaweapondev.omegavision.OmegaVision</main.class>
 
     <!--
       Listing the Author or Authors of the plugin. Use in the plugin.yml file.

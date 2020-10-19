@@ -1,7 +1,7 @@
-package me.omegaweapon.omegavision.command;
+package me.omegaweapondev.omegavision.command;
 
-import me.omegaweapon.omegavision.OmegaVision;
-import me.omegaweapon.omegavision.utils.MessageHandler;
+import me.omegaweapondev.omegavision.OmegaVision;
+import me.omegaweapondev.omegavision.utils.MessageHandler;
 import me.ou.library.Utilities;
 import me.ou.library.commands.GlobalCommand;
 import org.bukkit.command.CommandSender;

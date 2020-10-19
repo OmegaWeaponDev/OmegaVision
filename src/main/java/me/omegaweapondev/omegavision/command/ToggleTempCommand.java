@@ -1,7 +1,7 @@
-package me.omegaweapon.omegavision.command;
+package me.omegaweapondev.omegavision.command;
 
-import me.omegaweapon.omegavision.OmegaVision;
-import me.omegaweapon.omegavision.utils.MessageHandler;
+import me.omegaweapondev.omegavision.OmegaVision;
+import me.omegaweapondev.omegavision.utils.MessageHandler;
 import me.ou.library.Utilities;
 import me.ou.library.commands.GlobalCommand;
 import org.bukkit.Bukkit;
@@ -86,5 +86,6 @@ public class ToggleTempCommand extends GlobalCommand {
     }
 
     Utilities.addPotionEffect(target, PotionEffectType.NIGHT_VISION, duration, 1, false, false, false);
+    Utilities.logInfo(true, messageHandler.string("NightVision_Applied", "&9Night Vision has been applied!"));
   }
 }

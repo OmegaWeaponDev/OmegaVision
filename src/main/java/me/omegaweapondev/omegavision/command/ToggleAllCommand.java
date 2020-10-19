@@ -1,7 +1,7 @@
-package me.omegaweapon.omegavision.command;
+package me.omegaweapondev.omegavision.command;
 
-import me.omegaweapon.omegavision.OmegaVision;
-import me.omegaweapon.omegavision.utils.MessageHandler;
+import me.omegaweapondev.omegavision.OmegaVision;
+import me.omegaweapondev.omegavision.utils.MessageHandler;
 import me.ou.library.Utilities;
 import me.ou.library.commands.GlobalCommand;
 import org.bukkit.Bukkit;
@@ -69,10 +69,12 @@ public class ToggleAllCommand extends GlobalCommand {
     for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
       if(strings[0].equalsIgnoreCase("add")) {
         addNightVision(onlinePlayer);
+        Utilities.logInfo(true, messagesHandler.string("NightVision_Applied", "&9Night Vision has been applied!"));
       }
 
       if(strings[0].equalsIgnoreCase("remove")) {
         removeNightVision(onlinePlayer);
+        Utilities.logInfo(true, messagesHandler.string("NightVision_Removed", "&9Night Vision has been removed!"));
       }
     }
   }

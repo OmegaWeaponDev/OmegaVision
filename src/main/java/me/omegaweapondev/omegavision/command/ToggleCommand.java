@@ -1,12 +1,11 @@
-package me.omegaweapon.omegavision.command;
+package me.omegaweapondev.omegavision.command;
 
-import me.omegaweapon.omegavision.OmegaVision;
-import me.omegaweapon.omegavision.utils.MessageHandler;
-import me.omegaweapon.omegavision.utils.NightVisionConditions;
-import me.omegaweapon.omegavision.utils.NightVisionToggle;
+import me.omegaweapondev.omegavision.OmegaVision;
+import me.omegaweapondev.omegavision.utils.MessageHandler;
+import me.omegaweapondev.omegavision.utils.NightVisionConditions;
+import me.omegaweapondev.omegavision.utils.NightVisionToggle;
 import me.ou.library.Utilities;
 import me.ou.library.commands.GlobalCommand;
-import me.ou.library.commands.PlayerCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -74,12 +73,14 @@ public class ToggleCommand extends GlobalCommand {
       }
 
       if(strings[1].equalsIgnoreCase("on")) {
-        nvToggle.nightvisionEnableOthers(target);
+        nvToggle.nightvisionEnableOthers();
+        Utilities.logInfo(true, messageHandler.string("NightVision_Applied", "&9Night Vision has been applied!"));
         return;
       }
 
-      if (strings[1].equalsIgnoreCase("off")) {
-        nvToggle.nightvisionDisableOthers(target);
+      if(strings[1].equalsIgnoreCase("off")) {
+        nvToggle.nightvisionDisableOthers();
+        Utilities.logInfo(true, messageHandler.string("NightVision_Removed", "&9Night Vision has been removed!"));
       }
 
       return;
@@ -101,12 +102,12 @@ public class ToggleCommand extends GlobalCommand {
     }
 
     if(strings[1].equalsIgnoreCase("on")) {
-      nvToggle.nightvisionEnableOthers(target);
+      nvToggle.nightvisionEnableOthers();
       return;
     }
 
     if (strings[1].equalsIgnoreCase("off")) {
-      nvToggle.nightvisionDisableOthers(target);
+      nvToggle.nightvisionDisableOthers();
     }
   }
 }
