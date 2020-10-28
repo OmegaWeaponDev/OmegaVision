@@ -2,10 +2,12 @@ package me.omegaweapondev.omegavision;
 
 import me.omegaweapondev.omegavision.command.*;
 import me.omegaweapondev.omegavision.events.PlayerListener;
+import me.omegaweapondev.omegavision.utils.Placeholders;
 import me.ou.library.SpigotUpdater;
 import me.ou.library.Utilities;
 import me.ou.library.configs.ConfigCreator;
 import me.ou.library.configs.ConfigUpdater;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bstats.bukkit.Metrics;
@@ -29,6 +31,10 @@ public class OmegaVision extends JavaPlugin {
     // Setup bStats
     final int bstatsPluginId = 7489;
     Metrics metrics = new Metrics(getInstance(), bstatsPluginId);
+
+    if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+      new Placeholders(getInstance()).register();
+    }
 
     // Logs a message to console, saying that the plugin has enabled correctly.
     Utilities.logInfo(true,

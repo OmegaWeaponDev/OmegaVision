@@ -7,6 +7,9 @@ main: ${main.class}
 author: ${pl.author}
 authors: ${pl.authors}
 
+softdepend:
+  - PlaceholderAPI
+
 commands:
   omegavision:
     description: The main command for omegavision
