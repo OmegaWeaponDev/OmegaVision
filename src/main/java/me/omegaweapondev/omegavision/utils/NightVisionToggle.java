@@ -87,6 +87,11 @@ public class NightVisionToggle {
       nvConditions.nightvisionBlindness();
     }
 
+    // Add the players nightvision status to playerData.yml if they have the login permission
+    if(!Utilities.checkPermissions(player, true, "omegavision.login", "omegavision.admin")) {
+      return;
+    }
+
     // If enabled, send the player an action bar when toggling nightvision
     if(configFile.getBoolean("ActionBar_Messages")) {
       Utilities.sendActionBar(player, messageHandler.string("ActionBar_NightVision_Removed", "&cNightvision has been removed!"));
@@ -94,12 +99,7 @@ public class NightVisionToggle {
 
     // Remove the player from the playerMap
     playerMap.remove(player.getUniqueId());
-
-    // Add the players nightvision status to playerData.yml if they have the login permission
-    if(!Utilities.checkPermissions(player, true, "omegavision.login", "omegavision.admin")) {
-      return;
-    }
-
+    
     // Check if they have been added to the file, if not, add them
     if (!playerData.contains(player.getUniqueId().toString())) {
       playerData.createSection(player.getUniqueId().toString());
