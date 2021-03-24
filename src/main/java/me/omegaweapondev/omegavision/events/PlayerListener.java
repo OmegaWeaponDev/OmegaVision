@@ -20,8 +20,15 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.concurrent.TimeUnit;
 
 public class PlayerListener implements Listener {
-  private final FileConfiguration configFile = OmegaVision.getInstance().getConfigFile().getConfig();
-  private final MessageHandler messageHandler = new MessageHandler(OmegaVision.getInstance().getMessagesFile().getConfig());
+  private final OmegaVision plugin;
+  private final FileConfiguration configFile;
+  private final MessageHandler messageHandler;
+
+  public PlayerListener(final OmegaVision plugin) {
+    this.plugin = plugin;
+    configFile = plugin.getSettingsHandler().getConfigFile().getConfig();
+    messageHandler = plugin.getMessageHandler();
+  }
   
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onPlayerJoin(PlayerJoinEvent playerJoinEvent) {
@@ -34,13 +41,13 @@ public class PlayerListener implements Listener {
       return;
     }
 
-    new SpigotUpdater(OmegaVision.getInstance(), 73013).getVersion(version -> {
-      if (!OmegaVision.getInstance().getDescription().getVersion().equalsIgnoreCase(version)) {
-        PluginDescriptionFile pdf = OmegaVision.getInstance().getDescription();
+    new SpigotUpdater(plugin, 73013).getVersion(version -> {
+      if (!plugin.getDescription().getVersion().equalsIgnoreCase(version)) {
+        PluginDescriptionFile pdf = plugin.getDescription();
         Utilities.message(player,
-          "&bA new version of &c" + pdf.getName() + " &bis avaliable!",
-          "&bCurrent Version: &c" + pdf.getVersion() + " &b> New Version: &c" + version,
-          "&bGrab it here:&c https://github.com/OmegaWeaponDev/OmegaVision"
+          "#00D4FFA new version of #FF4A4A" + pdf.getName() + " &bis avaliable!",
+          "&bCurrent Version: #FF4A4A" + pdf.getVersion() + " &b> New Version: #FF4A4A" + version,
+          "&bGrab it here:#FF4A4A https://github.com/OmegaWeaponDev/OmegaVision"
         );
       }
     });
@@ -49,10 +56,10 @@ public class PlayerListener implements Listener {
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onPlayerQuit(PlayerQuitEvent playerQuitEvent) {
     Player player = playerQuitEvent.getPlayer();
-    final NightVisionToggle nvToggle = new NightVisionToggle(player);
+    final NightVisionToggle nvToggle = new NightVisionToggle(plugin, player);
     
     // Remove the players from the map when they quit
-    nvToggle.playerMap.remove(player.getUniqueId());
+    plugin.getUserData().getPlayerMap().remove(player.getUniqueId());
   }
   
   @EventHandler(priority = EventPriority.HIGHEST)
@@ -110,7 +117,7 @@ public class PlayerListener implements Listener {
       return;
     }
 
-    Bukkit.getScheduler().runTaskLater(OmegaVision.getInstance(), () -> {
+    Bukkit.getScheduler().runTaskLater(plugin, () -> {
       Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100, 1,
         configFile.getBoolean("Particle_Ambient"),
         configFile.getBoolean("Particle_Effects"),
@@ -138,15 +145,15 @@ public class PlayerListener implements Listener {
   }
 
   private void nightVisionLogin(final Player player) {
-    final NightVisionToggle nvToggle = new NightVisionToggle(player);
-    Boolean nightVision = OmegaVision.getInstance().getPlayerData().getConfig().getBoolean(player.getUniqueId().toString() + ".NightVision.Enabled");
+    final NightVisionToggle nvToggle = new NightVisionToggle(plugin, player);
+    Boolean nightVision = plugin.getUserData().getUserFile().getConfig().getBoolean(player.getUniqueId().toString() + ".NightVision.Enabled");
 
     if(!configFile.getBoolean("Night_Vision_Login")) {
       return;
     }
 
     if(!Utilities.checkPermissions(player, true, "omegavision.login", "omegavision.admin")) {
-      nvToggle.nightvisionDisable();
+      nvToggle.nightVisionDisable();
       return;
     }
 
@@ -155,11 +162,11 @@ public class PlayerListener implements Listener {
       return;
     }
 
-    nvToggle.nightvisionDisable();
+    nvToggle.nightVisionDisable();
   }
 
   private void nightVisionLimitReset(final Player player) {
-    final NightVisionToggle nvToggle = new NightVisionToggle(player);
+    final NightVisionToggle nvToggle = new NightVisionToggle(plugin, player);
 
     if(!configFile.getBoolean("Night_Vision_Limit.Enabled")) {
       return;
@@ -169,22 +176,22 @@ public class PlayerListener implements Listener {
       return;
     }
 
-    if(nvToggle.nightvisionLimitReached.get(player.getUniqueId()) == null) {
+    if(plugin.getUserData().getNightvisionLimitReached().get(player.getUniqueId()) == null) {
       return;
     }
 
-    Bukkit.getScheduler().scheduleSyncRepeatingTask(OmegaVision.getInstance(), () -> {
+    Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
       int configResetTimer = configFile.getInt("Night_Vision_Limit.Reset_Timer");
 
       Long resetTimer = TimeUnit.MILLISECONDS.convert(configResetTimer, TimeUnit.MINUTES);
-      Long limitReachedTime = nvToggle.nightvisionLimitReached.get(player.getUniqueId());
+      Long limitReachedTime = plugin.getUserData().getNightvisionLimitReached().get(player.getUniqueId());
 
       if(!(System.currentTimeMillis() >= (limitReachedTime + resetTimer))) {
         return;
       }
 
       configFile.set(player.getUniqueId().toString() + ".Limit", 0);
-      OmegaVision.getInstance().getPlayerData().saveConfig();
+      plugin.getUserData().saveUserFile();
     }, 20L, 20L * 60L);
 
     if(configFile.getBoolean("Sound_Effects.Limit_Reset.Enabled")) {

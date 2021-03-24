@@ -7,159 +7,175 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class NightVisionToggle {
+  private final OmegaVision plugin;
 
-  private final MessageHandler messageHandler = new MessageHandler(OmegaVision.getInstance().getMessagesFile().getConfig());
-  private final FileConfiguration configFile = OmegaVision.getInstance().getConfigFile().getConfig();
-  private final FileConfiguration playerData = OmegaVision.getInstance().getPlayerData().getConfig();
+  private final SettingsHandler settingsHandler;
+  private final UserDataHandler userData;
+  private final MessageHandler messageHandler;
   private final Player player;
-  public Map<UUID, String> playerMap = new HashMap<>();
-  public Map<UUID, Long> nightvisionAppliedTime = new HashMap<>();
-  public Map<UUID, Long> nightvisionLimitReached = new HashMap<>();
+  private final NightVisionConditions nightVisionConditions;
 
-  public NightVisionToggle(final Player player) {
+  private final FileConfiguration playerData;
+  private final FileConfiguration configFile;
+
+  private final Map<UUID, Boolean> playerMap;
+  private final Map<UUID, Long> nightvisionAppliedTime;
+  private final Map<UUID, Long> nightvisionLimitReached;
+
+  public NightVisionToggle(final OmegaVision plugin, final Player player) {
+    this.plugin = plugin;
     this.player = player;
+
+    settingsHandler = plugin.getSettingsHandler();
+    userData = plugin.getUserData();
+    nightVisionConditions = new NightVisionConditions(plugin, player);
+
+    messageHandler = new MessageHandler(plugin, settingsHandler.getMessagesFile().getConfig());
+    configFile = settingsHandler.getConfigFile().getConfig();
+    playerData = userData.getPlayerData();
+
+    playerMap = userData.getPlayerMap();
+    nightvisionAppliedTime = userData.getNightvisionAppliedTime();
+    nightvisionLimitReached = userData.getNightvisionLimitReached();
   }
 
   public void nightVisionEnable() {
-
-    if(nightvisionLimitReached.containsKey(player.getUniqueId()) && playerData.getInt(player.getUniqueId().toString() + ".Limit") == configFile.getInt("Night_Vision_Limit.Limit")) {
-      Utilities.message(player, messageHandler.string("Night_Vision_Limit.Limit_Reached", "&cSorry, you have reached the limit for the nightvision command!"));
+    // Check if the user has night vision
+    if(userData.hasNightNightVision(player.getUniqueId())) {
+      nightVisionDisable();
       return;
     }
 
-    // Add the nightvision effect to the player
-    Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100, 1,
-      configFile.getBoolean("Particle_Ambient"),
-      configFile.getBoolean("Particle_Effects"),
-      configFile.getBoolean("NightVision_Icon")
-    );
-
-    // Add the player to the maps
-    playerMap.put(player.getUniqueId(), player.getName());
-    nightvisionAppliedTime.put(player.getUniqueId(), System.currentTimeMillis());
-
-    // Send the player the nightvision applied message
-    Utilities.message(player, messageHandler.string("NightVision_Applied", "&9Night Vision has been applied!"));
-
-    // Add the players nightvision status to playerData.yml if they have the login permission
-    if(Utilities.checkPermissions(player, true,"omegavision.login", "omegavision.admin")) {
-
-      // Check if they have been added to the file, if not, add them
-      if (!playerData.isConfigurationSection(player.getUniqueId().toString())) {
-        playerData.createSection(player.getUniqueId().toString());
-      }
-
-      playerData.set(player.getUniqueId().toString() + ".NightVision.Enabled", true);
-      playerData.set(player.getUniqueId().toString() + ".NightVision.Last Used", System.currentTimeMillis());
-      OmegaVision.getInstance().getPlayerData().saveConfig();
+    // Check the status of the nightvision usage limit
+    if(!checkLimitStatus()) {
+      return;
     }
 
-    // If enabled, send the player an action bar when toggling nightvision
-    if (configFile.getBoolean("ActionBar_Messages")) {
+    // Apply nightvision to use the user
+    Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100, 1, configFile.getBoolean("Particle_Ambient"), configFile.getBoolean("Particle_Effects"), configFile.getBoolean("NightVision_Icon"));
+    increaseLimit();
+
+    // Add the user to the maps
+    playerMap.put(player.getUniqueId(), true);
+    nightvisionAppliedTime.put(player.getUniqueId(), System.currentTimeMillis());
+
+    // Save user to file, if have login permission
+    nightVisionLogin(player);
+
+    if(configFile.getBoolean("Sound_Effects.Night_Vision_Enabled.Enabled")) {
+      player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Enable.Sound")), 1, 1);
+    }
+
+    playerData.set(player.getUniqueId().toString() + ".NightVision.Enabled", true);
+
+    if(configFile.getBoolean("ActionBar_Message")) {
       Utilities.sendActionBar(player, messageHandler.string("ActionBar_NightVision_Applied", "&9Nightvision has been applied!"));
     }
 
-    if(configFile.getBoolean("Night_Vision_Limit.Enabled")) {
-      if(!Utilities.checkPermissions(player, true, "omegavision.limit.bypass", "omegavision.limit.admin", "omegavision.admin")) {
-        limitIncrease();
-      }
-    }
-
-    if(configFile.getBoolean("Sound_Effects.Night_Vision_Enable.Enabled")) {
-      player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Enable.Sound")), 1, 1);
-    }
+    Utilities.message(player, messageHandler.string("NightVision_Applied", "#53B1D5Nightvision has successfully been applied!"));
   }
 
-  public void nightvisionDisable() {
-    // Remove the nightvision effect from the player
-    Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
-    Utilities.message(player, messageHandler.string("NightVision_Removed", "&cNight Vision has been removed!"));
-
-    // Trigger the blindness method
-    if(configFile.getBoolean("Blindness_Effect.Enabled") && player.isOnline()) {
-      final NightVisionConditions nvConditions = new NightVisionConditions(player);
-
-      nvConditions.nightvisionBlindness();
-    }
-
-    // Add the players nightvision status to playerData.yml if they have the login permission
-    if(!Utilities.checkPermissions(player, true, "omegavision.login", "omegavision.admin")) {
+  public void nightVisionDisable() {
+    if(!userData.hasNightNightVision(player.getUniqueId())) {
       return;
     }
 
-    // If enabled, send the player an action bar when toggling nightvision
-    if(configFile.getBoolean("ActionBar_Messages")) {
-      Utilities.sendActionBar(player, messageHandler.string("ActionBar_NightVision_Removed", "&cNightvision has been removed!"));
+    Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
+    if(configFile.getBoolean("Blindness_Effect.Enabled") && player.isOnline()) {
+      nightVisionConditions.nightvisionBlindness();
     }
 
-    // Remove the player from the playerMap
     playerMap.remove(player.getUniqueId());
-    
-    // Check if they have been added to the file, if not, add them
-    if (!playerData.contains(player.getUniqueId().toString())) {
-      playerData.createSection(player.getUniqueId().toString());
-    }
 
     if(configFile.getBoolean("Sound_Effects.Night_Vision_Disable.Enabled")) {
-      player.playSound(player.getLocation(), Sound.valueOf(OmegaVision.getInstance().getConfigFile().getConfig().getString("Sound_Effects.Night_Vision_Disable.Sound")), 1, 1);
-    }
-
-    playerData.set(player.getUniqueId().toString() + ".NightVision.Enabled", false);
-    OmegaVision.getInstance().getPlayerData().saveConfig();
-  }
-
-  public void nightvisionEnableOthers() {
-    nightVisionEnable();
-
-    if(configFile.getBoolean("Sound_Effects.Night_Vision_Enable.Enabled")) {
-      player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Enable.Sound")), 1, 1);
-    }
-  }
-
-  public void nightvisionDisableOthers() {
-    nightvisionDisable();
-
-    if(configFile.getBoolean("Sound_Effects.Night_Vision_Disable.Enable")) {
       player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Disable.Sound")), 1, 1);
     }
+
+    nightVisionLogin(player);
   }
 
-  private int limitCheck(final Player player) {
-    int playerLimitAmount = playerData.getInt(player.getUniqueId().toString() + ".Limit");
-
-    if(playerData.getInt(player.getUniqueId().toString() + ".Limit") > 0) {
-      return playerLimitAmount ;
-    }
-
-    return 0;
-  }
-
-  private void limitIncrease() {
-    int playerLimitAmount = limitCheck(player);
-
-    if((playerLimitAmount + 1) > configFile.getInt("Night_Vision_Limit.Limit")) {
-      Utilities.message(player, messageHandler.string("Night_Vision_Limit.Limit_Reached", "&cSorry, you have reached the limit for the nightvision command!"));
-      nightvisionLimitReached.put(player.getUniqueId(), System.currentTimeMillis());
-
-      if(configFile.getBoolean("Sound_Effects.Limit_Reached.Enabled")) {
-        player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Limit_Reached.Sound")), 1, 1);
-      }
+  public void nightVisionDisableOthers(final Player target) {
+    if(!userData.hasNightNightVision(target.getUniqueId())) {
       return;
     }
 
-    if(playerLimitAmount < configFile.getInt("Night_Vision_Limit.Limit")) {
-      playerData.set(player.getUniqueId().toString() + ".Limit", playerLimitAmount + 1);
-      OmegaVision.getInstance().getPlayerData().saveConfig();
+    Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
+    playerMap.remove(target.getUniqueId());
 
-      Utilities.message(player, messageHandler.string("Night_Vision_Limit.Limit_Amount_Increased", "&bYour limit amount now stands at: &c%currentLimitAmount% / %maxLimitAmount%")
-        .replace("%currentLimitAmount%", String.valueOf(playerLimitAmount))
-        .replace("maxLimitAmount", String.valueOf(configFile.getInt("Night_Vision_Limit.Limit")))
-      );
+    if(configFile.getBoolean("Sound_Effects.Night_Vision_Disable.Enabled")) {
+      target.playSound(target.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Disable.Sound")), 1, 1);
     }
+
+    nightVisionLogin(target);
+  }
+
+  public void nightVisionEnableOthers(final Player target) {
+    if(userData.hasNightNightVision(target.getUniqueId())) {
+      nightVisionDisableOthers(target);
+      return;
+    }
+
+    Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100, 1, configFile.getBoolean("Particle_Ambient"), configFile.getBoolean("Particle_Effects"), configFile.getBoolean("NightVision_Icon"));
+
+
+    playerMap.put(target.getUniqueId(), true);
+    nightvisionAppliedTime.put(target.getUniqueId(), System.currentTimeMillis());
+
+    // Save user to file, if have login permission
+    nightVisionLogin(target);
+
+    if(configFile.getBoolean("Sound_Effects.Night_Vision_Enabled.Enabled")) {
+      target.playSound(target.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Enable.Sound")), 1, 1);
+    }
+
+    if(configFile.getBoolean("ActionBar_Message")) {
+      Utilities.sendActionBar(target, messageHandler.string("ActionBar_NightVision_Applied", "&9Nightvision has been applied!"));
+    }
+
+    Utilities.message(target, messageHandler.string("NightVision_Applied", "#53B1D5Nightvision has successfully been applied!"));
+  }
+
+  private void nightVisionLogin(final Player target) {
+    if(!Utilities.checkPermissions(target, true, "omegavision.login", "omegavision.admin")) {
+      return;
+    }
+
+    if(!userData.getPlayerData().getConfigurationSection("Users").getKeys(false).contains(target.getUniqueId().toString())) {
+      userData.getPlayerData().createSection("Users." + target.getUniqueId().toString());
+    }
+
+    userData.getPlayerData().set("Users." + target.getUniqueId().toString() + ".Enabled", true);
+    userData.getPlayerData().set("Users." + target.getUniqueId().toString() + ".NightVision_Last_Used", System.currentTimeMillis());
+    userData.saveUserFile();
+  }
+
+  private void increaseLimit() {
+    if(Utilities.checkPermissions(player, true, "omegavision.limit.bypass", "omegavision.limit.admin", "omegavision.admin")) {
+      return;
+    }
+
+    userData.getPlayerData().set("Users." + player.getUniqueId().toString() + ".Limit", userData.getCurrentUsageAmount(player.getUniqueId()) + 1);
+    Utilities.message(player,
+      messageHandler.string("Limit_Amount_Increased", "&bYour limit amount now stands at: &c%currentLimitAmount% / %maxLimitAmount%")
+      .replace("%currentLimitAmount%", String.valueOf(userData.getCurrentUsageAmount(player.getUniqueId())))
+      .replace("maxLimitAmount", String.valueOf(configFile.getInt("Night_Vision_Limit.Limit")))
+    );
+  }
+
+  private boolean checkLimitStatus() {
+    if(!configFile.getBoolean("Night_Vision_Limit.Enabled")) {
+      return true;
+    }
+
+    if(!nightvisionLimitReached.containsKey(player.getUniqueId())) {
+      return true;
+    }
+
+    Utilities.message(player, messageHandler.string("Night_Vision_Limit.Limit_Reached", "#FF4A4ASorry, you have reached the limit for the nightvision command!"));
+    return false;
   }
 }

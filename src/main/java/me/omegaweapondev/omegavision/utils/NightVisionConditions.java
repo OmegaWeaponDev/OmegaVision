@@ -10,39 +10,41 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.concurrent.TimeUnit;
 
 public class NightVisionConditions {
-  private final FileConfiguration configFile = OmegaVision.getInstance().getConfigFile().getConfig();
-  private final MessageHandler messageHandler = new MessageHandler(OmegaVision.getInstance().getMessagesFile().getConfig());
-
+  private final OmegaVision plugin;
+  private final FileConfiguration configFile;
+  private final MessageHandler messageHandler;
+  private final FileConfiguration playerData;
   private final Player player;
 
-  public NightVisionConditions(final Player player) {
-
+  public NightVisionConditions(final OmegaVision plugin, final Player player) {
+    this.plugin = plugin;
     this.player = player;
+    configFile = plugin.getSettingsHandler().getConfigFile().getConfig();
+    messageHandler = plugin.getMessageHandler();
+    playerData = plugin.getUserData().getPlayerData();
   }
 
   public void nightvisionBlindness() {
-    final NightVisionToggle nvToggle = new NightVisionToggle(player);
-
     if(Utilities.checkPermissions(player, true, "omegavision.blindness.bypass", "omegavision.admin")) {
       return;
     }
 
-    if(!OmegaVision.getInstance().getPlayerData().getConfig().isConfigurationSection(player.getUniqueId().toString())) {
+    if(!playerData.isConfigurationSection(player.getUniqueId().toString())) {
       return;
     }
 
-    if(!nvToggle.nightvisionAppliedTime.containsKey(player.getUniqueId())) {
+    if(!plugin.getUserData().getNightvisionAppliedTime().containsKey(player.getUniqueId())) {
       return;
     }
 
     long timeRemoved = TimeUnit.MINUTES.convert(System.currentTimeMillis(), TimeUnit.MILLISECONDS);
     int configTimer = configFile.getInt("Blindness_Effect.Timer");
     int configDuration = configFile.getInt("Blindness_Effect.Duration");
-    long timeApplied = TimeUnit.MINUTES.convert(nvToggle.nightvisionAppliedTime.get(player.getUniqueId()), TimeUnit.MILLISECONDS);
+    long timeApplied = TimeUnit.MINUTES.convert(plugin.getUserData().getNightvisionAppliedTime().get(player.getUniqueId()), TimeUnit.MILLISECONDS);
 
     if((timeRemoved - timeApplied) >= configTimer) {
       Utilities.addPotionEffect(player, PotionEffectType.BLINDNESS, configDuration, 1, true, true, true);
-      nvToggle.nightvisionAppliedTime.remove(player.getUniqueId());
+      plugin.getUserData().getNightvisionAppliedTime().remove(player.getUniqueId());
       Utilities.message(player, messageHandler.string("Blindness_Message", "&cYou have been using nightvision for too long, you are now blind"));
     }
 
@@ -54,7 +56,7 @@ public class NightVisionConditions {
   public boolean limitChecker() {
     final boolean configLimitEnabled = configFile.getBoolean("Night_Vision_Limit.Enabled");
     final int configLimitAmount = configFile.getInt("Night_Vision_Limit.Limit");
-    int playerLimitAmount = OmegaVision.getInstance().getPlayerData().getConfig().getInt(player.getUniqueId().toString() + ".Limit");
+    int playerLimitAmount = playerData.getInt(player.getUniqueId().toString() + ".Limit");
 
     if(!configLimitEnabled) {
       return false;

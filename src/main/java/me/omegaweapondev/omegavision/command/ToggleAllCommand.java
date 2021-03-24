@@ -3,17 +3,32 @@ package me.omegaweapondev.omegavision.command;
 import me.omegaweapondev.omegavision.OmegaVision;
 import me.omegaweapondev.omegavision.utils.MessageHandler;
 import me.ou.library.Utilities;
+import me.ou.library.builders.TabCompleteBuilder;
 import me.ou.library.commands.GlobalCommand;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class ToggleAllCommand extends GlobalCommand {
-  private final MessageHandler messagesHandler = new MessageHandler(OmegaVision.getInstance().getMessagesFile().getConfig());
-  private final FileConfiguration playerData = OmegaVision.getInstance().getPlayerData().getConfig();
+import java.util.Collections;
+import java.util.List;
+
+public class ToggleAllCommand extends GlobalCommand implements TabCompleter {
+  private final OmegaVision plugin;
+  private final MessageHandler messagesHandler;
+  private final FileConfiguration playerData;
+
+  public ToggleAllCommand(final OmegaVision plugin) {
+    this.plugin = plugin;
+    messagesHandler = plugin.getMessageHandler();
+    playerData = plugin.getUserData().getPlayerData();
+  }
 
   @Override
   protected void execute(CommandSender commandSender, String[] strings) {
@@ -25,7 +40,7 @@ public class ToggleAllCommand extends GlobalCommand {
 
       if(commandSender instanceof Player) {
         Player player = (Player) commandSender;
-        Utilities.message(player, "&cYou need to include add/remove to the command!");
+        Utilities.message(player, "#FF4A4AYou need to include add/remove to the command!");
       }
       return;
     }
@@ -42,7 +57,7 @@ public class ToggleAllCommand extends GlobalCommand {
     Player player = (Player) commandSender;
 
     if(!Utilities.checkPermissions(player, true, "omegavision.toggle.global", "omegavision.admin", "omegavision.toggle.all")) {
-      Utilities.message(player, messagesHandler.string("No_Permission", "&cSorry, you do not have permission to use that command"));
+      Utilities.message(player, messagesHandler.string("No_Permission", "#FF4A4ASorry, you do not have permission to use that command"));
       return;
     }
 
@@ -50,14 +65,14 @@ public class ToggleAllCommand extends GlobalCommand {
       for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
         addNightVision(onlinePlayer);
       }
-      Utilities.broadcast(messagesHandler.string("NightVision_Applied_Global", "&9Night Vision has been applied for all players!"));
+      Utilities.broadcast(true, messagesHandler.string("NightVision_Applied_Global", "#27408bNight Vision has been applied for all players!"));
     }
 
     if(strings[0].equalsIgnoreCase("remove")) {
       for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
         removeNightVision(onlinePlayer);
       }
-      Utilities.broadcast(messagesHandler.string("NightVision_Removed_Global", "&9Night Vision has been removed for all players!"));
+      Utilities.broadcast(true, messagesHandler.string("NightVision_Removed_Global", "#27408bNight Vision has been removed for all players!"));
     }
   }
 
@@ -69,12 +84,12 @@ public class ToggleAllCommand extends GlobalCommand {
     for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
       if(strings[0].equalsIgnoreCase("add")) {
         addNightVision(onlinePlayer);
-        Utilities.logInfo(true, messagesHandler.string("NightVision_Applied", "&9Night Vision has been applied!"));
+        Utilities.logInfo(true, messagesHandler.string("NightVision_Applied", "#27408bNight Vision has been applied!"));
       }
 
       if(strings[0].equalsIgnoreCase("remove")) {
         removeNightVision(onlinePlayer);
-        Utilities.logInfo(true, messagesHandler.string("NightVision_Removed", "&9Night Vision has been removed!"));
+        Utilities.logInfo(true, messagesHandler.string("NightVision_Removed", "#27408bNight Vision has been removed!"));
       }
     }
   }
@@ -88,7 +103,7 @@ public class ToggleAllCommand extends GlobalCommand {
 
     if(playerData.isConfigurationSection(player.getUniqueId().toString())) {
       playerData.set(player.getUniqueId().toString() + ".NightVision.Enabled", true);
-      OmegaVision.getInstance().getPlayerData().saveConfig();
+      plugin.getUserData().saveUserFile();
     }
   }
 
@@ -97,7 +112,19 @@ public class ToggleAllCommand extends GlobalCommand {
 
     if(playerData.isConfigurationSection(player.getUniqueId().toString())) {
       playerData.set(player.getUniqueId().toString() + ".NightVision.Enabled", false);
-      OmegaVision.getInstance().getPlayerData().saveConfig();
+      plugin.getUserData().saveUserFile();
     }
+  }
+
+  @Override
+  public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
+    if(strings.length <= 1) {
+      return new TabCompleteBuilder(commandSender)
+        .checkCommand("add", true, "omegavision.toggle.global", "omegavision.toggle.all", "omegavision.admin")
+        .checkCommand("remove", true, "omegavision.toggle.global", "omegavision.toggle.all", "omegavision.admin")
+        .build(strings[0]);
+    }
+
+    return Collections.emptyList();
   }
 }
