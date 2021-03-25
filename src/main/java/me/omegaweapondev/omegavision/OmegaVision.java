@@ -47,7 +47,6 @@ public class OmegaVision extends JavaPlugin {
   public void onReload() {
     // Reload all the config files.
     getSettingsHandler().reloadFiles();
-    getUserData().reloadUserFile();
   }
 
 

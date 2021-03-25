@@ -14,7 +14,6 @@ public class UserDataHandler {
   private final OmegaVision plugin;
 
   private final ConfigCreator userData = new ConfigCreator("playerData.yml");
-
   private final Map<UUID, Boolean> playerMap = new HashMap<>();
   private final Map<UUID, Long> nightvisionAppliedTime = new HashMap<>();
   private final Map<UUID, Long> nightvisionLimitReached = new HashMap<>();
@@ -24,15 +23,11 @@ public class UserDataHandler {
   }
 
   public void createUserFile() {
-    getUserFile().createConfig();
-  }
-
-  public void reloadUserFile() {
-    getUserFile().reloadConfig();
+    userData.createConfig();
   }
 
   public void saveUserFile() {
-    getUserFile().saveConfig();
+    userData.saveConfig();
   }
 
   public ConfigCreator getUserFile() {
