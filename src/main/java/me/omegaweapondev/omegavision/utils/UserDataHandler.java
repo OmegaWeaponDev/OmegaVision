@@ -35,6 +35,10 @@ public class UserDataHandler {
   }
 
   public boolean hasNightNightVision(final UUID playerUUID) {
+    if(getPlayerMap().isEmpty()) {
+      return false;
+    }
+
     return getPlayerMap().get(playerUUID);
   }
 
@@ -47,6 +51,14 @@ public class UserDataHandler {
   }
 
   public void populateMapsOnEnable() {
+    if(getPlayerData().getConfigurationSection("Users") == null) {
+      return;
+    }
+
+    if(getPlayerData().getConfigurationSection("Users").getKeys(false).size() == 0) {
+      return;
+    }
+
     for(String playerUUID : getPlayerData().getConfigurationSection("Users").getKeys(false)) {
       Player player = Bukkit.getPlayer(UUID.fromString(playerUUID));
 
