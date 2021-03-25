@@ -1,6 +1,7 @@
 package me.omegaweapondev.omegavision.utils;
 
 import me.omegaweapondev.omegavision.OmegaVision;
+import me.ou.library.Utilities;
 import me.ou.library.configs.ConfigCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -38,7 +39,6 @@ public class UserDataHandler {
     if(getPlayerMap().isEmpty()) {
       return false;
     }
-
     return getPlayerMap().get(playerUUID);
   }
 

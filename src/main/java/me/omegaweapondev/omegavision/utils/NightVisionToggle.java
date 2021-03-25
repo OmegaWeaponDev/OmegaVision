@@ -70,7 +70,8 @@ public class NightVisionToggle {
       player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Enable.Sound")), 1, 1);
     }
 
-    playerData.set(player.getUniqueId().toString() + ".NightVision.Enabled", true);
+    playerData.set("Users." + player.getUniqueId().toString() + ".Enabled", true);
+    userData.saveUserFile();
 
     if(configFile.getBoolean("ActionBar_Message")) {
       Utilities.sendActionBar(player, messageHandler.string("ActionBar_NightVision_Applied", "&9Nightvision has been applied!"));
@@ -144,8 +145,18 @@ public class NightVisionToggle {
       return;
     }
 
+    if(userData.getPlayerData().getConfigurationSection("Users") == null) {
+      userData.getPlayerData().createSection("Users");
+    }
+
     if(!userData.getPlayerData().getConfigurationSection("Users").getKeys(false).contains(target.getUniqueId().toString())) {
       userData.getPlayerData().createSection("Users." + target.getUniqueId().toString());
+    }
+
+    if(userData.getPlayerData().getBoolean("Users." + target.getUniqueId().toString() + ".Enabled")) {
+      userData.getPlayerData().set("Users." + target.getUniqueId().toString() + ".Enabled", false);
+      userData.saveUserFile();
+      return;
     }
 
     userData.getPlayerData().set("Users." + target.getUniqueId().toString() + ".Enabled", true);
