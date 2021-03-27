@@ -165,6 +165,10 @@ public class NightVisionToggle {
   }
 
   private void increaseLimit() {
+    if(!configFile.getBoolean("Night_Vision_Limit.Enabled")) {
+      return;
+    }
+
     if(Utilities.checkPermissions(player, true, "omegavision.limit.bypass", "omegavision.limit.admin", "omegavision.admin")) {
       return;
     }
