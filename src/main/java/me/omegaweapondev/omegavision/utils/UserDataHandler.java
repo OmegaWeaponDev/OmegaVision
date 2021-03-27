@@ -62,6 +62,10 @@ public class UserDataHandler {
     for(String playerUUID : getPlayerData().getConfigurationSection("Users").getKeys(false)) {
       Player player = Bukkit.getPlayer(UUID.fromString(playerUUID));
 
+      if(player == null) {
+        return;
+      }
+
       getPlayerMap().put(player.getUniqueId(), getPlayerData().getBoolean("Users." + playerUUID));
     }
   }
