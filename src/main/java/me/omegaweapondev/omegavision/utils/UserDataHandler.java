@@ -39,6 +39,11 @@ public class UserDataHandler {
     if(getPlayerMap().isEmpty()) {
       return false;
     }
+
+    if(!getPlayerMap().containsKey(playerUUID)) {
+      return false;
+    }
+
     return getPlayerMap().get(playerUUID);
   }
 
