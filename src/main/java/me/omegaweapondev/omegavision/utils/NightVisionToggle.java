@@ -34,7 +34,7 @@ public class NightVisionToggle {
     userData = plugin.getUserData();
     nightVisionConditions = new NightVisionConditions(plugin, player);
 
-    messageHandler = new MessageHandler(plugin, settingsHandler.getMessagesFile().getConfig());
+    messageHandler = plugin.getMessageHandler();
     configFile = settingsHandler.getConfigFile().getConfig();
     playerData = userData.getPlayerData();
 

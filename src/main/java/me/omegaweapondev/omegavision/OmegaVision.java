@@ -23,7 +23,7 @@ public class OmegaVision extends JavaPlugin {
   public void onEnable() {
     plugin = this;
     settingsHandler = new SettingsHandler(plugin);
-    messageHandler = new MessageHandler(plugin, getSettingsHandler().getMessagesFile().getConfig());
+    messageHandler = new MessageHandler(plugin);
     userData = new UserDataHandler(plugin);
 
     initialSetup();
