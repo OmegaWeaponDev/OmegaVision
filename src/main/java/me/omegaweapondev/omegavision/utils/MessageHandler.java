@@ -16,8 +16,7 @@ public class MessageHandler {
 
   public MessageHandler(final OmegaVision plugin) {
     this.plugin = plugin;
-    this.messagesConfig = plugin.getSettingsHandler().getMessagesFile().getConfig();
-    //this.messagesConfig = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + File.separator + "messages.yml"));
+    this.messagesConfig = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + File.separator + "messages.yml"));
     this.configName = plugin.getSettingsHandler().getMessagesFile().getFileName();
   }
 
