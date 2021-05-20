@@ -26,6 +26,15 @@ public class OmegaVision extends JavaPlugin {
     messageHandler = new MessageHandler(plugin);
     userData = new UserDataHandler(plugin);
 
+    // Logs a message to console, saying that the plugin has enabled correctly.
+    Utilities.logInfo(false,
+      "  ____ _   __",
+      " / __ \\ | / /   OmegaVision v" + plugin.getDescription().getVersion() + " by OmegaWeaponDev",
+      "/ /_/ / |/ /    Running on version: " + Bukkit.getVersion(),
+      "\\____/|___/",
+      ""
+    );
+
     initialSetup();
     getSettingsHandler().setupConfigs();
     getSettingsHandler().configUpdater();
@@ -66,19 +75,10 @@ public class OmegaVision extends JavaPlugin {
 
     if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
       Utilities.logWarning(true,
-        "DeathWarden requires PlaceholderAPI to be installed if you are wanting to use the placeholders",
+        "OmegaVision requires PlaceholderAPI to be installed if you are wanting to use the placeholders",
         "You can install PlaceholderAPI here: https://www.spigotmc.org/resources/placeholderapi.6245/ "
       );
     }
-
-    // Logs a message to console, saying that the plugin has enabled correctly.
-    Utilities.logInfo(true,
-      "  ____ _   __",
-      " / __ \\ | / /   OmegaVision v" + plugin.getDescription().getVersion() + " by OmegaWeaponDev",
-      "/ /_/ / |/ /    A modern nightvision plugin",
-      "\\____/|___/     Currently supporting Spigot 1.13 - 1.16",
-      ""
-    );
   }
 
   private void spigotUpdater() {
