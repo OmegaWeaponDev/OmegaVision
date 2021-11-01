@@ -11,40 +11,41 @@
 #
 # -------------------------------------------------------------------------------------------
 
-# If set to true, players with permission `omegavision.login` will login with nightvision
-# enabled, if they logged out without it still enabled.
-Night_Vision_Login: true
+Night_Vision_Settings:
+  # If set to true, players with permission `omegavision.nightvision.login` will log in with night vision
+  # enabled, if they logged out without it still enabled.
+  Night_Vision_Login: true
 
-# If set to true, players will get particle effects when nightvision is applied
-Particle_Effects: true
+  # If set to true, players will get particle effects when night vision is applied
+  Particle_Effects: true
 
-# If set to true, potion effect produce more, translucent, particles.
-# This does require the Particle_Effect setting to be set to true
-Particle_Ambient: true
+  # If set to true, potion effect produce more, translucent, particles.
+  # This does require the Particle_Effect setting to be set to true
+  Particle_Ambient: true
 
-# If set to true, an icon will display on the screen when nightvision is applied
-NightVision_Icon: true
+  # If set to true, an icon will display on the screen when night vision is applied
+  NightVision_Icon: true
 
-# If set to true, players will get an actionbar message when they toggle nightvision
-ActionBar_Messages: true
+  # If set to true, players will get an actionbar message when they toggle night vision
+  ActionBar_Messages: true
 
-# If set to true, players will be able to use milk buckets to remove the potion effects
-# from when they toggle nightvision
-Bucket_Usage: true
+  # If set to true, players will be able to use milk buckets to remove the potion effects
+  # from when they toggle night vision
+  Bucket_Usage: true
 
-# If set to true, once players use a milk bucket to remove potion effects from nightvision
-# the bucket will be emptied so they need to refill it again to use it
-Bucket_Empty: true
+  # If set to true, once players use a milk bucket to remove potion effects from night vision
+  # the bucket will be emptied, and they need to refill it again to use it
+  Bucket_Empty: true
 
-# If set to true, players will keep nightvision when they die
-Keep_NightVision_On_Death: true
+  # If set to true, players will keep night vision when they die
+  Keep_NightVision_On_Death: true
 
-# If true, players who use nightvision will get blinded for a period of time
+# If true, players who use night vision will get blinded for a period of time
 # Bypass: `omegavision.blindness.bypass`
 Blindness_Effect:
   # Determines whether you want to enable this feature
   Enabled: true
-  # How long nightvision must be active for before blindness kicks in (in minutes)
+  # How long night vision must be active for before blindness kicks in (in minutes)
   Timer: 10
   # How long the blindness will last (In minutes).
   Duration: 20
@@ -73,11 +74,11 @@ Sound_Effects:
     Enabled: true
     Sound: ENTITY_WITCH_THROW
 
-# Set the limit for how many times a player can use the nightvision toggle command
+# Set the limit for how many times a player can use the night vision toggle command
 # Use the permission `omegavision.limit.bypass` to bypass the limit
 # Applies to toggling it on, not off
 Night_Vision_Limit:
-  # Whether or not you want to limit the nightvision command use
+  # Whether you want to limit the night vision command use or not
   Enabled: true
   # The limit amount
   Limit: 5
@@ -92,9 +93,9 @@ World_Disable:
     - world_nether
     - world_the_end
 
-# If set to true, those with the permission omegavision.update will recieve messages
+# If set to true, those with the permission omegavision.update will receive messages
 # when the plugin updates on spigot
 Update_Notify: true
 
 # DO NOT EDIT THIS!
-Config_Version: 1.3
+Config_Version: 2.0

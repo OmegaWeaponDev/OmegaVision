@@ -12,103 +12,88 @@ softdepend:
 
 commands:
   omegavision:
-    description: The main command for omegavision
+    description: The core command for the plugin
     aliases: [ov, ovision, omegav]
   nightvision:
-    description: The Nightvision toggle command
+    description: The command to control player night vision
     aliases: [nv, nvision, nightv]
   nightvisionlist:
-    description: The Nightvision List command
+    description: The command to list all players with night vision
     aliases: [nvlist]
   nightvisionlimit:
-    description: The NightVision Limit Command
+    description: The command to control night vision limits
     aliases: [nvlimit]
-  nightvisiontemp:
-    description: The NightVision Temp Toggle command
-    aliases: [nvt, nvtemp]
-  nightvisionall:
-    description: The NightVision Toggle All command
-    aliases: [nva, nvall]
+
 
 permissions:
   omegavision.admin:
-    description: Grants the user access to all commands
+    description: The wildcard permission to give all the plugin permissions.
     default: false
     children:
       - omegavision.reload
+      - omegavision.nightvision.admin
       - omegavision.update
-      - omegavision.toggle
-      - omegavision.toggle.others
-      - omegavision.toggle.all
-      - omegavision.toggle.temp
-      - omegavision.toggle.global
-      - omegavision.bucket
-      - omegavision.blindess.bypass
-      - omegavision.list
-      - omegavision.limit.check
-      - omegavision.limit.all
-      - omegavision.limit.checkothers
-      - omegavision.limit.reset
-      - omegavision.limit.bypass
-      - omegavision.nightvision.worldbypass
-  omegavision.limit.all:
-    description: Grants the user access to all the limit commands
+      - omegavision.limit.admin
+      - omegavision.blindness.bypass
+  omegavision.nightvision.admin:
+    description: The wildcard permission to give all the night vision permissions.
+    default: false
+    children:
+      - omegavision.nightvision.toggle
+      - omegavision.nightvision.toggle.others
+      - omegavision.nightvision.toggle.global
+      - omegavision.nightvision.toggle.temp
+      - omegavision.nightvision.particles.bypass
+      - omegavision.nightvision.world.bypass
+      - omegavision.nightvision.list
+      - omegavision.nightvision.login
+  omegavision.limit.admin:
+    description: The wildcard permission to give all the limit permissions.
     default: false
     children:
       - omegavision.limit.check
-      - omegavision.limit.checkothers
-      - omegavision.limit.bypass
+      - omegavision.limit.check.others
       - omegavision.limit.reset
-  omegavision.toggle.all:
-    description: Grants the user access to all the toggle commands
-    default: false
-    children:
-      - omegavision.toggle
-      - omegavision.toggle.others
-      - omegavision.toggle.global
-      - omegavision.toggle.temp
+      - omegavision.limit.bypass
   omegavision.reload:
-    description: Grants the user access to the reload command
+    description: The permission required to reload the plugin.
     default: false
   omegavision.update:
-    description: Allows the user to recieve the update messages in-game
-    default: false
-  omegavision.toggle:
-    description: Grants the user access to the toggle command
-    default: false
-  omegavision.toggle.others:
-    description: Grants the user access to the toggle others command
-    default: false
-  omegavision.toggle.global:
-    description: Grants the user access to the toggle all command
-    default: false
-  omegavision.toggle.temp:
-    description: Granst the user access to the toggle temp command
-    default: false
-  omegavision.bucket:
-    description: Allows the user to use buckets to remove the potion effects from nightvision
+    description: The permission required to receive plugin update notifications.
     default: false
   omegavision.blindness.bypass:
-    description: Allows the user to bypass the blindness effect
+    description: The permission required to bypass the blindness effect feature.
     default: false
-  omegavision.list:
-    description: Grants the user access to the nightivison list command
+  omegavision.nightvision.toggle:
+    description: The permission required to toggle your own night vision on and off.
+    default: false
+  omegavision.nightvision.toggle.others:
+    description: The permission required to toggle night vision for other players.
+    default: false
+  omegavision.nightvision.toggle.global:
+    description: The permission required to toggle night vision for all players currently online.
+    default: false
+  omegavision.nightvision.toggle.temp:
+    description: The permission required to toggle night vision temporarily for a player.
+    default: false
+  omegavision.nightvision.particles.bypass:
+    description: The permission required to bypass the night vision particle effects.
+    default: false
+  omegavision.nightvision.world.bypass:
+    description: The permission required to bypass the disabled worlds for night vision.
+    default: false
+  omegavision.nightvision.list:
+    description: The permission required to list all players who currently have night vision.
     default: false
   omegavision.limit.check:
-    description: Grants the user access to the check limit command
+    description: The permission required to check your own night vision limit status.
     default: false
-  omegavision.limit.checkothers:
-    description: Grants the user access to check the limit for other players
-    default: false
-  omegavision.limit.bypass:
-    description: Allows to user to bypass the command limits
+  omegavision.limit.check.others:
+    description: The permission required to check another players night vision limit status.
     default: false
   omegavision.limit.reset:
-    description: Grants the user access to the limit reset command
+    description: The permission required to reset a players night vision limit status.
     default: false
-  omegavision.login:
-    description: Allows the user access to keep nightvision on login
-    default: false
-  omegavision.nightvision.worldbypass:
-    description: Allows the user to keep nightvision on world change
+  omegavision.limit.bypass:
+    description: The permission required to bypass the night vision limit amount
     default: false

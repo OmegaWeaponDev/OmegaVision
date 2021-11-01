@@ -2,71 +2,72 @@
 #
 #  Welcome to OmegaVision's messages file.
 #
-#  Here you'll find all of the messages that you can
+#  Here you'll find all the messages that you can
 #  customize to your server needs.
-#
-#  Placeholders:
-#   - %currentLimitAmount% - How many times they have used the nightvision command
-#   - %maxLimitAmount% - The max limit number set in the config.yml
 #
 # -------------------------------------------------------------------------------------------
 
 # Sets the plugins prefix to use in all the messages.
 # NOTE: A space will automatically be added after the prefix.
-Prefix: "&7[&9&lOV&7]"
+Plugin_Prefix: "#8c8c8c[#2b9bbf&lOV#8c8c8c]"
 
-# Sets the message for when pleased have night vision applied.
-NightVision_Applied: "&9Night Vision has been applied!"
+Night_Vision_Messages:
+  # Sets the message for when pleased have night vision applied.
+  Night_Vision_Applied: "#2b9bbfNight Vision has been applied!"
+  
+  # Sets the message for when players have night vision removed.
+  Night_Vision_Removed: "#f63e3eNight Vision has been removed!"
+  
+  # Sets the message for when night vision gets automatically disabled when entering a specific world
+  Night_Vision_World_Disable: "#f63e3eYour night vision has been disabled."
+  
+  # Sets the message players get when they apply night vision temporary for someone.
+  Night_Vision_Appplied_Temp: "#2b9bbfNight vision has now been temporarily applied for %player%."
+  
+  # Sets the message all players get when night vision has been applied globally
+  Night_Vision_Applied_Global: "#2b9bbfNight Vision has been applied for all players!"
+  
+  # Sets the message all players get when night vision has been removed globally
+  Night_Vision_Removed_Global: "#f63e3eNight Vision has been removed for all players!"
+  
+  # Sets the actionbar message that is displayed when night vision is applied!
+  ActionBar_Night_Vision_Applied: "#2b9bbfNight vision has been applied!"
+  
+  # Sets the actionbar message that is displayed when night vision is removed!
+  ActionBar_Night_Vision_Removed: "#f63e3eNight vision has been removed!"
+  
+  # Sets the message players get when they drink milk bucket
+  # to remove the particle and icon when using night vision
+  Bucket_Message: "#2b9bbfParticle Effects and the icon have been removed!"
+  
+  # Sets the message players get when they go blind.
+  Blindness_Message: "#f63e3eYou have been using night vision for too long, you are now blind."
 
-# Sets the message for when players have night vision removed.
-NightVision_Removed: "&cNight Vision has been removed!"
-
-# Sets the message for when night vision gets automatically disabled when entering a specific world
-NightVision_World_Disable: "&cYour nightvision has been disabled."
-
-# Sets the message players get when they apply night vision temporary for someone.
-NightVision_Appplied_Temp: "&3 Night vision has now been temporarily applied for %player%"
-
-# Sets the message all players get when night vision has been applied globally
-NightVision_Applied_Global: "&9Night Vision has been applied for all players!"
-
-# Sets the message all players get when night vision has been removed globally
-NightVision_Removed_Global: "&cNight Vision has been removed for all players!"
-
-# Sets the actionbar message that is displayed when nightvision is applied!
-ActionBar_NightVision_Applied: "&9Nightvision has been applied!"
-
-# Sets the actionbar message that is displayed when nightvision is removed!
-ActionBar_NightVision_Removed: "&cNightvision has been removed!"
-
-# Sets the message players get when they drink milk bucket
-# to remove the particle and icon when using nightvision
-Bucket_Message: "&9Particle Effects and the icon have been removed!"
-
-# Sets the message players get when they go blind.
-Blindness_Message: "&cYou have been using nightvision for too long, you are now blind"
-
-# Set the different messages for the nightvision command limits
+# Set the different messages for the night vision command limits
 Night_Vision_Limit:
   # Sets the message players get when the limit has been reached
-  Limit_Reached: "&cSorry, you have reached the limit for the nightvision command!"
+  Limit_Reached: "#f63e3eSorry, you have reached the limit for the night vision command!"
+
   # Sets the message players get when their limit amount has been reset
-  Limit_Reset: "&bYour limit's have been reset! You can use the nightvision command again!"
+  Limit_Reset: "#1fe3e0Your limit's have been reset! You can use the night vision command again!"
+
   # Sets the message players get when their limit count has been increased
-  Limit_Amount_Increased: "&bYour limit amount now stands at: &c%currentLimitAmount% / %maxLimitAmount%"
+  Limit_Amount_Increased: "#1fe3e0Your limit amount now stands at: #f63e3e%currentLimitAmount% / %maxLimitAmount%"
+
   # Sets the message players get when they use the limit check command
-  Limit_Check: "&bYour limit amount currently stands at: &c%currentLimitAmount% / %maxLimitAmount%"
+  Limit_Check: "#1fe3e0Your limit amount currently stands at: #f63e3e%currentLimitAmount% / %maxLimitAmount%"
+
   # Sets the message players get when they check another players command limits
-  Limit_Check_Others: "&c&player&'s &blimit amount currently stands at: &c%currentLimitAmount% / %maxLimitAmount%"
+  Limit_Check_Others: "#f63e3e&player&'s #1fe3e0limit amount currently stands at: #f63e3e%currentLimitAmount% / %maxLimitAmount%"
 
 # Set the message player receive when a player is not found
-Invalid_Player: "&cSorry, that player cannot be found."
+Invalid_Player: "#f63e3eSorry, that player cannot be found."
 
-# Sets the messages for when players don't have permission to use nightvision.
-No_Permission: "&cSorry, but you don't have permission to do that"
+# Sets the messages for when players don't have permission to use night vision.
+No_Permission: "#f63e3eSorry, but you don't have permission to do that."
 
-# Sets the reload message
-Reload_Message: "&cOmegaVision has successfully been reloaded"
+# Sets the message that players get when they reload the plugin
+Plugin_Reload: "#f63e3eOmegaVision has successfully been reloaded."
 
 # DO NOT EDIT THIS!
 Config_Version: 1.3

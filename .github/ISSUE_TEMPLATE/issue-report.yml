@@ -1,0 +1,63 @@
+name: OmegaVision Issue report
+description: Report any issues that you encounter with OmegaVision
+labels: ["type: issue"]
+body:
+  - type: markdown
+    attributes:
+      value: "Before posting an issue, please make sure you have downloaded and installed the latest version from: https://www.spigotmc.org/resources/omegavision.73013/"
+  - type: textarea
+    id: issue-description
+    attributes:
+      label: issue-description
+      description: Please provide a clear and detailed description of the issue that you are reporting.
+      placeholder: Issue Description...
+    validations:
+      required: true
+  - type: textarea
+    id: error-messages
+    attributes:
+      label: Error Messages
+      description: If you are getting any error messages (either in-game or in the server console) please provide the full errors here. Use hastebin.com or any other paste service to send errors.
+      placeholder: Make sure you use a paste service to provide errors!
+    validations:
+      required: false
+  - type: textarea
+    id: expected-behaviour
+    attributes:
+      label: Expected Behaviour
+      description: What were you expecting to happen when the issue occurred?
+      placeholder: Expected Behaviour...
+    validations:
+      required: true
+  - type: input
+    id: server-version
+    attributes:
+      label: Server Version
+      description: Please provide the exact server version you are using, including the type and specific version number.
+      placeholder: 'git-Paper-124 (MC: 1.17.1)'
+    validations:
+      required: true
+  - type: input
+    id: omegavision-version
+    attributes:
+      label: OmegaVision Version
+      description: Please tell me the exact version that you were using when you encountered the issue.
+      placeholder: v2.4.12
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs and Configs
+      description: Please include a pastebin of relevant config files or logs. You should use https://gist.github.com/ to upload, then include the link below.
+      placeholder: Link to config/log paste...
+    validations:
+      required: false
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional Information
+      description: If there is any other information you feel is relevant to this issue, please provide it here.
+      placeholder: Additional Information...
+    validations:
+      required: false

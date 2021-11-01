@@ -1,127 +1,122 @@
 package me.omegaweapondev.omegavision.command;
 
 import me.omegaweapondev.omegavision.OmegaVision;
-import me.omegaweapondev.omegavision.utils.MessageHandler;
+import me.omegaweapondev.omegavision.utils.MessagesHandler;
 import me.ou.library.Utilities;
 import me.ou.library.builders.TabCompleteBuilder;
 import me.ou.library.commands.GlobalCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
 
 public class PluginCommand extends GlobalCommand implements TabCompleter {
-  private final OmegaVision plugin;
-  private final MessageHandler messagesHandler;
+  private final OmegaVision pluginInstance;
+  private final MessagesHandler messagesHandler;
 
-  public PluginCommand(final OmegaVision plugin) {
-    this.plugin = plugin;
-    messagesHandler = plugin.getMessageHandler();
+  public PluginCommand(final OmegaVision pluginInstance) {
+    this.pluginInstance = pluginInstance;
+    messagesHandler = pluginInstance.getMessagesHandler();
   }
 
 	@Override
 	protected void execute(final CommandSender sender, final String[] strings) {
-
-	  if(strings.length != 1) {
-	    invalidArgsCommand(sender);
-	    return;
-    }
-		
-		switch(strings[0]) {
-			case "version":
-			  versionCommand(sender);
-				break;
-			case "help":
-			  helpCommand(sender);
-				break;
-			case "reload":
-			  reloadCommand(sender);
-				break;
-			default:
-			  invalidArgsCommand(sender);
-				break;
-		}
-	}
-
-	private void versionCommand(final CommandSender sender) {
-	  if(sender instanceof Player) {
-	    Player player = (Player) sender;
-      Utilities.message(player, messagesHandler.getPrefix() + "#00D4FFOmegaVision #FF4A4Av" + plugin.getDescription().getVersion() + " #00D4FFBy OmegaWeaponDev");
+    if(strings.length != 1) {
+      helpCommand(sender);
       return;
     }
 
-	  Utilities.logInfo(true, "#00D4FFRunning version: #FF4A4A" + plugin.getDescription().getVersion());
-	}
-
-	private void helpCommand(final CommandSender sender) {
-    if(sender instanceof Player) {
-      Player player = (Player) sender;
-
-      Utilities.message(player,
-        messagesHandler.getPrefix() + "#00D4FFToggle command: #FF4A4A/nv & /nv <player>",
-        messagesHandler.getPrefix() + "#00D4FFList command: #FF4A4A/nvlist",
-        messagesHandler.getPrefix() + "#00D4FFReload command: #FF4A4A/omegavision reload"
-      );
-      return;
+    switch(strings[0]) {
+      case "version" -> versionCommand(sender);
+      case "reload" -> reloadCommand(sender);
+      default -> helpCommand(sender);
     }
-
-    Utilities.logInfo(true,
-      "#00D4FFToggle command: #FF4A4A/nv & /nv <player>",
-      "#00D4FFList command: #FF4A4A/nvlist",
-      "#00D4FFReload command: #FF4A4A/omegavision reload"
-    );
 	}
 
-	private void reloadCommand(final CommandSender sender) {
-    if(sender instanceof Player) {
-      Player player = (Player) sender;
+  private void reloadCommand(final CommandSender commandSender) {
+    if(commandSender instanceof final Player player) {
 
       if(!Utilities.checkPermissions(player, true, "omegavision.reload", "omegavision.admin")) {
-        Utilities.message(player, messagesHandler.string("No_Permission", "#FF4A4ASorry, you do not have permission to use this command."));
+        Utilities.message(player, messagesHandler.string("No_Permission", "#f63e3eSorry, but you don't have permission to do that."));
         return;
       }
 
-      plugin.onReload();
-      Utilities.message(player, messagesHandler.string("Reload_Message", "#FF4A4AOmegaVision has successfully been reloaded"));
+      pluginInstance.onReload();
+      Utilities.message(player, messagesHandler.string("Plugin_Reload", "#f63e3eOmegaVision has successfully been reloaded."));
       return;
     }
 
-    plugin.onReload();
-    Utilities.logInfo(true, messagesHandler.console("Reload_Message", "OmegaVision has successfully been reloaded"));
-	}
+    if(commandSender instanceof ConsoleCommandSender) {
+      pluginInstance.onReload();
+      Utilities.logInfo(true, "OmegaVision has successfully been reloaded.");
+    }
+  }
 
-  private void invalidArgsCommand(final CommandSender sender) {
+  private void versionCommand(final CommandSender sender) {
+
     if(sender instanceof Player) {
-      Player player = (Player) sender;
+      final Player player = (Player) sender;
 
+      Utilities.message(player, messagesHandler.getPrefix() + "#86DE0FOmegaVision #CA002Ev" + pluginInstance.getDescription().getVersion() + " #86DE0FBy OmegaWeaponDev");
+      return;
+    }
+
+    if(sender instanceof ConsoleCommandSender) {
+      Utilities.logInfo(true, "OmegaVision v" + pluginInstance.getDescription().getVersion() + " By OmegaWeaponDev");
+    }
+  }
+
+  private void helpCommand(final CommandSender sender) {
+
+    if(sender instanceof Player) {
+      final Player player = (Player) sender;
+
+      versionCommand(player);
       Utilities.message(player,
-        messagesHandler.getPrefix() + "#00D4FFOmegaVision #FF4A4Av" + plugin.getDescription().getVersion() + " #00D4FFBy OmegaWeaponDev",
-        messagesHandler.getPrefix() + "#FF4A4A/omegavision help #00D4FFto display all the commands"
+        messagesHandler.getPrefix() + "#86DE0FReload Command: #CA002E/omegavision reload",
+        messagesHandler.getPrefix() + "#86DE0FVersion Command: #CA002E/omegavision version",
+        messagesHandler.getPrefix() + "#86DE0FHelp Command: #CA002E/omegavision help",
+        messagesHandler.getPrefix() + "#86DE0FNight Vision Toggle Command: #CA002E/nightvision",
+        messagesHandler.getPrefix() + "#86DE0FNight Vision Toggle Others Command: #CA002E/nightvision <player>",
+        messagesHandler.getPrefix() + "#86DE0FNight Vision Global Command: #CA002E/nightvision global",
+        messagesHandler.getPrefix() + "#86DE0FNight Vision Temp Command: #CA002E/nightvision <player> <time>",
+        messagesHandler.getPrefix() + "#86DE0FNight Vision List Command: #CA002E/nightvisionlist",
+        messagesHandler.getPrefix() + "#86DE0FNight Vision Limit Check Command: #CA002E/nightvisionlimit check",
+        messagesHandler.getPrefix() + "#86DE0FNight Vision Limit Check Others Command: #CA002E/nightvisionlimit check <player>",
+        messagesHandler.getPrefix() + "#86DE0FNight Vision Limit Reset Command: #CA002E/nightvisionlimit reset <player>"
       );
       return;
     }
 
-    Utilities.logInfo(true,
-      "#00D4FFRunning version: #FF4A4A" + plugin.getDescription().getVersion(),
-      "#FF4A4A/omegavision help #00D4FFto display all the commands"
-    );
+    if(sender instanceof ConsoleCommandSender) {
+      versionCommand(sender);
+      Utilities.logInfo(true,
+        "Reload Command: /omegavision reload",
+        "Version Command: /omegavision version",
+        "Help Command: /omegavision help",
+        "Night Vision Toggle Others Command: /nightvision <player>",
+        "Night Vision Global Command: /nightvision global",
+        "Night Vision Temp Command: /nightvision <player> <time>",
+        "Night Vision List Command: /nightvisionlist",
+        "Night Vision Limit Check Others Command: /nightvisionlimit check <player>",
+        "Night Vision Limit Reset Command: /nightvisionlimit reset <player>"
+      );
+    }
   }
 
   @Override
   public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
     if(strings.length <= 1) {
       return new TabCompleteBuilder(commandSender)
-        .checkCommand("help", true, "omegavision.admin")
-        .checkCommand("reload", true, "omegavision.reload", "omegavision.admin")
         .checkCommand("version", true, "omegavision.admin")
+        .checkCommand("reload", true, "omegavision.reload", "omegavision.admin")
         .build(strings[0]);
     }
-
     return Collections.emptyList();
   }
 }

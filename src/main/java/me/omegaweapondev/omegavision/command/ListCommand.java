@@ -1,8 +1,7 @@
 package me.omegaweapondev.omegavision.command;
 
-
 import me.omegaweapondev.omegavision.OmegaVision;
-import me.omegaweapondev.omegavision.utils.MessageHandler;
+import me.omegaweapondev.omegavision.utils.MessagesHandler;
 import me.ou.library.Utilities;
 import me.ou.library.commands.GlobalCommand;
 import org.bukkit.Bukkit;
@@ -12,48 +11,51 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class ListCommand extends GlobalCommand implements TabCompleter {
-  private final OmegaVision plugin;
-  private final MessageHandler messagesHandler;
+  private final OmegaVision pluginInstance;
+  private final MessagesHandler messagesHandler;
 
-  public ListCommand(final OmegaVision plugin) {
-    this.plugin = plugin;
-    messagesHandler = plugin.getMessageHandler();
+  public ListCommand(final OmegaVision pluginInstance) {
+    this.pluginInstance = pluginInstance;
+    messagesHandler = pluginInstance.getMessagesHandler();
   }
   
   @Override
   protected void execute(final CommandSender commandSender, final String[] strings) {
+    if(commandSender instanceof Player) {
+      Player player = (Player) commandSender;
 
-    if(!(commandSender instanceof Player)) {
-      Utilities.logInfo(true, messagesHandler.getPrefix() + "#00D4FFThe following players have nightvision enabled:");
-
-      for(Player onlinePlayers : Bukkit.getServer().getOnlinePlayers()) {
-        if(onlinePlayers.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
-          Utilities.logInfo(true,  messagesHandler.getPrefix() +  "#FF4A4A" + onlinePlayers.getName());
-        }
+      if(!Utilities.checkPermissions(player, true, "omegavision.nightvision.list", "omegavision.nightvision.admin", "omegavision.admin")) {
+        Utilities.message(player, messagesHandler.string("No_Permission", "#f63e3eSorry, but you don't have permission to do that."));
+        return;
       }
+
+      Utilities.message(player, messagesHandler.getPrefix() + "#00D4FFThe following players have night vision enabled:", getPlayerList());
       return;
     }
 
-    final Player player = (Player) commandSender;
+    Utilities.logInfo(true, "The following players have night vision enabled:", getPlayerList());
+  }
 
-    if(!Utilities.checkPermissions(player, true, "omegavision.list", "omegavision.admin")) {
-      Utilities.message(player, messagesHandler.string("No_Permission", "#FF4A4ASorry, you do not have permission to use that command."));
-      return;
-    }
-
-    Utilities.message(player, messagesHandler.getPrefix() + "#00D4FFThe following players have nightvision enabled:");
-
-    for(Player onlinePlayers : Bukkit.getServer().getOnlinePlayers()) {
-      if(onlinePlayers.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
-        Utilities.message(player,  messagesHandler.getPrefix() +  "#FF4A4A" + onlinePlayers.getName());
+  private String getPlayerList() {
+    List<String> nightVisionList = new ArrayList<>();
+    for(Player playerName : Bukkit.getOnlinePlayers()) {
+      if(playerName.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+        nightVisionList.add(playerName.getName());
       }
     }
+
+    StringBuilder playerList = new StringBuilder();
+    for(String playerName : nightVisionList) {
+      playerList.append(playerName).append(", ");
+    }
+
+    return playerList.toString();
   }
 
   @Override

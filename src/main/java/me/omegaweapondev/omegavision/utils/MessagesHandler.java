@@ -2,22 +2,21 @@ package me.omegaweapondev.omegavision.utils;
 
 import me.omegaweapondev.omegavision.OmegaVision;
 import me.ou.library.Utilities;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.List;
 
-public class MessageHandler {
-  private final OmegaVision plugin;
+public class MessagesHandler {
+  private final OmegaVision pluginInstance;
   private final FileConfiguration messagesConfig;
   private final String configName;
 
-  public MessageHandler(final OmegaVision plugin) {
-    this.plugin = plugin;
-    this.messagesConfig = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder() + File.separator + "messages.yml"));
-    this.configName = plugin.getSettingsHandler().getMessagesFile().getFileName();
+  public MessagesHandler(final OmegaVision pluginInstance) {
+    this.pluginInstance = pluginInstance;
+    this.messagesConfig = YamlConfiguration.loadConfiguration(new File(pluginInstance.getDataFolder() + File.separator + "messages.yml"));
+    this.configName = pluginInstance.getStorageManager().getMessagesFile().getFileName();
   }
 
   public String string(final String message, final String fallbackMessage) {
@@ -26,6 +25,22 @@ public class MessageHandler {
       return getPrefix() + fallbackMessage;
     }
     return getPrefix() + messagesConfig.getString(message);
+  }
+
+  public List<String> stringList(final String message, final List<String> fallbackMessage) {
+    if(messagesConfig.getStringList(message).isEmpty()) {
+      getErrorMessage(message);
+      return fallbackMessage;
+    }
+    return messagesConfig.getStringList(message);
+  }
+
+  public List<String> consoleStringList(final String message, final List<String> fallbackMessage) {
+    if(messagesConfig.getStringList(message).isEmpty()) {
+      getErrorMessage(message);
+      return fallbackMessage;
+    }
+    return messagesConfig.getStringList(message);
   }
 
   public String console(final String message, final String fallbackMessage) {
@@ -37,11 +52,11 @@ public class MessageHandler {
   }
 
   public String getPrefix() {
-    if(messagesConfig.getString("Prefix") == null) {
+    if(messagesConfig.getString("Plugin_Prefix") == null) {
       getErrorMessage("Prefix");
-      return "&7&l[&aOV&7&l]" + " ";
+      return "#8c8c8c[#2b9bbf&lOV#8c8c8c]" + " ";
     }
-    return messagesConfig.getString("Prefix") + " ";
+    return messagesConfig.getString("Plugin_Prefix") + " ";
   }
 
   private void getErrorMessage(final String message) {

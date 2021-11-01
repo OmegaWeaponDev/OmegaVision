@@ -12,19 +12,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 
-public class LimitCommand extends GlobalCommand implements TabCompleter {
+public class NightVisionCommand extends GlobalCommand implements TabCompleter {
   private final OmegaVision pluginInstance;
-  private final MessagesHandler messagesHandler;
   private final FileConfiguration configFile;
+  private final MessagesHandler messagesHandler;
 
-  public LimitCommand(final OmegaVision pluginInstance) {
+  public NightVisionCommand(final OmegaVision pluginInstance) {
     this.pluginInstance = pluginInstance;
-    messagesHandler = pluginInstance.getMessagesHandler();
     configFile = pluginInstance.getStorageManager().getConfigFile().getConfig();
+    messagesHandler = pluginInstance.getMessagesHandler();
   }
 
   @Override
-  protected void execute(CommandSender sender, String[] strings) {
+  protected void execute(final CommandSender commandSender, final String[] strings) {
 
   }
 
@@ -33,3 +33,4 @@ public class LimitCommand extends GlobalCommand implements TabCompleter {
     return Collections.emptyList();
   }
 }
+

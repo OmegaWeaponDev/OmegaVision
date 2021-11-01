@@ -6,39 +6,39 @@ import me.ou.library.configs.ConfigCreator;
 import me.ou.library.configs.ConfigUpdater;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
-public class SettingsHandler {
+public class StorageManager {
   private final OmegaVision plugin;
 
   private final ConfigCreator configFile = new ConfigCreator("config.yml");
   private final ConfigCreator messagesFile = new ConfigCreator("messages.yml");
+  private final ConfigCreator userDataFile = new ConfigCreator("userData.yml");
 
-  public SettingsHandler(final OmegaVision plugin) {
+  public StorageManager(final OmegaVision plugin) {
     this.plugin = plugin;
   }
 
   public void setupConfigs() {
     getConfigFile().createConfig();
     getMessagesFile().createConfig();
+    getUserDataFile().createConfig();
+
   }
 
   public void configUpdater() {
     Utilities.logInfo(true, "Attempting to update the config files....");
 
     try {
-      if(getConfigFile().getConfig().getDouble("Config_Version") != 1.3) {
-        getConfigFile().getConfig().set("Config_Version", 1.3);
+      if(getConfigFile().getConfig().getDouble("Config_Version") != 2.0) {
+        getConfigFile().getConfig().set("Config_Version", 2.0);
         getConfigFile().saveConfig();
         ConfigUpdater.update(plugin, "config.yml", getConfigFile().getFile(), Arrays.asList("none"));
         Utilities.logInfo(true, "The config.yml has successfully been updated!");
       }
 
-      if(getMessagesFile().getConfig().getDouble("Config_Version") != 1.3) {
-        getMessagesFile().getConfig().set("Config_Version", 1.3);
+      if(getMessagesFile().getConfig().getDouble("Config_Version") != 2.0) {
+        getMessagesFile().getConfig().set("Config_Version", 2.0);
         getMessagesFile().saveConfig();
         ConfigUpdater.update(plugin, "messages.yml", getMessagesFile().getFile(), Arrays.asList("none"));
         Utilities.logInfo(true, "The messages.yml has successfully been updated!");
@@ -60,5 +60,9 @@ public class SettingsHandler {
 
   public ConfigCreator getMessagesFile() {
     return messagesFile;
+  }
+
+  public ConfigCreator getUserDataFile() {
+    return userDataFile;
   }
 }

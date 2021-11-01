@@ -1,9 +1,9 @@
 # -------------------------------------------------------------------------------------------
 #
-#  Welcome to OmegaVision's Player Data file.
+#  Welcome to OmegaVision's User Data file.
 #
-#  This file contains all the uuids and nightivision status
-#  for all the players who have the permission omegavision.login
+#  You generally won't need to touch this file
+#  as it is just to store data about all the users.
 #
 # -------------------------------------------------------------------------------------------
 
