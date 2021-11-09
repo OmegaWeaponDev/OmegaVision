@@ -5,6 +5,7 @@ import me.omegaweapondev.omegavision.utils.NightVisionToggle;
 import me.ou.library.Utilities;
 import me.ou.library.builders.TabCompleteBuilder;
 import me.ou.library.commands.GlobalCommand;
+import me.ou.library.commands.PlayerCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -16,24 +17,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class NightVisionCommand extends GlobalCommand implements TabCompleter {
+public class NightVisionCommand extends PlayerCommand implements TabCompleter {
   private final OmegaVision pluginInstance;
-
-  private NightVisionToggle nightVisionToggle;
 
   public NightVisionCommand(final OmegaVision pluginInstance) {
     this.pluginInstance = pluginInstance;
   }
 
   @Override
-  protected void execute(final CommandSender commandSender, final String[] strings) {
-    if(!(commandSender instanceof Player) && strings.length == 1) {
-      Utilities.logWarning(true, "Only a player can use that command!");
-      return;
-    }
-
-    Player player = (Player) commandSender;
-    nightVisionToggle = new NightVisionToggle(pluginInstance, player);
+  protected void execute(final Player player, final String[] strings) {
+    NightVisionToggle nightVisionToggle = new NightVisionToggle(pluginInstance, player);
 
     if(strings.length == 0) {
       nightVisionToggle.nightVisionToggle();
@@ -51,7 +44,7 @@ public class NightVisionCommand extends GlobalCommand implements TabCompleter {
     }
 
     if(strings.length == 3) {
-      nightVisionToggle.nightVisionToggleTemp(Bukkit.getPlayer(strings[1]), Integer.getInteger(strings[2]));
+      nightVisionToggle.nightVisionToggleTemp(Bukkit.getPlayer(strings[1]), Integer.parseInt(strings[2]));
     }
   }
 
@@ -69,8 +62,8 @@ public class NightVisionCommand extends GlobalCommand implements TabCompleter {
     if(strings.length == 1) {
 
       return new TabCompleteBuilder(commandSender)
-        .checkCommand("global", true, "omegavision.nightvision.toggle.global", "omegavision.nightvision.admin", "omegavision.admin")
-        .checkCommand("temp", true, "omegavision.nightvision.toggle.temp", "omegavision.nightvision.admin", "omegavision.admin")
+        .checkCommand("global", true, "omegavision.nightvision.global", "omegavision.nightvision.admin", "omegavision.admin")
+        .checkCommand("temp", true, "omegavision.nightvision.temp", "omegavision.nightvision.admin", "omegavision.admin")
         .checkCommand(onlinePlayers, true, "omegavision.nightvision.toggle.others", "omegavision.nightvision.admin", "omegavision.admin")
         .build(strings[0]);
     }
@@ -78,14 +71,14 @@ public class NightVisionCommand extends GlobalCommand implements TabCompleter {
     if(strings.length == 2) {
       if(strings[0].equalsIgnoreCase("temp")) {
         return new TabCompleteBuilder(commandSender)
-          .checkCommand(onlinePlayers, true, "omegavision.nightvision.toggle.temp", "omegavision.nightvision.admin", "omegavision.admin")
+          .checkCommand(onlinePlayers, true, "omegavision.nightvision.temp", "omegavision.nightvision.admin", "omegavision.admin")
           .build(strings[1]);
       }
 
       if(strings[0].equalsIgnoreCase("global")) {
         return new TabCompleteBuilder(commandSender)
-          .checkCommand("add", true, "omegavision.nightvision.toggle.global", "omegavision.nightvision.admin", "omegavision.admin")
-          .checkCommand("remove", true, "omegavision.nightvision.toggle.global", "omegavision.nightvision.admin", "omegavision.admin")
+          .checkCommand("add", true, "omegavision.nightvision.global", "omegavision.nightvision.admin", "omegavision.admin")
+          .checkCommand("remove", true, "omegavision.nightvision.global", "omegavision.nightvision.admin", "omegavision.admin")
           .build(strings[1]);
       }
     }

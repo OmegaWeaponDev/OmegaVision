@@ -2,6 +2,7 @@ package me.omegaweapondev.omegavision.events;
 
 import me.omegaweapondev.omegavision.OmegaVision;
 import me.omegaweapondev.omegavision.utils.MessagesHandler;
+import me.omegaweapondev.omegavision.utils.NightVisionToggle;
 import me.omegaweapondev.omegavision.utils.UserDataHandler;
 import me.ou.library.Utilities;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PlayerListener implements Listener {
   private final OmegaVision pluginInstance;
   private final FileConfiguration configFile;
-  private final MessagesHandler messagesHandler;
+
   private final UserDataHandler userDataHandler;
   private final boolean particleEffects;
   private final boolean ambientEffects;
@@ -28,12 +29,11 @@ public class PlayerListener implements Listener {
   public PlayerListener(final OmegaVision pluginInstance) {
     this.pluginInstance = pluginInstance;
     configFile = pluginInstance.getStorageManager().getConfigFile().getConfig();
-    messagesHandler = pluginInstance.getMessagesHandler();
     userDataHandler = pluginInstance.getUserDataHandler();
 
     particleEffects = configFile.getBoolean("Night_Vision_Settings.Particle_Effects");
     ambientEffects = configFile.getBoolean("Night_Vision_Settings.Particle_Ambient");
-    nightvisionIcon = configFile.getBoolean("Night_Vision_Settings.NightVision_Icon");
+    nightvisionIcon = configFile.getBoolean("Night_Vision_Settings.Night_Vision_Icon");
   }
 
   @EventHandler(priority = EventPriority.HIGHEST)
@@ -46,7 +46,7 @@ public class PlayerListener implements Listener {
       userDataHandler.addUserToMap(player.getUniqueId());
     }
 
-    if(configFile.getBoolean("Night_Vision_Settings.Night_Vision_Login") && userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.NIGHT_VISION) && Utilities.checkPermissions(player, true, "omegavision.nightvision.login", "omegavision.nightvision.admin", "omegavision.admin")) {
+    if(configFile.getBoolean("Night_Vision_Settings.Night_Vision_Login") && userDataHandler.getEffectStatus(player.getUniqueId()) && Utilities.checkPermissions(player, true, "omegavision.nightvision.login", "omegavision.nightvision.admin", "omegavision.admin")) {
       Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100 ,1, particleEffects, ambientEffects, nightvisionIcon);
     }
   }
@@ -58,6 +58,15 @@ public class PlayerListener implements Listener {
 
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onPlayerRespawn(PlayerRespawnEvent playerRespawnEvent) {
+    Player player = playerRespawnEvent.getPlayer();
 
+    if(!Utilities.checkPermissions(player, false, "omegavision.nightvision.keepondeath", "omegavision.nightvision.admin", "omegavision.admin")) {
+     return;
+    }
+
+    if(userDataHandler.getEffectStatus(player.getUniqueId())) {
+      NightVisionToggle nightVisionToggle = new NightVisionToggle(pluginInstance, player);
+      nightVisionToggle.applyNightVisionGlobal(player);
+    }
   }
 }

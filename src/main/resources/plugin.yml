@@ -34,19 +34,19 @@ permissions:
       - omegavision.nightvision.admin
       - omegavision.update
       - omegavision.limit.admin
-      - omegavision.blindness.bypass
   omegavision.nightvision.admin:
     description: The wildcard permission to give all the night vision permissions.
     default: false
     children:
       - omegavision.nightvision.toggle
       - omegavision.nightvision.toggle.others
-      - omegavision.nightvision.toggle.global
-      - omegavision.nightvision.toggle.temp
+      - omegavision.nightvision.global
+      - omegavision.nightvision.temp
       - omegavision.nightvision.particles.bypass
       - omegavision.nightvision.world.bypass
       - omegavision.nightvision.list
       - omegavision.nightvision.login
+      - omegavision.nightvision.keepondeath
   omegavision.limit.admin:
     description: The wildcard permission to give all the limit permissions.
     default: false
@@ -60,9 +60,6 @@ permissions:
     default: false
   omegavision.update:
     description: The permission required to receive plugin update notifications.
-    default: false
-  omegavision.blindness.bypass:
-    description: The permission required to bypass the blindness effect feature.
     default: false
   omegavision.nightvision.toggle:
     description: The permission required to toggle your own night vision on and off.
@@ -84,6 +81,9 @@ permissions:
     default: false
   omegavision.nightvision.list:
     description: The permission required to list all players who currently have night vision.
+    default: false
+  omegavision.nightvision.keepondeath:
+    description: The permission required to keep night vision on death
     default: false
   omegavision.limit.check:
     description: The permission required to check your own night vision limit status.

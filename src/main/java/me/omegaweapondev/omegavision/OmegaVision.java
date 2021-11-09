@@ -3,6 +3,7 @@ package me.omegaweapondev.omegavision;
 import me.omegaweapondev.omegavision.command.*;
 import me.omegaweapondev.omegavision.events.PlayerListener;
 import me.omegaweapondev.omegavision.utils.MessagesHandler;
+import me.omegaweapondev.omegavision.utils.Placeholders;
 import me.omegaweapondev.omegavision.utils.StorageManager;
 import me.omegaweapondev.omegavision.utils.UserDataHandler;
 import me.ou.library.Utilities;
@@ -34,6 +35,15 @@ public class OmegaVision extends JavaPlugin {
       "\\____/|___/",
       ""
     );
+
+    if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
+      Utilities.logWarning(true,
+        "OmegaVision requires PlaceholderAPI to be installed if you are wanting to use any of the placeholders",
+        "You can install PlaceholderAPI here: https://www.spigotmc.org/resources/placeholderapi.6245/ "
+      );
+    } else {
+      new Placeholders(pluginInstance).register();
+    }
 
     registerCommands();
     registerEvents();

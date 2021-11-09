@@ -24,7 +24,7 @@ Night_Vision_Settings:
   Particle_Ambient: true
 
   # If set to true, an icon will display on the screen when night vision is applied
-  NightVision_Icon: true
+  Night_Vision_Icon: true
 
   # If set to true, players will get an actionbar message when they toggle night vision
   ActionBar_Messages: true
@@ -38,17 +38,7 @@ Night_Vision_Settings:
   Bucket_Empty: true
 
   # If set to true, players will keep night vision when they die
-  Keep_NightVision_On_Death: true
-
-# If true, players who use night vision will get blinded for a period of time
-# Bypass: `omegavision.blindness.bypass`
-Blindness_Effect:
-  # Determines whether you want to enable this feature
-  Enabled: true
-  # How long night vision must be active for before blindness kicks in (in minutes)
-  Timer: 10
-  # How long the blindness will last (In minutes).
-  Duration: 20
+  Keep_Night_Vision_On_Death: true
 
 # Play a special sound to a player when certain things happen
 # You can find all the sound effects here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html

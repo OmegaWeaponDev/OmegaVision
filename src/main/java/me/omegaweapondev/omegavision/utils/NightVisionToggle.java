@@ -4,6 +4,8 @@ import me.omegaweapondev.omegavision.OmegaVision;
 import me.ou.library.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
@@ -40,7 +42,7 @@ public class NightVisionToggle {
 
     particleEffects = configFile.getBoolean("Night_Vision_Settings.Particle_Effects");
     particleAmbients = configFile.getBoolean("Night_Vision_Settings.Particle_Ambient");
-    nightVisionIcon = configFile.getBoolean("Night_Vision_Settings.NightVision_Icon");
+    nightVisionIcon = configFile.getBoolean("Night_Vision_Settings.Night_Vision_Icon");
     actionBarMessages = configFile.getBoolean("Night_Vision_Settings.ActionBar_Messages");
 
     nightVisionApplied = messagesHandler.string("Night_Vision_Messages.Night_Vision_Applied", "#2b9bbfNight Vision has been applied!");
@@ -48,7 +50,7 @@ public class NightVisionToggle {
     nightVisionAppliedActionbar = messagesHandler.string("Night_Vision_Messages.ActionBar_Night_Vision_Applied", "#2b9bbfNight vision has been applied!");
     nightVisionRemovedActionbar = messagesHandler.string("Night_Vision_Messages.ActionBar_Night_Vision_Removed", "#f63e3eNight Vision has been removed!");
 
-    hasNightVision = userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.NIGHT_VISION);
+    hasNightVision = userDataHandler.getEffectStatus(player.getUniqueId());
   }
 
   public void nightVisionToggle() {
@@ -60,7 +62,7 @@ public class NightVisionToggle {
     // Check if the player currently has night vision enabled
     if(hasNightVision) {
       // Remove night vision from the player
-      userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
+      userDataHandler.setEffectStatus(player.getUniqueId(), false);
       Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
 
       // Send night vision removal messages
@@ -82,9 +84,9 @@ public class NightVisionToggle {
     }
 
     // Check if the target currently has night vision enabled
-    if(userDataHandler.getEffectStatus(target.getUniqueId(), UserDataHandler.NIGHT_VISION)) {
+    if(userDataHandler.getEffectStatus(target.getUniqueId())) {
       // Remove night vision from the target
-      userDataHandler.setEffectStatus(target.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
+      userDataHandler.setEffectStatus(target.getUniqueId(), false);
       Utilities.removePotionEffect(target, PotionEffectType.NIGHT_VISION);
 
       // Send night vision removal messages
@@ -93,10 +95,10 @@ public class NightVisionToggle {
     }
 
     // Check if the target has particle bypass perm and apply correct night vision effect
-    applyNightVision(player, 60 * 60 * 24 * 100);
+    applyNightVision(target, 60 * 60 * 24 * 100);
 
     // Send night vision applied messages
-    sendNightVisionAppliedMessages(player);
+    sendNightVisionAppliedMessages(target);
   }
 
   public void nightVisionToggleTemp(final Player target, final int seconds) {
@@ -106,7 +108,7 @@ public class NightVisionToggle {
     }
 
     // Check if the target currently has night vision enabled
-    if(userDataHandler.getEffectStatus(target.getUniqueId(), UserDataHandler.NIGHT_VISION)) {
+    if(userDataHandler.getEffectStatus(target.getUniqueId())) {
       // Remove night vision from the target
       Utilities.removePotionEffect(target, PotionEffectType.NIGHT_VISION);
     }
@@ -124,32 +126,51 @@ public class NightVisionToggle {
       return;
     }
 
+    if(Bukkit.getOnlinePlayers().size() == 0){
+      Utilities.logWarning(true, "There are currently no players online!");
+      return;
+    }
+
     for(Player player : Bukkit.getOnlinePlayers()) {
       if(action.equalsIgnoreCase("remove")) {
         // Remove night vision from the target
-        userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
+        userDataHandler.setEffectStatus(player.getUniqueId(), false);
         Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
 
-        Utilities.broadcast(false, messagesHandler.string("Night_Vision_Removed_Global", "#2b9bbfNight Vision has been removed for all players!"));
+        Utilities.broadcast(false, messagesHandler.string("Night_Vision_Messages.Night_Vision_Removed_Global", "#2b9bbfNight Vision has been removed for all players!"));
         return;
       }
 
       if(action.equalsIgnoreCase("add")) {
         // Check if the target has particle bypass perm and apply correct night vision effect
-        applyNightVision(player, 60 * 60 * 24 * 100);
+        applyNightVisionGlobal(player);
 
         // Send night vision applied messages
-        Utilities.broadcast(false, messagesHandler.string("Night_Vision_Applied_Global", "#2b9bbfNight Vision has been applied for all players!"));
+        Utilities.broadcast(false, messagesHandler.string("Night_Vision_Messages.Night_Vision_Applied_Global", "#2b9bbfNight Vision has been applied for all players!"));
       }
     }
   }
 
   private void applyNightVision(final Player player, final int duration) {
-    userDataHandler.setEffectStatus(player.getUniqueId(), true, UserDataHandler.NIGHT_VISION);
+    if(checkLimitStatus(player)) {
+      userDataHandler.setEffectStatus(player.getUniqueId(), true);
+      if(Utilities.checkPermissions(player, false, "omegavision.nightvision.particles.bypass")) {
+        Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, duration ,1, false, false, false);
+      } else {
+        Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, duration ,1, particleEffects, particleAmbients, nightVisionIcon);
+      }
+      increaseLimitAmount(player);
+      return;
+    }
+    Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Reached", "#f63e3eSorry, you have reached the limit for the night vision command!"));
+  }
+
+  public void applyNightVisionGlobal(final Player player) {
+    userDataHandler.setEffectStatus(player.getUniqueId(), true);
     if(Utilities.checkPermissions(player, false, "omegavision.nightvision.particles.bypass")) {
-      Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, duration ,1, false, false, false);
+      Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100 ,1, false, false, false);
     } else {
-      Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, duration ,1, particleEffects, particleAmbients, nightVisionIcon);
+      Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100 ,1, particleEffects, particleAmbients, nightVisionIcon);
     }
   }
 
@@ -167,6 +188,41 @@ public class NightVisionToggle {
     {
       Utilities.sendActionBar(player, nightVisionRemovedActionbar);
     }
+  }
+
+  private boolean checkLimitStatus(@NotNull final Player player) {
+    if(!configFile.getBoolean("Night_Vision_Limit.Enabled")) {
+      return true;
+    }
+
+    if(Utilities.checkPermissions(player, true, "omegavision.limit.bypass", "omegavision.limit.admin", "omegavision.admin")) {
+      return true;
+    }
+
+    return userDataHandler.getLimitStatus(player.getUniqueId()) < configFile.getInt("Night_Vision_Limit.Limit");
+  }
+
+  private void increaseLimitAmount(@NotNull final Player player) {
+    if(!configFile.getBoolean("Night_Vision_Limit.Enabled")) {
+      return;
+    }
+
+    if(Utilities.checkPermissions(player, true, "omegavision.limit.bypass", "omegavision.limit.admin", "omegavision.admin")) {
+      return;
+    }
+    int currentLimitCount = userDataHandler.getLimitStatus(player.getUniqueId());
+
+    if(currentLimitCount + 1 >= configFile.getInt("Night_Vision_Limit.Limit")) {
+      userDataHandler.setLimitStatus(player.getUniqueId(), configFile.getInt("Night_Vision_Limit.Limit"));
+      Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Reached", "#f63e3eSorry, you have reached the limit for the night vision command!"));
+      return;
+    }
+
+    userDataHandler.setLimitStatus(player.getUniqueId(), currentLimitCount + 1);
+    Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Amount_Increased", "#1fe3e0Your limit amount now stands at: #f63e3e%currentLimitAmount% / %maxLimitAmount%")
+      .replace("%currentLimitAmount%", String.valueOf(currentLimitCount))
+      .replace("%maxLimitAmount%", String.valueOf(configFile.getInt("Night_Vision_Limit.Limit")))
+    );
   }
 
   private boolean toggleSelfPerm(final Player player) {

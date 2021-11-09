@@ -39,9 +39,6 @@ Night_Vision_Messages:
   # Sets the message players get when they drink milk bucket
   # to remove the particle and icon when using night vision
   Bucket_Message: "#2b9bbfParticle Effects and the icon have been removed!"
-  
-  # Sets the message players get when they go blind.
-  Blindness_Message: "#f63e3eYou have been using night vision for too long, you are now blind."
 
 # Set the different messages for the night vision command limits
 Night_Vision_Limit:
@@ -58,7 +55,7 @@ Night_Vision_Limit:
   Limit_Check: "#1fe3e0Your limit amount currently stands at: #f63e3e%currentLimitAmount% / %maxLimitAmount%"
 
   # Sets the message players get when they check another players command limits
-  Limit_Check_Others: "#f63e3e&player&'s #1fe3e0limit amount currently stands at: #f63e3e%currentLimitAmount% / %maxLimitAmount%"
+  Limit_Check_Others: "#f63e3e%player%'s #1fe3e0limit amount currently stands at: #f63e3e%currentLimitAmount% / %maxLimitAmount%"
 
 # Set the message player receive when a player is not found
 Invalid_Player: "#f63e3eSorry, that player cannot be found."
@@ -70,4 +67,4 @@ No_Permission: "#f63e3eSorry, but you don't have permission to do that."
 Plugin_Reload: "#f63e3eOmegaVision has successfully been reloaded."
 
 # DO NOT EDIT THIS!
-Config_Version: 1.3
+Config_Version: 2.0

@@ -7,6 +7,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class Placeholders extends PlaceholderExpansion {
   private final OmegaVision plugin;
+  private final UserDataHandler userDataHandler;
 
   /**
    * Since we register the expansion inside our own plugin, we
@@ -18,6 +19,7 @@ public class Placeholders extends PlaceholderExpansion {
    */
   public Placeholders(OmegaVision plugin){
     this.plugin = plugin;
+    userDataHandler = plugin.getUserDataHandler();
   }
 
   /**
@@ -103,30 +105,16 @@ public class Placeholders extends PlaceholderExpansion {
 
     // %omegavision_hasnightvision%
     if(identifier.equals("hasnightvision")){
-      return String.valueOf(player.hasPotionEffect(PotionEffectType.NIGHT_VISION));
-    }
-
-    // %omegavision_hasblindness%
-    if(identifier.equals("hasblindness")){
-      return String.valueOf(player.hasPotionEffect(PotionEffectType.BLINDNESS));
+      return String.valueOf(userDataHandler.getEffectStatus(player.getUniqueId()));
     }
 
     // %omegavision_nightvision_expiry%
     if(identifier.equals("nightvision_expiry")) {
-      if(!player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+      if(userDataHandler.getEffectStatus(player.getUniqueId())) {
         return "";
       }
 
       return String.valueOf(player.getPotionEffect(PotionEffectType.NIGHT_VISION).getDuration());
-    }
-
-    // %omegavision_blindness_expiry%
-    if(identifier.equals("blindess_expiry")) {
-      if(!player.hasPotionEffect(PotionEffectType.BLINDNESS)) {
-        return "";
-      }
-
-      return String.valueOf(player.getPotionEffect(PotionEffectType.BLINDNESS).getDuration());
     }
 
     // We return null if an invalid placeholder

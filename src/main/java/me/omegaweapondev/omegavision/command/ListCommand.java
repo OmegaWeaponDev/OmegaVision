@@ -43,6 +43,18 @@ public class ListCommand extends GlobalCommand implements TabCompleter {
   }
 
   private String getPlayerList() {
+    if(Bukkit.getOnlinePlayers().size() == 0)
+    {
+      return "There are currently no players online!";
+    }
+
+    for(Player player : Bukkit.getOnlinePlayers()) {
+      if(player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+        break;
+      }
+      return "No players currently have night vision enabled!";
+    }
+
     List<String> nightVisionList = new ArrayList<>();
     for(Player playerName : Bukkit.getOnlinePlayers()) {
       if(playerName.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
