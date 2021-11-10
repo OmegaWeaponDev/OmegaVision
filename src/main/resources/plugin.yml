@@ -24,7 +24,6 @@ commands:
     description: The command to control night vision limits
     aliases: [nvlimit]
 
-
 permissions:
   omegavision.admin:
     description: The wildcard permission to give all the plugin permissions.

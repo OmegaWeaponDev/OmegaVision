@@ -43,6 +43,8 @@ Night_Vision_Settings:
 # Play a special sound to a player when certain things happen
 # You can find all the sound effects here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
 Sound_Effects:
+  # Do you want OmegaVision to play some sound effects?
+  Enabled: true
   # The sound players hear when they enable night vision
   Night_Vision_Enable:
     Enabled: true
@@ -59,10 +61,6 @@ Sound_Effects:
   Limit_Reset:
     Enabled: true
     Sound: ENTITY_PLAYER_LEVELUP
-  # The sound players here when the blindness effect has been applied
-  Blindness_Effect:
-    Enabled: true
-    Sound: ENTITY_WITCH_THROW
 
 # Set the limit for how many times a player can use the night vision toggle command
 # Use the permission `omegavision.limit.bypass` to bypass the limit

@@ -2,6 +2,7 @@ package me.omegaweapondev.omegavision.command;
 
 import me.omegaweapondev.omegavision.OmegaVision;
 import me.omegaweapondev.omegavision.utils.MessagesHandler;
+import me.omegaweapondev.omegavision.utils.UserDataHandler;
 import me.ou.library.Utilities;
 import me.ou.library.builders.TabCompleteBuilder;
 import me.ou.library.commands.GlobalCommand;
@@ -150,7 +151,7 @@ public class PluginCommand extends GlobalCommand implements TabCompleter {
       " Server Version: " + Bukkit.getServer().getVersion(),
       " Online Mode: " + Bukkit.getOnlineMode(),
       " Players Online: " + Bukkit.getOnlinePlayers().size() + " / " + Bukkit.getMaxPlayers(),
-      " OmegaVision Commands: " + Utilities.setCommand().size() + " / 6 registered",
+      " OmegaVision Commands: " + Utilities.setCommand().size() + " / 4 registered",
       " Currently Installed Plugins...",
       " " + plugins,
       "==========================================="

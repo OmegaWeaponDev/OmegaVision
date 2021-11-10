@@ -35,15 +35,26 @@ public class NightVisionCommand extends PlayerCommand implements TabCompleter {
 
     if(strings.length == 1) {
       Player target = Bukkit.getPlayer(strings[0]);
+
+      if(target == null) {
+        return;
+      }
+
       nightVisionToggle.nightVisionToggleOthers(target);
     }
 
     if(strings.length == 2) {
+      if(!strings[0].equalsIgnoreCase("global")) {
+        return;
+      }
       nightVisionToggle.nightVisionToggleGlobal(strings[1]);
       return;
     }
 
     if(strings.length == 3) {
+      if(!strings[0].equalsIgnoreCase("temp")) {
+        return;
+      }
       nightVisionToggle.nightVisionToggleTemp(Bukkit.getPlayer(strings[1]), Integer.parseInt(strings[2]));
     }
   }

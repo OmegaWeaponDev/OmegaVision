@@ -48,7 +48,7 @@ public class UserDataHandler {
       @Override
       public void run() {
         getUserDataMap().put(playerUUID, new ConcurrentHashMap<>());
-        setEffectStatus(playerUUID, userDataFile.getBoolean("Users." + playerUUID + "." + NIGHT_VISION));
+        setEffectStatus(playerUUID, userDataFile.getBoolean("Users." + playerUUID + "." + NIGHT_VISION, false));
 
       }
     }.runTaskAsynchronously(pluginInstance);

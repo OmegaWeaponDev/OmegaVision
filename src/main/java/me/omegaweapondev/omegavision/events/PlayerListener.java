@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -48,6 +49,31 @@ public class PlayerListener implements Listener {
 
     if(configFile.getBoolean("Night_Vision_Settings.Night_Vision_Login") && userDataHandler.getEffectStatus(player.getUniqueId()) && Utilities.checkPermissions(player, true, "omegavision.nightvision.login", "omegavision.nightvision.admin", "omegavision.admin")) {
       Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100 ,1, particleEffects, ambientEffects, nightvisionIcon);
+    }
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void onWorldChange(PlayerChangedWorldEvent playerChangedWorldEvent) {
+    final Player player = playerChangedWorldEvent.getPlayer();
+
+    if(!configFile.getBoolean("World_Disable.Enabled")) {
+      return;
+    }
+
+    if(Utilities.checkPermissions(player, true, "omegavision.nightvision.world.bypass", "omegavision.nightvision.admin", "omegavision.admin")) {
+      return;
+    }
+
+    for(String worldName : configFile.getStringList("World_Disable.Worlds")) {
+      if(!userDataHandler.getEffectStatus(player.getUniqueId())) {
+        return;
+      }
+
+      if(player.getWorld().getName().equalsIgnoreCase(worldName)) {
+        userDataHandler.setEffectStatus(player.getUniqueId(), false);
+        Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
+        return;
+      }
     }
   }
 

@@ -67,6 +67,7 @@ public class NightVisionToggle {
 
       // Send night vision removal messages
       sendNightVisionRemovedMessages(player);
+      toggleSoundEffect(player, "Night_Vision_Disabled");
       return;
     }
 
@@ -91,6 +92,7 @@ public class NightVisionToggle {
 
       // Send night vision removal messages
       sendNightVisionRemovedMessages(target);
+      toggleSoundEffect(player, "Night_Vision_Disabled");
       return;
     }
 
@@ -138,6 +140,7 @@ public class NightVisionToggle {
         Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
 
         Utilities.broadcast(false, messagesHandler.string("Night_Vision_Messages.Night_Vision_Removed_Global", "#2b9bbfNight Vision has been removed for all players!"));
+        toggleSoundEffect(player, "Night_Vision_Disabled");
         return;
       }
 
@@ -159,10 +162,12 @@ public class NightVisionToggle {
       } else {
         Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, duration ,1, particleEffects, particleAmbients, nightVisionIcon);
       }
+      toggleSoundEffect(player, "Night_Vision_Applied");
       increaseLimitAmount(player);
       return;
     }
     Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Reached", "#f63e3eSorry, you have reached the limit for the night vision command!"));
+    toggleSoundEffect(player, "Limit_Reached");
   }
 
   public void applyNightVisionGlobal(final Player player) {
@@ -172,6 +177,7 @@ public class NightVisionToggle {
     } else {
       Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100 ,1, particleEffects, particleAmbients, nightVisionIcon);
     }
+    toggleSoundEffect(player, "Night_Vision_Applied");
   }
 
   private void sendNightVisionAppliedMessages(final Player player) {
@@ -215,6 +221,7 @@ public class NightVisionToggle {
     if(currentLimitCount + 1 >= configFile.getInt("Night_Vision_Limit.Limit")) {
       userDataHandler.setLimitStatus(player.getUniqueId(), configFile.getInt("Night_Vision_Limit.Limit"));
       Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Reached", "#f63e3eSorry, you have reached the limit for the night vision command!"));
+      toggleSoundEffect(player, "Limit_Reached");
       return;
     }
 
@@ -255,5 +262,35 @@ public class NightVisionToggle {
       return false;
     }
     return true;
+  }
+
+  private void toggleSoundEffect(final Player player, final String soundEffect) {
+
+    if(!configFile.getBoolean("Sound_Effects.Enabled")) {
+      return;
+    }
+
+    switch(soundEffect) {
+      case "Night_Vision_Applied":
+        if(!configFile.getBoolean("Sound_Effects.Night_Vision_Enable.Enabled")) {
+          break;
+        }
+        player.playSound(player.getLocation(), configFile.getString("Sound_Effects.Night_Vision_Enable.Sound"), 1, 1);
+        break;
+      case "Night_Vision_Disabled:":
+        if(!configFile.getBoolean("Sound_Effects.Night_Vision_Disable.Enabled")) {
+          break;
+        }
+        player.playSound(player.getLocation(), configFile.getString("Sound_Effects.Night_Vision_Disable.Sound"), 1, 1);
+        break;
+      case "Limit_Reached":
+        if(!configFile.getBoolean("Sound_Effects.Limit_Reached.Enabled")) {
+          break;
+        }
+        player.playSound(player.getLocation(), configFile.getString("Sound_Effects.Limit_Reached.Sound"), 1, 1);
+        break;
+      default:
+        break;
+    }
   }
 }

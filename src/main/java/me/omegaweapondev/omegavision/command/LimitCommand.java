@@ -75,6 +75,10 @@ public class LimitCommand extends GlobalCommand implements TabCompleter {
         if(target != null) {
           userDataHandler.setLimitStatus(target.getUniqueId(), 0);
           Utilities.message(target, messagesHandler.string("Night_Vision_Limit.Limit_Reset", "#1fe3e0Your limit's have been reset! You can use the night vision command again!"));
+
+          if(configFile.getBoolean("Sound_Effects.Enabled") && configFile.getBoolean("Sound_Effects.Limit_Reset.Enabled")) {
+            target.playSound(target.getLocation(), configFile.getString("Sound_Effects.Limit_Reset.Sound"), 1, 1);
+          }
           return;
         }
       }
@@ -103,6 +107,10 @@ public class LimitCommand extends GlobalCommand implements TabCompleter {
       if(target != null) {
         userDataHandler.setLimitStatus(target.getUniqueId(), 0);
         Utilities.message(target, messagesHandler.string("Night_Vision_Limit.Limit_Reset", "#1fe3e0Your limit's have been reset! You can use the night vision command again!"));
+      }
+
+      if(configFile.getBoolean("Sound_Effects.Enabled") && configFile.getBoolean("Sound_Effects.Limit_Reset.Enabled")) {
+        target.playSound(target.getLocation(), configFile.getString("Sound_Effects.Limit_Reset.Sound"), 1, 1);
       }
     }
   }
