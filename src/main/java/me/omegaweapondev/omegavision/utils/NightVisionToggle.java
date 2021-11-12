@@ -1,6 +1,7 @@
 package me.omegaweapondev.omegavision.utils;
 
 import me.omegaweapondev.omegavision.OmegaVision;
+import me.ou.library.DateTimeUtils;
 import me.ou.library.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -8,6 +9,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.TimeUnit;
 
 public class NightVisionToggle {
   private final OmegaVision pluginInstance;
@@ -215,6 +218,7 @@ public class NightVisionToggle {
       userDataHandler.setLimitStatus(player.getUniqueId(), configFile.getInt("Night_Vision_Limit.Limit"));
       Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Reached", "#f63e3eSorry, you have reached the limit for the night vision command!"));
       toggleSoundEffect(player, "Limit_Reached");
+      limitResetTimer(player);
       return;
     }
 
@@ -223,6 +227,15 @@ public class NightVisionToggle {
       .replace("%currentLimitAmount%", String.valueOf(currentLimitCount + 1))
       .replace("%maxLimitAmount%", String.valueOf(configFile.getInt("Night_Vision_Limit.Limit")))
     );
+  }
+
+  private void limitResetTimer(final Player player) {
+    Bukkit.getScheduler().runTaskLaterAsynchronously(pluginInstance, () -> {
+      userDataHandler.setLimitStatus(player.getUniqueId(), 0);
+      if(player.isOnline()) {
+        Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Reset", "#1fe3e0Your night vision limits have reset! You can use the night vision command again!"));
+      }
+    }, TimeUnit.MINUTES.toMillis(configFile.getInt("Night_Vision_Limit.Reset_Timer")));
   }
 
   private boolean toggleSelfPerm(final Player player) {

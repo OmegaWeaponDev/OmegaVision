@@ -54,6 +54,7 @@ public class OmegaVision extends JavaPlugin {
   @Override
   public void onDisable() {
     getUserDataHandler().saveUserDataToFile();
+    Bukkit.getScheduler().cancelTasks(pluginInstance);
   }
 
   public void onReload() {

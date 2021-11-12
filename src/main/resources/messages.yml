@@ -46,7 +46,7 @@ Night_Vision_Limit:
   Limit_Reached: "#f63e3eSorry, you have reached the limit for the night vision command!"
 
   # Sets the message players get when their limit amount has been reset
-  Limit_Reset: "#1fe3e0Your limit's have been reset! You can use the night vision command again!"
+  Limit_Reset: "#1fe3e0Your night vision limits have reset! You can use the night vision command again!"
 
   # Sets the message players get when their limit count has been increased
   Limit_Amount_Increased: "#1fe3e0Your limit amount now stands at: #f63e3e%currentLimitAmount% / %maxLimitAmount%"
