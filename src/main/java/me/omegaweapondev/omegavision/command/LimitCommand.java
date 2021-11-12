@@ -7,6 +7,7 @@ import me.ou.library.Utilities;
 import me.ou.library.builders.TabCompleteBuilder;
 import me.ou.library.commands.GlobalCommand;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -77,7 +78,7 @@ public class LimitCommand extends GlobalCommand implements TabCompleter {
           Utilities.message(target, messagesHandler.string("Night_Vision_Limit.Limit_Reset", "#1fe3e0Your limit's have been reset! You can use the night vision command again!"));
 
           if(configFile.getBoolean("Sound_Effects.Enabled") && configFile.getBoolean("Sound_Effects.Limit_Reset.Enabled")) {
-            target.playSound(target.getLocation(), configFile.getString("Sound_Effects.Limit_Reset.Sound"), 1, 1);
+            target.playSound(target.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Limit_Reset.Sound")), 1, 1);
           }
           return;
         }
@@ -110,7 +111,7 @@ public class LimitCommand extends GlobalCommand implements TabCompleter {
       }
 
       if(configFile.getBoolean("Sound_Effects.Enabled") && configFile.getBoolean("Sound_Effects.Limit_Reset.Enabled")) {
-        target.playSound(target.getLocation(), configFile.getString("Sound_Effects.Limit_Reset.Sound"), 1, 1);
+        target.playSound(target.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Limit_Reset.Sound")), 1, 1);
       }
     }
   }

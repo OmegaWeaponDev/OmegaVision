@@ -18,7 +18,6 @@ public class UserDataHandler {
   private final OmegaVision pluginInstance;
   private final FileConfiguration userDataFile;
   private final Map<UUID, Map<String, Object>> userDataMap = new ConcurrentHashMap<>();
-  private final Map<UUID, Integer> userLimitMap = new ConcurrentHashMap<>();
 
   public UserDataHandler(final OmegaVision pluginInstance) {
     this.pluginInstance = pluginInstance;
@@ -32,10 +31,8 @@ public class UserDataHandler {
       }
 
       getUserDataMap().clear();
-      getUserLimitMap().clear();
       for(String user : userDataFile.getConfigurationSection("Users.").getKeys(false)) {
         getUserDataMap().put(UUID.fromString(user), new ConcurrentHashMap<>());
-        getUserLimitMap().put(UUID.fromString(user), 0);
       }
     });
   }
@@ -43,6 +40,16 @@ public class UserDataHandler {
   public void addUserToMap(@NotNull final UUID playerUUID) {
     getUserDataMap().put(playerUUID, new ConcurrentHashMap<>());
     setEffectStatus(playerUUID, userDataFile.getBoolean("Users." + playerUUID + "." + NIGHT_VISION, false));
+
+    if(!pluginInstance.getStorageManager().getConfigFile().getConfig().getBoolean("Night_Vision_Limit.Enabled")) {
+      return;
+    }
+
+    if(Utilities.checkPermissions(Bukkit.getPlayer(playerUUID), true, "omegavision.limit.bypass", "omegavision.limit.admin", "omegavision.admin")) {
+      return;
+    }
+
+    setLimitStatus(playerUUID, userDataFile.getInt("Users." + playerUUID + "." + LIMIT, 0));
   }
 
   public void saveUserDataToFile() {
@@ -59,6 +66,7 @@ public class UserDataHandler {
   public void saveUserDataToFile(@NotNull final UUID playerUUID) {
     Bukkit.getScheduler().runTaskAsynchronously(pluginInstance, () -> {
       userDataFile.set("Users." + playerUUID + "." + NIGHT_VISION, getUserDataMap().get(playerUUID).getOrDefault(NIGHT_VISION, false));
+      userDataFile.set("Users." + playerUUID + "." + LIMIT, getUserDataMap().get(playerUUID).getOrDefault(LIMIT, 0));
       pluginInstance.getStorageManager().getUserDataFile().saveConfig();
       userDataMap.remove(playerUUID);
     });
@@ -82,9 +90,5 @@ public class UserDataHandler {
 
   public Map<UUID, Map<String, Object>> getUserDataMap() {
     return userDataMap;
-  }
-
-  public Map<UUID, Integer> getUserLimitMap() {
-    return userLimitMap;
   }
 }

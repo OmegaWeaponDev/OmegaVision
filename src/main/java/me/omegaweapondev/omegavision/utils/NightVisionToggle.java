@@ -68,9 +68,6 @@ public class NightVisionToggle {
 
     // Check if they have particle bypass perm and apply correct night vision effect
     applyNightVision(player, 60 * 60 * 24 * 100);
-
-    // Send night vision applied messages
-    sendNightVisionAppliedMessages(player);
   }
 
   public void nightVisionToggleOthers(final Player target) {
@@ -152,13 +149,14 @@ public class NightVisionToggle {
   private void applyNightVision(final Player player, final int duration) {
     if(checkLimitStatus(player)) {
       userDataHandler.setEffectStatus(player.getUniqueId(), true);
-      if(Utilities.checkPermissions(player, false, "omegavision.nightvision.particles.bypass")) {
+      if(Utilities.checkPermissions(player, false, "omegavision.nightvision.particles.bypass", "omegavision.nightvision.admin", "omegavision.admin")) {
         Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, duration ,1, false, false, false);
       } else {
         Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, duration ,1, particleEffects, particleAmbients, nightVisionIcon);
       }
       toggleSoundEffect(player, "Night_Vision_Applied");
       increaseLimitAmount(player);
+      sendNightVisionAppliedMessages(player);
       return;
     }
     Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Reached", "#f63e3eSorry, you have reached the limit for the night vision command!"));
@@ -167,7 +165,7 @@ public class NightVisionToggle {
 
   public void applyNightVisionGlobal(final Player player) {
     userDataHandler.setEffectStatus(player.getUniqueId(), true);
-    if(Utilities.checkPermissions(player, false, "omegavision.nightvision.particles.bypass")) {
+    if(Utilities.checkPermissions(player, false, "omegavision.nightvision.particles.bypass", "omegavision.nightvision.admin", "omegavision.admin")) {
       Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100 ,1, false, false, false);
     } else {
       Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100 ,1, particleEffects, particleAmbients, nightVisionIcon);
@@ -213,7 +211,7 @@ public class NightVisionToggle {
     }
     int currentLimitCount = userDataHandler.getLimitStatus(player.getUniqueId());
 
-    if(currentLimitCount + 1 >= configFile.getInt("Night_Vision_Limit.Limit")) {
+    if(currentLimitCount + 1 > configFile.getInt("Night_Vision_Limit.Limit")) {
       userDataHandler.setLimitStatus(player.getUniqueId(), configFile.getInt("Night_Vision_Limit.Limit"));
       Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Reached", "#f63e3eSorry, you have reached the limit for the night vision command!"));
       toggleSoundEffect(player, "Limit_Reached");
@@ -222,7 +220,7 @@ public class NightVisionToggle {
 
     userDataHandler.setLimitStatus(player.getUniqueId(), currentLimitCount + 1);
     Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Amount_Increased", "#1fe3e0Your limit amount now stands at: #f63e3e%currentLimitAmount% / %maxLimitAmount%")
-      .replace("%currentLimitAmount%", String.valueOf(currentLimitCount))
+      .replace("%currentLimitAmount%", String.valueOf(currentLimitCount + 1))
       .replace("%maxLimitAmount%", String.valueOf(configFile.getInt("Night_Vision_Limit.Limit")))
     );
   }
