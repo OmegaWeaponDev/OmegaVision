@@ -1,6 +1,8 @@
 package me.omegaweapondev.omegavision.utils;
 
 import me.omegaweapondev.omegavision.OmegaVision;
+import me.ou.library.Utilities;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +16,6 @@ public class UserDataHandler {
   public static final String NIGHT_VISION = "Night_Vision";
   public static final String LIMIT = "Limit";
   private final OmegaVision pluginInstance;
-  private final Set<String> userData;
   private final FileConfiguration userDataFile;
   private final Map<UUID, Map<String, Object>> userDataMap = new ConcurrentHashMap<>();
   private final Map<UUID, Integer> userLimitMap = new ConcurrentHashMap<>();
@@ -22,63 +23,45 @@ public class UserDataHandler {
   public UserDataHandler(final OmegaVision pluginInstance) {
     this.pluginInstance = pluginInstance;
     userDataFile = pluginInstance.getStorageManager().getUserDataFile().getConfig();
-    userData = userDataFile.getConfigurationSection("Users").getKeys(false);
   }
 
   public void populateUserDataMap() {
-    if(userData.isEmpty()) {
-      return;
-    }
-
-    new BukkitRunnable() {
-      @Override
-      public void run() {
-        getUserDataMap().clear();
-        for(String user : userData) {
-          getUserDataMap().put(UUID.fromString(user), new ConcurrentHashMap<>());
-          getUserLimitMap().put(UUID.fromString(user), 0);
-        }
+    Bukkit.getScheduler().runTaskAsynchronously(pluginInstance, () -> {
+      if(userDataFile.getConfigurationSection("Users.").getKeys(false).isEmpty()) {
+        return;
       }
-    }.runTaskAsynchronously(pluginInstance);
 
+      getUserDataMap().clear();
+      getUserLimitMap().clear();
+      for(String user : userDataFile.getConfigurationSection("Users.").getKeys(false)) {
+        getUserDataMap().put(UUID.fromString(user), new ConcurrentHashMap<>());
+        getUserLimitMap().put(UUID.fromString(user), 0);
+      }
+    });
   }
 
   public void addUserToMap(@NotNull final UUID playerUUID) {
-    new BukkitRunnable() {
-      @Override
-      public void run() {
-        getUserDataMap().put(playerUUID, new ConcurrentHashMap<>());
-        setEffectStatus(playerUUID, userDataFile.getBoolean("Users." + playerUUID + "." + NIGHT_VISION, false));
-
-      }
-    }.runTaskAsynchronously(pluginInstance);
+    getUserDataMap().put(playerUUID, new ConcurrentHashMap<>());
+    setEffectStatus(playerUUID, userDataFile.getBoolean("Users." + playerUUID + "." + NIGHT_VISION, false));
   }
 
   public void saveUserDataToFile() {
-    new BukkitRunnable() {
-      @Override
-      public void run() {
-        for(UUID userUUID : getUserDataMap().keySet()) {
-          userDataFile.set("Users." + userUUID + "." + NIGHT_VISION, getUserDataMap().get(userUUID).getOrDefault(NIGHT_VISION, false));
-          userDataFile.set("Users." + userUUID + "." + LIMIT, getUserDataMap().get(userUUID).getOrDefault(LIMIT, 0));
-        }
-        pluginInstance.getStorageManager().getUserDataFile().saveConfig();
-        userDataMap.clear();
-      }
-    }.runTaskAsynchronously(pluginInstance);
-
+    for (UUID userUUID : getUserDataMap().keySet()) {
+      userDataFile.set("Users." + userUUID + "." + NIGHT_VISION, getUserDataMap().get(userUUID).getOrDefault(NIGHT_VISION, false));
+      userDataFile.set("Users." + userUUID + "." + LIMIT, getUserDataMap().get(userUUID).getOrDefault(LIMIT, 0));
+    }
+    pluginInstance.getStorageManager().getUserDataFile().saveConfig();
+    userDataMap.clear();
   }
 
-  public void saveUserDataToFile(@NotNull final UUID playerUUID) {
-    new BukkitRunnable() {
-      @Override
-      public void run() {
-        userDataFile.set("Users." + playerUUID + "." + NIGHT_VISION, getUserDataMap().get(playerUUID).getOrDefault(NIGHT_VISION, false));
-        pluginInstance.getStorageManager().getUserDataFile().saveConfig();
-        userDataMap.remove(playerUUID);
-      }
-    }.runTaskAsynchronously(pluginInstance);
 
+
+  public void saveUserDataToFile(@NotNull final UUID playerUUID) {
+    Bukkit.getScheduler().runTaskAsynchronously(pluginInstance, () -> {
+      userDataFile.set("Users." + playerUUID + "." + NIGHT_VISION, getUserDataMap().get(playerUUID).getOrDefault(NIGHT_VISION, false));
+      pluginInstance.getStorageManager().getUserDataFile().saveConfig();
+      userDataMap.remove(playerUUID);
+    });
   }
 
   public void setEffectStatus(@NotNull UUID uuid, boolean status) {

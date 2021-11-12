@@ -6,7 +6,7 @@ import me.ou.library.configs.ConfigCreator;
 import me.ou.library.configs.ConfigUpdater;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
 
 public class StorageManager {
   private final OmegaVision plugin;

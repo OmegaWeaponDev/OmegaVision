@@ -4,15 +4,10 @@ import me.omegaweapondev.omegavision.OmegaVision;
 import me.ou.library.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Map;
-import java.util.UUID;
 
 public class NightVisionToggle {
   private final OmegaVision pluginInstance;
@@ -275,19 +270,19 @@ public class NightVisionToggle {
         if(!configFile.getBoolean("Sound_Effects.Night_Vision_Enable.Enabled")) {
           break;
         }
-        player.playSound(player.getLocation(), configFile.getString("Sound_Effects.Night_Vision_Enable.Sound"), 1, 1);
+        player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Enable.Sound")) , 1, 1);
         break;
       case "Night_Vision_Disabled:":
         if(!configFile.getBoolean("Sound_Effects.Night_Vision_Disable.Enabled")) {
           break;
         }
-        player.playSound(player.getLocation(), configFile.getString("Sound_Effects.Night_Vision_Disable.Sound"), 1, 1);
+        player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Disable.Sound")), 1, 1);
         break;
       case "Limit_Reached":
         if(!configFile.getBoolean("Sound_Effects.Limit_Reached.Enabled")) {
           break;
         }
-        player.playSound(player.getLocation(), configFile.getString("Sound_Effects.Limit_Reached.Sound"), 1, 1);
+        player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Limit_Reached.Sound")), 1, 1);
         break;
       default:
         break;

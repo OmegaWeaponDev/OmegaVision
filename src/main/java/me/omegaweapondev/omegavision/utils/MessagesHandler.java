@@ -13,9 +13,9 @@ public class MessagesHandler {
   private final FileConfiguration messagesConfig;
   private final String configName;
 
-  public MessagesHandler(final OmegaVision pluginInstance) {
+  public MessagesHandler(final OmegaVision pluginInstance, FileConfiguration messagesConfig) {
     this.pluginInstance = pluginInstance;
-    this.messagesConfig = YamlConfiguration.loadConfiguration(new File(pluginInstance.getDataFolder() + File.separator + "messages.yml"));
+    this.messagesConfig = messagesConfig;
     this.configName = pluginInstance.getStorageManager().getMessagesFile().getFileName();
   }
 
@@ -53,7 +53,7 @@ public class MessagesHandler {
 
   public String getPrefix() {
     if(messagesConfig.getString("Plugin_Prefix") == null) {
-      getErrorMessage("Prefix");
+      getErrorMessage("Plugin_Prefix");
       return "#8c8c8c[#2b9bbf&lOV#8c8c8c]" + " ";
     }
     return messagesConfig.getString("Plugin_Prefix") + " ";

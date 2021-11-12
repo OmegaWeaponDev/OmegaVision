@@ -22,11 +22,11 @@ public class OmegaVision extends JavaPlugin {
     Utilities.setInstance(pluginInstance);
 
     storageManager = new StorageManager(pluginInstance);
-    getStorageManager().setupConfigs();
-    getStorageManager().configUpdater();
+    storageManager.setupConfigs();
+    storageManager.configUpdater();
 
     userDataHandler = new UserDataHandler(pluginInstance);
-    messagesHandler = new MessagesHandler(pluginInstance);
+    messagesHandler = new MessagesHandler(pluginInstance, storageManager.getMessagesFile().getConfig());
 
     Utilities.logInfo(false,
       "  ____ _   __",
