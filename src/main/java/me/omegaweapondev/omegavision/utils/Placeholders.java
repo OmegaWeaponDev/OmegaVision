@@ -117,6 +117,11 @@ public class Placeholders extends PlaceholderExpansion {
       return String.valueOf(player.getPotionEffect(PotionEffectType.NIGHT_VISION).getDuration());
     }
 
+    // %omegavision_limit_count%
+    if(identifier.equalsIgnoreCase("limit_count")) {
+      return String.valueOf(userDataHandler.getLimitStatus(player.getUniqueId()));
+    }
+
     // We return null if an invalid placeholder
     // was provided
     return null;

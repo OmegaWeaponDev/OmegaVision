@@ -5,15 +5,16 @@ import me.omegaweapondev.omegavision.utils.MessagesHandler;
 import me.omegaweapondev.omegavision.utils.NightVisionToggle;
 import me.omegaweapondev.omegavision.utils.UserDataHandler;
 import me.ou.library.Utilities;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PlayerListener implements Listener {
   private final OmegaVision pluginInstance;
   private final FileConfiguration configFile;
+  private final MessagesHandler messagesHandler;
 
   private final UserDataHandler userDataHandler;
   private final boolean particleEffects;
@@ -31,6 +33,7 @@ public class PlayerListener implements Listener {
     this.pluginInstance = pluginInstance;
     configFile = pluginInstance.getStorageManager().getConfigFile().getConfig();
     userDataHandler = pluginInstance.getUserDataHandler();
+    messagesHandler = pluginInstance.getMessagesHandler();
 
     particleEffects = configFile.getBoolean("Night_Vision_Settings.Particle_Effects");
     ambientEffects = configFile.getBoolean("Night_Vision_Settings.Particle_Ambient");
@@ -94,5 +97,40 @@ public class PlayerListener implements Listener {
       NightVisionToggle nightVisionToggle = new NightVisionToggle(pluginInstance, player);
       nightVisionToggle.applyNightVisionGlobal(player);
     }
+  }
+
+  @EventHandler(priority = EventPriority.HIGHEST)
+  public void onBucketUse(PlayerItemConsumeEvent playerItemConsumeEvent) {
+    final Player player = playerItemConsumeEvent.getPlayer();
+    final ItemStack item = playerItemConsumeEvent.getItem();
+
+    if(!configFile.getBoolean("Night_Vision_Settings.Bucket_Usage")) {
+      return;
+    }
+
+    if(!item.getData().getItemType().equals(Material.MILK_BUCKET)) {
+      return;
+    }
+
+    if(!player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+      return;
+    }
+
+    if(!Utilities.checkPermissions(player, true, "omegavision.nightvision.bucket", "omegavision.nightvision.admin", "omegavision.admin")) {
+      return;
+    }
+    playerItemConsumeEvent.setCancelled(true);
+
+    for(PotionEffect activeEffects : player.getActivePotionEffects()) {
+      Utilities.removePotionEffect(player, activeEffects.getType());
+    }
+    Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100, 1, false, false, false);
+    Utilities.message(player, messagesHandler.string("Night_Vision_Messages.Bucket_Message", "#2b9bbfThe particle effects and the icon have been removed!"));
+
+    if(!configFile.getBoolean("Night_Vision_Settings.Bucket_Empty")) {
+      return;
+    }
+
+    player.getInventory().getItemInMainHand().setType(Material.BUCKET);
   }
 }

@@ -38,7 +38,7 @@ Night_Vision_Messages:
   
   # Sets the message players get when they drink milk bucket
   # to remove the particle and icon when using night vision
-  Bucket_Message: "#2b9bbfParticle Effects and the icon have been removed!"
+  Bucket_Message: "#2b9bbfThe particle effects and the icon have been removed!"
 
 # Set the different messages for the night vision command limits
 Night_Vision_Limit:

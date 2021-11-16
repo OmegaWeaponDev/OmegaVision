@@ -46,6 +46,7 @@ permissions:
       - omegavision.nightvision.list
       - omegavision.nightvision.login
       - omegavision.nightvision.keepondeath
+      - omegavision.nightvision.bucket
   omegavision.limit.admin:
     description: The wildcard permission to give all the limit permissions.
     default: false
@@ -80,6 +81,9 @@ permissions:
     default: false
   omegavision.nightvision.list:
     description: The permission required to list all players who currently have night vision.
+    default: false
+  omegavision.nightvision.bucket:
+    description: The permission required to use the bucket feature to remove potion particle effects.
     default: false
   omegavision.nightvision.keepondeath:
     description: The permission required to keep night vision on death
