@@ -1,8 +1,6 @@
 package me.omegaweapondev.omegavision.utils;
 
-import me.clip.placeholderapi.util.TimeUtil;
 import me.omegaweapondev.omegavision.OmegaVision;
-import me.ou.library.DateTimeUtils;
 import me.ou.library.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -203,7 +201,7 @@ public class NightVisionToggle {
    * @param duration (The duration in seconds for how long the night vision will last)
    */
   private void applyNightVision(final Player player, final int duration) {
-    if(checkLimitStatus(player)) {
+    if(!hasReachedLimit(player)) {
       userDataHandler.setEffectStatus(player.getUniqueId(), true, UserDataHandler.NIGHT_VISION);
       userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.LIMIT_REACHED);
       if(Utilities.checkPermissions(player, false, "omegavision.nightvision.particles.bypass", "omegavision.nightvision.admin", "omegavision.admin")) {
@@ -272,13 +270,13 @@ public class NightVisionToggle {
    * @param player (The player whose night vision limit status is being checked)
    * @return (The current limit status)
    */
-  private boolean checkLimitStatus(@NotNull final Player player) {
+  private boolean hasReachedLimit(@NotNull final Player player) {
     if(!configFile.getBoolean("Night_Vision_Limit.Enabled")) {
-      return true;
+      return false;
     }
 
     if(Utilities.checkPermissions(player, true, "omegavision.limit.bypass", "omegavision.limit.admin", "omegavision.admin")) {
-      return true;
+      return false;
     }
 
     return (boolean) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.LIMIT_REACHED);
