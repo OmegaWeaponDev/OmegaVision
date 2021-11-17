@@ -2,7 +2,9 @@ package me.omegaweapondev.omegavision.utils;
 
 import me.omegaweapondev.omegavision.OmegaVision;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -50,7 +52,9 @@ public class UserDataHandler {
 
       getUserDataMap().clear();
       for(String user : userDataFile.getConfigurationSection("Users.").getKeys(false)) {
-        if(Bukkit.getPlayer(UUID.fromString(user)).isOnline()) {
+        OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(user));
+
+        if(player.isOnline()) {
           getUserDataMap().put(UUID.fromString(user), new ConcurrentHashMap<>());
         }
       }
