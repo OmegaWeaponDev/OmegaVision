@@ -71,7 +71,7 @@ public class UserDataHandler {
 
     setEffectStatus(playerUUID, userDataFile.getBoolean("Users." + playerUUID + "." + NIGHT_VISION, false), NIGHT_VISION);
     setEffectStatus(playerUUID, userDataFile.getBoolean("Users." + playerUUID + "." + LIMIT_REACHED, false), LIMIT_REACHED);
-    setEffectStatus(playerUUID, userDataFile.getLong("Users." + playerUUID + "." + RESET_TIMER_ACTIVE, 0), RESET_TIMER_ACTIVE);
+    setEffectStatus(playerUUID, userDataFile.getBoolean("Users." + playerUUID + "." + RESET_TIMER_ACTIVE, false), RESET_TIMER_ACTIVE);
     setEffectStatus(playerUUID, userDataFile.getLong("Users." + playerUUID + "." + LIMIT_REACHED_TIME, 0), LIMIT_REACHED_TIME);
     setEffectStatus(playerUUID, userDataFile.getInt("Users." + playerUUID + "." + LIMIT, 0), LIMIT);
   }

@@ -97,6 +97,13 @@ public class PlayerListener implements Listener {
     if(configFile.getBoolean("Night_Vision_Settings.Night_Vision_Login") && (boolean) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.NIGHT_VISION) && Utilities.checkPermissions(player, true, "omegavision.nightvision.login", "omegavision.nightvision.admin", "omegavision.admin")) {
       Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100 ,1, particleEffects, ambientEffects, nightvisionIcon);
     }
+
+    if(configFile.getBoolean("Night_Vision_Limit.Enabled")) {
+      if((boolean) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.LIMIT_REACHED)) {
+        NightVisionToggle nightVisionToggle = new NightVisionToggle(pluginInstance, player);
+        nightVisionToggle.limitResetTimer(player);
+      }
+    }
   }
 
   /**

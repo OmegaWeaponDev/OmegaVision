@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 /**
  *
@@ -34,8 +35,6 @@ public class NightVisionToggle {
   private final String nightVisionRemovedActionbar;
 
   private final Player player;
-
-  public static long resetTimer;
 
   /**
    *
@@ -201,6 +200,7 @@ public class NightVisionToggle {
    * @param duration (The duration in seconds for how long the night vision will last)
    */
   private void applyNightVision(final Player player, final int duration) {
+    increaseLimitAmount(player);
     if(!hasReachedLimit(player)) {
       userDataHandler.setEffectStatus(player.getUniqueId(), true, UserDataHandler.NIGHT_VISION);
       userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.LIMIT_REACHED);
@@ -210,13 +210,11 @@ public class NightVisionToggle {
         Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, duration ,1, particleEffects, particleAmbients, nightVisionIcon);
       }
       toggleSoundEffect(player, "Night_Vision_Applied");
-      increaseLimitAmount(player);
       sendNightVisionAppliedMessages(player);
       return;
     }
     Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Reached", "#f63e3eSorry, you have reached the limit for the night vision command!"));
     toggleSoundEffect(player, "Limit_Reached");
-    userDataHandler.setEffectStatus(player.getUniqueId(), true, UserDataHandler.LIMIT_REACHED);
   }
 
   /**
@@ -298,12 +296,10 @@ public class NightVisionToggle {
     }
     int currentLimitCount = (int) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.LIMIT);
 
-    if(currentLimitCount + 1 > configFile.getInt("Night_Vision_Limit.Limit")) {
+    if((currentLimitCount + 1) > configFile.getInt("Night_Vision_Limit.Limit")) {
       userDataHandler.setEffectStatus(player.getUniqueId(), configFile.getInt("Night_Vision_Limit.Limit"), UserDataHandler.LIMIT);
       userDataHandler.setEffectStatus(player.getUniqueId(), true, UserDataHandler.LIMIT_REACHED);
       userDataHandler.setEffectStatus(player.getUniqueId(), System.currentTimeMillis(), UserDataHandler.LIMIT_REACHED_TIME);
-      Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Reached", "#f63e3eSorry, you have reached the limit for the night vision command!"));
-      toggleSoundEffect(player, "Limit_Reached");
       limitResetTimer(player);
       return;
     }
@@ -322,15 +318,17 @@ public class NightVisionToggle {
    *
    * @param player (The player whose night vision limit is being reset)
    */
-  private void limitResetTimer(final Player player) {
+  public void limitResetTimer(final Player player) {
     if(!(boolean) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.LIMIT_REACHED)) {
       return;
     }
 
-    long configResetTimer = TimeUnit.MINUTES.toMillis(configFile.getInt("Night_Vision_Limit.Reset_Timer"));
+    final UUID playerUUID = player.getUniqueId();
+
+    long configResetTimer = TimeUnit.MILLISECONDS.convert(configFile.getInt("Night_Vision_Limit.Reset_Timer"), TimeUnit.MINUTES);
     long limitTimeReached = (long) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.LIMIT_REACHED_TIME);
 
-    if((limitTimeReached + configResetTimer) > System.currentTimeMillis()) {
+    if(System.currentTimeMillis() >= (limitTimeReached + configResetTimer)) {
       userDataHandler.setEffectStatus(player.getUniqueId(), 0, UserDataHandler.LIMIT);
       userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.LIMIT_REACHED);
       userDataHandler.setEffectStatus(player.getUniqueId(), 0, UserDataHandler.LIMIT_REACHED_TIME);
@@ -347,15 +345,21 @@ public class NightVisionToggle {
 
     userDataHandler.setEffectStatus(player.getUniqueId(), true, UserDataHandler.RESET_TIMER_ACTIVE);
     Bukkit.getScheduler().runTaskLaterAsynchronously(pluginInstance, () -> {
-      userDataHandler.setEffectStatus(player.getUniqueId(), 0, UserDataHandler.LIMIT);
-      userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.LIMIT_REACHED);
-      userDataHandler.setEffectStatus(player.getUniqueId(), 0, UserDataHandler.LIMIT_REACHED_TIME);
-      userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.RESET_TIMER_ACTIVE);
       if(player.isOnline()) {
+        userDataHandler.setEffectStatus(playerUUID, 0, UserDataHandler.LIMIT);
+        userDataHandler.setEffectStatus(playerUUID, false, UserDataHandler.LIMIT_REACHED);
+        userDataHandler.setEffectStatus(playerUUID, 0, UserDataHandler.LIMIT_REACHED_TIME);
+        userDataHandler.setEffectStatus(playerUUID, false, UserDataHandler.RESET_TIMER_ACTIVE);
+
         Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Reset", "#1fe3e0Your night vision limits have reset! You can use the night vision command again!"));
+      } else {
+        pluginInstance.getStorageManager().getUserDataFile().getConfig().set("Users." + playerUUID + "." + UserDataHandler.LIMIT_REACHED, false);
+        pluginInstance.getStorageManager().getUserDataFile().getConfig().set("Users." + playerUUID + "." + UserDataHandler.RESET_TIMER_ACTIVE, false);
+        pluginInstance.getStorageManager().getUserDataFile().getConfig().set("Users." + playerUUID + "." + UserDataHandler.LIMIT_REACHED_TIME, 0);
+        pluginInstance.getStorageManager().getUserDataFile().getConfig().set("Users." + playerUUID + "." + UserDataHandler.LIMIT, 0);
       }
 
-    }, TimeUnit.MINUTES.toMillis(configFile.getInt("Night_Vision_Limit.Reset_Timer")));
+    }, configResetTimer / 50);
   }
 
   /**

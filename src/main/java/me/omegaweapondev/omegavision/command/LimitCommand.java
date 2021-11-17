@@ -110,6 +110,9 @@ public class LimitCommand extends GlobalCommand implements TabCompleter {
         if(target != null) {
           // Resets the players limit status back to 0
           userDataHandler.setEffectStatus(target.getUniqueId(), 0, UserDataHandler.LIMIT);
+          userDataHandler.setEffectStatus(target.getUniqueId(), false, UserDataHandler.LIMIT_REACHED);
+          userDataHandler.setEffectStatus(target.getUniqueId(), false, UserDataHandler.RESET_TIMER_ACTIVE);
+          userDataHandler.setEffectStatus(target.getUniqueId(), 0, UserDataHandler.LIMIT_REACHED_TIME);
           Utilities.message(target, messagesHandler.string("Night_Vision_Limit.Limit_Reset", "#1fe3e0Your limit's have been reset! You can use the night vision command again!"));
 
           if(configFile.getBoolean("Sound_Effects.Enabled") && configFile.getBoolean("Sound_Effects.Limit_Reset.Enabled")) {
@@ -142,12 +145,17 @@ public class LimitCommand extends GlobalCommand implements TabCompleter {
       Player target = Bukkit.getPlayer(strings[1]);
       if(target != null) {
         userDataHandler.setEffectStatus(target.getUniqueId(), 0, UserDataHandler.LIMIT);
+        userDataHandler.setEffectStatus(target.getUniqueId(), false, UserDataHandler.LIMIT_REACHED);
+        userDataHandler.setEffectStatus(target.getUniqueId(), false, UserDataHandler.RESET_TIMER_ACTIVE);
+        userDataHandler.setEffectStatus(target.getUniqueId(), 0, UserDataHandler.LIMIT_REACHED_TIME);
         Utilities.message(target, messagesHandler.string("Night_Vision_Limit.Limit_Reset", "#1fe3e0Your limit's have been reset! You can use the night vision command again!"));
-      }
 
-      if(configFile.getBoolean("Sound_Effects.Enabled") && configFile.getBoolean("Sound_Effects.Limit_Reset.Enabled")) {
-        target.playSound(target.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Limit_Reset.Sound")), 1, 1);
+        if(configFile.getBoolean("Sound_Effects.Enabled") && configFile.getBoolean("Sound_Effects.Limit_Reset.Enabled")) {
+          target.playSound(target.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Limit_Reset.Sound")), 1, 1);
+        }
+        return;
       }
+      Utilities.logInfo(true, messagesHandler.console("Invalid_Player", "#f63e3eSorry, that player cannot be found."));
     }
   }
 
