@@ -1,7 +1,6 @@
 package me.omegaweapondev.omegavision.utils;
 
 import me.omegaweapondev.omegavision.OmegaVision;
-import me.ou.library.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +17,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class UserDataHandler {
   public static final String NIGHT_VISION = "Night_Vision";
+  public static final String LIMIT_REACHED = "Limit_Reached";
+  public static final String LIMIT_REACHED_TIME = "Limit_Reached_Time";
+  public static final String RESET_TIMER_ACTIVE = "Reset_Timer_Active";
   public static final String LIMIT = "Limit";
   private final OmegaVision pluginInstance;
   private final FileConfiguration userDataFile;
@@ -59,18 +61,13 @@ public class UserDataHandler {
    *
    */
   public void addUserToMap(@NotNull final UUID playerUUID) {
-    getUserDataMap().put(playerUUID, new ConcurrentHashMap<>());
-    setEffectStatus(playerUUID, userDataFile.getBoolean("Users." + playerUUID + "." + NIGHT_VISION, false));
+    getUserDataMap().putIfAbsent(playerUUID, new ConcurrentHashMap<>());
 
-    if(!pluginInstance.getStorageManager().getConfigFile().getConfig().getBoolean("Night_Vision_Limit.Enabled")) {
-      return;
-    }
-
-    if(Utilities.checkPermissions(Bukkit.getPlayer(playerUUID), true, "omegavision.limit.bypass", "omegavision.limit.admin", "omegavision.admin")) {
-      return;
-    }
-
-    setLimitStatus(playerUUID, userDataFile.getInt("Users." + playerUUID + "." + LIMIT, 0));
+    setEffectStatus(playerUUID, userDataFile.getBoolean("Users." + playerUUID + "." + NIGHT_VISION, false), NIGHT_VISION);
+    setEffectStatus(playerUUID, userDataFile.getBoolean("Users." + playerUUID + "." + LIMIT_REACHED, false), LIMIT_REACHED);
+    setEffectStatus(playerUUID, userDataFile.getLong("Users." + playerUUID + "." + RESET_TIMER_ACTIVE, 0), RESET_TIMER_ACTIVE);
+    setEffectStatus(playerUUID, userDataFile.getLong("Users." + playerUUID + "." + LIMIT_REACHED_TIME, 0), LIMIT_REACHED_TIME);
+    setEffectStatus(playerUUID, userDataFile.getInt("Users." + playerUUID + "." + LIMIT, 0), LIMIT);
   }
 
   /**
@@ -81,6 +78,9 @@ public class UserDataHandler {
   public void saveUserDataToFile() {
     for (UUID userUUID : getUserDataMap().keySet()) {
       userDataFile.set("Users." + userUUID + "." + NIGHT_VISION, getUserDataMap().get(userUUID).getOrDefault(NIGHT_VISION, false));
+      userDataFile.set("Users." + userUUID + "." + LIMIT_REACHED, getUserDataMap().get(userUUID).getOrDefault(LIMIT_REACHED, false));
+      userDataFile.set("Users." + userUUID + "." + RESET_TIMER_ACTIVE, getUserDataMap().get(userUUID).getOrDefault(RESET_TIMER_ACTIVE, false));
+      userDataFile.set("Users." + userUUID + "." + LIMIT_REACHED_TIME, getUserDataMap().get(userUUID).getOrDefault(LIMIT_REACHED_TIME, 0));
       userDataFile.set("Users." + userUUID + "." + LIMIT, getUserDataMap().get(userUUID).getOrDefault(LIMIT, 0));
     }
     pluginInstance.getStorageManager().getUserDataFile().saveConfig();
@@ -96,6 +96,9 @@ public class UserDataHandler {
   public void saveUserDataToFile(@NotNull final UUID playerUUID) {
     Bukkit.getScheduler().runTaskAsynchronously(pluginInstance, () -> {
       userDataFile.set("Users." + playerUUID + "." + NIGHT_VISION, getUserDataMap().get(playerUUID).getOrDefault(NIGHT_VISION, false));
+      userDataFile.set("Users." + playerUUID + "." + LIMIT_REACHED, getUserDataMap().get(playerUUID).getOrDefault(LIMIT_REACHED, false));
+      userDataFile.set("Users." + playerUUID + "." + RESET_TIMER_ACTIVE, getUserDataMap().get(playerUUID).getOrDefault(RESET_TIMER_ACTIVE, false));
+      userDataFile.set("Users." + playerUUID + "." + LIMIT_REACHED_TIME, getUserDataMap().get(playerUUID).getOrDefault(LIMIT_REACHED_TIME, 0));
       userDataFile.set("Users." + playerUUID + "." + LIMIT, getUserDataMap().get(playerUUID).getOrDefault(LIMIT, 0));
       pluginInstance.getStorageManager().getUserDataFile().saveConfig();
       userDataMap.remove(playerUUID);
@@ -109,19 +112,8 @@ public class UserDataHandler {
    * @param uuid (The player whose entry in the map is to be modified)
    * @param status (The status effect to modify the value for)
    */
-  public void setEffectStatus(@NotNull UUID uuid, boolean status) {
-    getUserDataMap().get(uuid).put(NIGHT_VISION, status);
-  }
-
-  /**
-   *
-   * Sets the player's limit status in the user data map
-   *
-   * @param uuid (The player whose entry in the map is to be modified)
-   * @param limitAmount (The value to set the limit status to)
-   */
-  public void setLimitStatus(@NotNull UUID uuid, int limitAmount) {
-    getUserDataMap().get(uuid).put(LIMIT, limitAmount);
+  public void setEffectStatus(@NotNull UUID uuid, Object status, String effect) {
+    getUserDataMap().get(uuid).put(effect, status);
   }
 
   /**
@@ -131,19 +123,8 @@ public class UserDataHandler {
    * @param uuid (The player whose data needs to be retrieved from the user data map)
    * @return (The value of the effect status)
    */
-  public boolean getEffectStatus(@NotNull UUID uuid) {
-    return (boolean) getUserDataMap().get(uuid).getOrDefault(NIGHT_VISION, false);
-  }
-
-  /**
-   *
-   * Gets the specific players current limit status from the map
-   *
-   * @param uuid The player whose data needs to be retrieved from the user data map)
-   * @return (The current limit status value)
-   */
-  public int getLimitStatus(@NotNull UUID uuid) {
-    return (int) getUserDataMap().get(uuid).getOrDefault(LIMIT, 0);
+  public Object getEffectStatus(@NotNull UUID uuid, String effect) {
+    return getUserDataMap().get(uuid).get(effect);
   }
 
   /**

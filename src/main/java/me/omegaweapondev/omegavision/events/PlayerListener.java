@@ -94,7 +94,7 @@ public class PlayerListener implements Listener {
 
     // Check if the Night Vision Login setting was enabled and the player has a true night vision status in the map
     // If so, Apply night vision to them once they have logged in
-    if(configFile.getBoolean("Night_Vision_Settings.Night_Vision_Login") && userDataHandler.getEffectStatus(player.getUniqueId()) && Utilities.checkPermissions(player, true, "omegavision.nightvision.login", "omegavision.nightvision.admin", "omegavision.admin")) {
+    if(configFile.getBoolean("Night_Vision_Settings.Night_Vision_Login") && (boolean) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.NIGHT_VISION) && Utilities.checkPermissions(player, true, "omegavision.nightvision.login", "omegavision.nightvision.admin", "omegavision.admin")) {
       Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100 ,1, particleEffects, ambientEffects, nightvisionIcon);
     }
   }
@@ -122,13 +122,13 @@ public class PlayerListener implements Listener {
 
     // Checks the players new world against the list of worlds in the config
     for(String worldName : configFile.getStringList("World_Disable.Worlds")) {
-      if(!userDataHandler.getEffectStatus(player.getUniqueId())) {
+      if(!(boolean) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.NIGHT_VISION)) {
         return;
       }
 
       // If the world name is in the config world list, remove night vision from the player
       if(player.getWorld().getName().equalsIgnoreCase(worldName)) {
-        userDataHandler.setEffectStatus(player.getUniqueId(), false);
+        userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
         Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
         return;
       }
@@ -169,7 +169,7 @@ public class PlayerListener implements Listener {
     }
 
     // Re-applies night vision to the player after they respawn
-    userDataHandler.setEffectStatus(player.getUniqueId(), true);
+    userDataHandler.setEffectStatus(player.getUniqueId(), true, UserDataHandler.NIGHT_VISION);
     if(Utilities.checkPermissions(player, false, "omegavision.nightvision.particles.bypass", "omegavision.nightvision.admin", "omegavision.admin")) {
       Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100 ,1, false, false, false);
     } else {
@@ -194,25 +194,25 @@ public class PlayerListener implements Listener {
 
     // Check if the bucket usage feature was enabled.
     if(!configFile.getBoolean("Night_Vision_Settings.Bucket_Usage")) {
-      userDataHandler.setEffectStatus(player.getUniqueId(), false);
+      userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
       return;
     }
 
     // Check if the item consumed was a milk bucket
     if(!item.getType().equals(Material.MILK_BUCKET)) {
-      userDataHandler.setEffectStatus(player.getUniqueId(), false);
+      userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
       return;
     }
 
     // Check if the player currently has night vision
     if(!player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
-      userDataHandler.setEffectStatus(player.getUniqueId(), false);
+      userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
       return;
     }
 
     // Check if the player has permission to use the bucket feature
     if(!Utilities.checkPermissions(player, true, "omegavision.nightvision.bucket", "omegavision.nightvision.admin", "omegavision.admin")) {
-      userDataHandler.setEffectStatus(player.getUniqueId(), false);
+      userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
       return;
     }
     // Set the event to cancelled, so we can change how it's handled

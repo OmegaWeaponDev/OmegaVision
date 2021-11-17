@@ -111,12 +111,12 @@ public class Placeholders extends PlaceholderExpansion {
 
     // %omegavision_hasnightvision%
     if(identifier.equals("hasnightvision")){
-      return String.valueOf(userDataHandler.getEffectStatus(player.getUniqueId()));
+      return String.valueOf(userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.NIGHT_VISION));
     }
 
     // %omegavision_nightvision_expiry%
     if(identifier.equals("nightvision_expiry")) {
-      if(userDataHandler.getEffectStatus(player.getUniqueId())) {
+      if((boolean) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.NIGHT_VISION)) {
         return "";
       }
 
@@ -125,7 +125,7 @@ public class Placeholders extends PlaceholderExpansion {
 
     // %omegavision_limit_count%
     if(identifier.equalsIgnoreCase("limit_count")) {
-      return String.valueOf(userDataHandler.getLimitStatus(player.getUniqueId()));
+      return String.valueOf(userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.LIMIT));
     }
 
     // We return null if an invalid placeholder

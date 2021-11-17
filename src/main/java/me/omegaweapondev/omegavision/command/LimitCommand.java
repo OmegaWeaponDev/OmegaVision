@@ -67,7 +67,7 @@ public class LimitCommand extends GlobalCommand implements TabCompleter {
 
         // Send the player a message with their current limit status
         Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Check", "#1fe3e0Your limit amount currently stands at: #f63e3e%currentLimitAmount% / %maxLimitAmount%")
-          .replace("%currentLimitAmount%", String.valueOf(userDataHandler.getLimitStatus(player.getUniqueId())))
+          .replace("%currentLimitAmount%", String.valueOf(userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.LIMIT)))
           .replace("%maxLimitAmount%", String.valueOf(configFile.getInt("Night_Vision_Limit.Limit")))
         );
         return;
@@ -88,7 +88,7 @@ public class LimitCommand extends GlobalCommand implements TabCompleter {
           // Send the player a message to inform them of the targets limit status
           Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Check_Others", "#f63e3e%player%'s #1fe3e0limit amount currently stands at: #f63e3e%currentLimitAmount% / %maxLimitAmount%")
             .replace("%player%", target.getDisplayName())
-            .replace("%currentLimitAmount%", String.valueOf(userDataHandler.getLimitStatus(target.getUniqueId())))
+            .replace("%currentLimitAmount%", String.valueOf(userDataHandler.getEffectStatus(target.getUniqueId(), UserDataHandler.LIMIT)))
             .replace("%maxLimitAmount%", String.valueOf(configFile.getInt("Night_Vision_Limit.Limit")))
           );
           return;
@@ -109,7 +109,7 @@ public class LimitCommand extends GlobalCommand implements TabCompleter {
         Player target = Bukkit.getPlayer(strings[1]);
         if(target != null) {
           // Resets the players limit status back to 0
-          userDataHandler.setLimitStatus(target.getUniqueId(), 0);
+          userDataHandler.setEffectStatus(target.getUniqueId(), 0, UserDataHandler.LIMIT);
           Utilities.message(target, messagesHandler.string("Night_Vision_Limit.Limit_Reset", "#1fe3e0Your limit's have been reset! You can use the night vision command again!"));
 
           if(configFile.getBoolean("Sound_Effects.Enabled") && configFile.getBoolean("Sound_Effects.Limit_Reset.Enabled")) {
@@ -129,7 +129,7 @@ public class LimitCommand extends GlobalCommand implements TabCompleter {
       if(target != null) {
         Utilities.logInfo(true, messagesHandler.console("Night_Vision_Limit.Limit_Check_Others", "#f63e3e%player%'s #1fe3e0limit amount currently stands at: #f63e3e%currentLimitAmount% / %maxLimitAmount%")
           .replace("%player%", target.getDisplayName())
-          .replace("%currentLimitAmount%", String.valueOf(userDataHandler.getLimitStatus(target.getUniqueId())))
+          .replace("%currentLimitAmount%", String.valueOf(userDataHandler.getEffectStatus(target.getUniqueId(), UserDataHandler.LIMIT)))
           .replace("%maxLimitAmount%", String.valueOf(configFile.getInt("Night_Vision_Limit.Limit")))
         );
         return;
@@ -141,7 +141,7 @@ public class LimitCommand extends GlobalCommand implements TabCompleter {
     if(strings.length == 2 && strings[0].equalsIgnoreCase("reset")) {
       Player target = Bukkit.getPlayer(strings[1]);
       if(target != null) {
-        userDataHandler.setLimitStatus(target.getUniqueId(), 0);
+        userDataHandler.setEffectStatus(target.getUniqueId(), 0, UserDataHandler.LIMIT);
         Utilities.message(target, messagesHandler.string("Night_Vision_Limit.Limit_Reset", "#1fe3e0Your limit's have been reset! You can use the night vision command again!"));
       }
 

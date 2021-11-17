@@ -1,5 +1,6 @@
 package me.omegaweapondev.omegavision.utils;
 
+import me.clip.placeholderapi.util.TimeUtil;
 import me.omegaweapondev.omegavision.OmegaVision;
 import me.ou.library.DateTimeUtils;
 import me.ou.library.Utilities;
@@ -36,6 +37,8 @@ public class NightVisionToggle {
 
   private final Player player;
 
+  public static long resetTimer;
+
   /**
    *
    * The public constructor for the Night Vision Toggle class
@@ -60,7 +63,7 @@ public class NightVisionToggle {
     nightVisionAppliedActionbar = messagesHandler.string("Night_Vision_Messages.ActionBar_Night_Vision_Applied", "#2b9bbfNight vision has been applied!");
     nightVisionRemovedActionbar = messagesHandler.string("Night_Vision_Messages.ActionBar_Night_Vision_Removed", "#f63e3eNight Vision has been removed!");
 
-    hasNightVision = userDataHandler.getEffectStatus(player.getUniqueId());
+    hasNightVision = (boolean) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.NIGHT_VISION);
   }
 
   /**
@@ -77,7 +80,7 @@ public class NightVisionToggle {
     // Check if the player currently has night vision enabled
     if(hasNightVision) {
       // Remove night vision from the player
-      userDataHandler.setEffectStatus(player.getUniqueId(), false);
+      userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
       Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
 
       // Send night vision removal messages
@@ -110,9 +113,9 @@ public class NightVisionToggle {
     }
 
     // Check if the target currently has night vision enabled
-    if(userDataHandler.getEffectStatus(target.getUniqueId())) {
+    if((boolean) userDataHandler.getEffectStatus(target.getUniqueId(), UserDataHandler.NIGHT_VISION)) {
       // Remove night vision from the target
-      userDataHandler.setEffectStatus(target.getUniqueId(), false);
+      userDataHandler.setEffectStatus(target.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
       Utilities.removePotionEffect(target, PotionEffectType.NIGHT_VISION);
 
       // Send night vision removal messages
@@ -142,7 +145,7 @@ public class NightVisionToggle {
     }
 
     // Check if the target currently has night vision enabled
-    if(userDataHandler.getEffectStatus(target.getUniqueId())) {
+    if((boolean) userDataHandler.getEffectStatus(target.getUniqueId(), UserDataHandler.NIGHT_VISION)) {
       // Remove night vision from the target
       Utilities.removePotionEffect(target, PotionEffectType.NIGHT_VISION);
     }
@@ -174,7 +177,7 @@ public class NightVisionToggle {
     for(Player player : Bukkit.getOnlinePlayers()) {
       if(action.equalsIgnoreCase("remove")) {
         // Remove night vision from the target
-        userDataHandler.setEffectStatus(player.getUniqueId(), false);
+        userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
         Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
 
         Utilities.broadcast(false, messagesHandler.string("Night_Vision_Messages.Night_Vision_Removed_Global", "#2b9bbfNight Vision has been removed for all players!"));
@@ -201,7 +204,8 @@ public class NightVisionToggle {
    */
   private void applyNightVision(final Player player, final int duration) {
     if(checkLimitStatus(player)) {
-      userDataHandler.setEffectStatus(player.getUniqueId(), true);
+      userDataHandler.setEffectStatus(player.getUniqueId(), true, UserDataHandler.NIGHT_VISION);
+      userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.LIMIT_REACHED);
       if(Utilities.checkPermissions(player, false, "omegavision.nightvision.particles.bypass", "omegavision.nightvision.admin", "omegavision.admin")) {
         Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, duration ,1, false, false, false);
       } else {
@@ -214,6 +218,7 @@ public class NightVisionToggle {
     }
     Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Reached", "#f63e3eSorry, you have reached the limit for the night vision command!"));
     toggleSoundEffect(player, "Limit_Reached");
+    userDataHandler.setEffectStatus(player.getUniqueId(), true, UserDataHandler.LIMIT_REACHED);
   }
 
   /**
@@ -223,7 +228,7 @@ public class NightVisionToggle {
    * @param player (The player that night vision is to be applied to)
    */
   public void applyNightVisionGlobal(final Player player) {
-    userDataHandler.setEffectStatus(player.getUniqueId(), true);
+    userDataHandler.setEffectStatus(player.getUniqueId(), true, UserDataHandler.NIGHT_VISION);
     if(Utilities.checkPermissions(player, false, "omegavision.nightvision.particles.bypass", "omegavision.nightvision.admin", "omegavision.admin")) {
       Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100 ,1, false, false, false);
     } else {
@@ -276,7 +281,7 @@ public class NightVisionToggle {
       return true;
     }
 
-    return userDataHandler.getLimitStatus(player.getUniqueId()) < configFile.getInt("Night_Vision_Limit.Limit");
+    return (boolean) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.LIMIT_REACHED);
   }
 
   /**
@@ -293,17 +298,19 @@ public class NightVisionToggle {
     if(Utilities.checkPermissions(player, true, "omegavision.limit.bypass", "omegavision.limit.admin", "omegavision.admin")) {
       return;
     }
-    int currentLimitCount = userDataHandler.getLimitStatus(player.getUniqueId());
+    int currentLimitCount = (int) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.LIMIT);
 
     if(currentLimitCount + 1 > configFile.getInt("Night_Vision_Limit.Limit")) {
-      userDataHandler.setLimitStatus(player.getUniqueId(), configFile.getInt("Night_Vision_Limit.Limit"));
+      userDataHandler.setEffectStatus(player.getUniqueId(), configFile.getInt("Night_Vision_Limit.Limit"), UserDataHandler.LIMIT);
+      userDataHandler.setEffectStatus(player.getUniqueId(), true, UserDataHandler.LIMIT_REACHED);
+      userDataHandler.setEffectStatus(player.getUniqueId(), System.currentTimeMillis(), UserDataHandler.LIMIT_REACHED_TIME);
       Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Reached", "#f63e3eSorry, you have reached the limit for the night vision command!"));
       toggleSoundEffect(player, "Limit_Reached");
       limitResetTimer(player);
       return;
     }
 
-    userDataHandler.setLimitStatus(player.getUniqueId(), currentLimitCount + 1);
+    userDataHandler.setEffectStatus(player.getUniqueId(), currentLimitCount + 1, UserDataHandler.LIMIT);
     Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Amount_Increased", "#1fe3e0Your limit amount now stands at: #f63e3e%currentLimitAmount% / %maxLimitAmount%")
       .replace("%currentLimitAmount%", String.valueOf(currentLimitCount + 1))
       .replace("%maxLimitAmount%", String.valueOf(configFile.getInt("Night_Vision_Limit.Limit")))
@@ -318,11 +325,34 @@ public class NightVisionToggle {
    * @param player (The player whose night vision limit is being reset)
    */
   private void limitResetTimer(final Player player) {
-    Bukkit.getScheduler().runTaskLaterAsynchronously(pluginInstance, () -> {
-      userDataHandler.setLimitStatus(player.getUniqueId(), 0);
+    if(!(boolean) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.LIMIT_REACHED)) {
+      return;
+    }
+
+    long limitResetTime = (long) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.LIMIT_REACHED_TIME) + TimeUnit.MINUTES.toMillis(configFile.getInt("Night_Vision_Limit.Reset_Timer"));
+
+    if(!(limitResetTime < System.currentTimeMillis())) {
+      userDataHandler.setEffectStatus(player.getUniqueId(), 0, UserDataHandler.LIMIT);
       if(player.isOnline()) {
         Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Reset", "#1fe3e0Your night vision limits have reset! You can use the night vision command again!"));
       }
+      return;
+    }
+
+    if((boolean) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.RESET_TIMER_ACTIVE)) {
+      return;
+    }
+
+    userDataHandler.setEffectStatus(player.getUniqueId(), true, UserDataHandler.RESET_TIMER_ACTIVE);
+    Bukkit.getScheduler().runTaskLaterAsynchronously(pluginInstance, () -> {
+      userDataHandler.setEffectStatus(player.getUniqueId(), 0, UserDataHandler.LIMIT);
+      userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.LIMIT_REACHED);
+      userDataHandler.setEffectStatus(player.getUniqueId(), 0, UserDataHandler.LIMIT_REACHED_TIME);
+      userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.RESET_TIMER_ACTIVE);
+      if(player.isOnline()) {
+        Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Reset", "#1fe3e0Your night vision limits have reset! You can use the night vision command again!"));
+      }
+
     }, TimeUnit.MINUTES.toMillis(configFile.getInt("Night_Vision_Limit.Reset_Timer")));
   }
 
