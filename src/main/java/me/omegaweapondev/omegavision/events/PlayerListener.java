@@ -6,6 +6,7 @@ import me.omegaweapondev.omegavision.utils.NightVisionToggle;
 import me.omegaweapondev.omegavision.utils.UserDataHandler;
 import me.ou.library.Utilities;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -105,18 +106,22 @@ public class PlayerListener implements Listener {
     final ItemStack item = playerItemConsumeEvent.getItem();
 
     if(!configFile.getBoolean("Night_Vision_Settings.Bucket_Usage")) {
+      userDataHandler.setEffectStatus(player.getUniqueId(), false);
       return;
     }
 
-    if(!item.getData().getItemType().equals(Material.MILK_BUCKET)) {
+    if(!item.getType().equals(Material.MILK_BUCKET)) {
+      userDataHandler.setEffectStatus(player.getUniqueId(), false);
       return;
     }
 
     if(!player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+      userDataHandler.setEffectStatus(player.getUniqueId(), false);
       return;
     }
 
     if(!Utilities.checkPermissions(player, true, "omegavision.nightvision.bucket", "omegavision.nightvision.admin", "omegavision.admin")) {
+      userDataHandler.setEffectStatus(player.getUniqueId(), false);
       return;
     }
     playerItemConsumeEvent.setCancelled(true);
