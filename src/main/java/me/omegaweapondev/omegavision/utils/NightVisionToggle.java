@@ -329,10 +329,14 @@ public class NightVisionToggle {
       return;
     }
 
-    long limitResetTime = (long) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.LIMIT_REACHED_TIME) + TimeUnit.MINUTES.toMillis(configFile.getInt("Night_Vision_Limit.Reset_Timer"));
+    long configResetTimer = TimeUnit.MINUTES.toMillis(configFile.getInt("Night_Vision_Limit.Reset_Timer"));
+    long limitTimeReached = (long) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.LIMIT_REACHED_TIME);
 
-    if(!(limitResetTime < System.currentTimeMillis())) {
+    if((limitTimeReached + configResetTimer) > System.currentTimeMillis()) {
       userDataHandler.setEffectStatus(player.getUniqueId(), 0, UserDataHandler.LIMIT);
+      userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.LIMIT_REACHED);
+      userDataHandler.setEffectStatus(player.getUniqueId(), 0, UserDataHandler.LIMIT_REACHED_TIME);
+      userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.RESET_TIMER_ACTIVE);
       if(player.isOnline()) {
         Utilities.message(player, messagesHandler.string("Night_Vision_Limit.Limit_Reset", "#1fe3e0Your night vision limits have reset! You can use the night vision command again!"));
       }

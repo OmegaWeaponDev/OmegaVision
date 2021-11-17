@@ -50,7 +50,9 @@ public class UserDataHandler {
 
       getUserDataMap().clear();
       for(String user : userDataFile.getConfigurationSection("Users.").getKeys(false)) {
-        getUserDataMap().put(UUID.fromString(user), new ConcurrentHashMap<>());
+        if(Bukkit.getPlayer(UUID.fromString(user)).isOnline()) {
+          getUserDataMap().put(UUID.fromString(user), new ConcurrentHashMap<>());
+        }
       }
     });
   }
