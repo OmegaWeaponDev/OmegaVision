@@ -102,6 +102,13 @@ public class NightVisionToggle {
       return;
     }
 
+    if(target.getName().equals(player.getName())) {
+      if(!Utilities.checkPermissions(player, true, "omegavision.nightvision.toggle", "omegavision.nightvision.admin", "omegavision.admin")) {
+        Utilities.message(player, messagesHandler.string("No_Permission", "#f63e3eSorry, but you don't have permission to do that."));
+        return;
+      }
+    }
+
     // Check if the target currently has night vision enabled
     if(userDataHandler.getEffectStatus(target.getUniqueId())) {
       // Remove night vision from the target
@@ -110,7 +117,7 @@ public class NightVisionToggle {
 
       // Send night vision removal messages
       sendNightVisionRemovedMessages(target);
-      toggleSoundEffect(player, "Night_Vision_Disabled");
+      toggleSoundEffect(target, "Night_Vision_Disabled");
       return;
     }
 
