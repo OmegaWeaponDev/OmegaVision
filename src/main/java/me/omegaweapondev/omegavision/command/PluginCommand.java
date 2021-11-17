@@ -2,7 +2,6 @@ package me.omegaweapondev.omegavision.command;
 
 import me.omegaweapondev.omegavision.OmegaVision;
 import me.omegaweapondev.omegavision.utils.MessagesHandler;
-import me.omegaweapondev.omegavision.utils.UserDataHandler;
 import me.ou.library.Utilities;
 import me.ou.library.builders.TabCompleteBuilder;
 import me.ou.library.commands.GlobalCommand;
@@ -18,22 +17,43 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ *
+ * The main command for the plugin `/omegavision`
+ *
+ * @author OmegaWeaponDev
+ */
 public class PluginCommand extends GlobalCommand implements TabCompleter {
   private final OmegaVision pluginInstance;
   private final MessagesHandler messagesHandler;
 
+  /**
+   *
+   * The public constructor for the main plugin command
+   *
+   * @param pluginInstance (The plugin's instance)
+   */
   public PluginCommand(final OmegaVision pluginInstance) {
     this.pluginInstance = pluginInstance;
     messagesHandler = pluginInstance.getMessagesHandler();
   }
 
+  /**
+   *
+   * Handles the execution of the main plugin command
+   *
+   * @param sender (The CommandSender who is trying to execute the command)
+   * @param strings (The arguments that were passed into the command)
+   */
 	@Override
 	protected void execute(final CommandSender sender, final String[] strings) {
+	  // If no arguments as passed into the command, send the command help message
     if(strings.length != 1) {
       helpCommand(sender);
       return;
     }
 
+    // Call the correct method based on the first arg passed into the command
     switch(strings[0]) {
       case "version" -> versionCommand(sender);
       case "reload" -> reloadCommand(sender);
@@ -42,29 +62,50 @@ public class PluginCommand extends GlobalCommand implements TabCompleter {
     }
 	}
 
+  /**
+   *
+   * Method to handle the plugin's reload command
+   *
+   * @param commandSender (The CommandSender who is trying to execute the command)
+   */
   private void reloadCommand(final CommandSender commandSender) {
+    // Check if the CommandSender is a player
     if(commandSender instanceof final Player player) {
 
+      // Check if the player has permission to reload the plugin
       if(!Utilities.checkPermissions(player, true, "omegavision.reload", "omegavision.admin")) {
         Utilities.message(player, messagesHandler.string("No_Permission", "#f63e3eSorry, but you don't have permission to do that."));
         return;
       }
 
+      // Reload the plugin and send a message to the player telling them the plugin has reloaded.
       pluginInstance.onReload();
       Utilities.message(player, messagesHandler.string("Plugin_Reload", "#f63e3eOmegaVision has successfully been reloaded."));
       return;
     }
 
+    // If the CommandSender is the server console, skip other checks and just reload the plugin
     if(commandSender instanceof ConsoleCommandSender) {
       pluginInstance.onReload();
       Utilities.logInfo(true, "OmegaVision has successfully been reloaded.");
     }
   }
 
+  /**
+   *
+   * Method to handle the plugin's version command
+   *
+   * @param sender (The CommandSender who is trying to execute the command)
+   */
   private void versionCommand(final CommandSender sender) {
-
+    // Check if the CommandSender is a player
     if(sender instanceof Player) {
       final Player player = (Player) sender;
+
+      // Check if the player has permission to view the plugins version
+      if(!Utilities.checkPermission(player, true, "omegavision.admin")) {
+        return;
+      }
 
       Utilities.message(player, messagesHandler.getPrefix() + "#86DE0FOmegaVision #CA002Ev" + pluginInstance.getDescription().getVersion() + " #86DE0FBy OmegaWeaponDev");
       return;
@@ -75,6 +116,12 @@ public class PluginCommand extends GlobalCommand implements TabCompleter {
     }
   }
 
+  /**
+   *
+   * Method to handle the plugin's help command
+   *
+   * @param sender (The CommandSender who is trying to execute the command)
+   */
   private void helpCommand(final CommandSender sender) {
 
     if(sender instanceof Player) {
@@ -113,6 +160,12 @@ public class PluginCommand extends GlobalCommand implements TabCompleter {
     }
   }
 
+  /**
+   *
+   * Method to handle the plugin's debug command
+   *
+   * @param commandSender (The CommandSender who is trying to execute the command)
+   */
   private void debugCommand(final CommandSender commandSender) {
     StringBuilder plugins = new StringBuilder();
     
@@ -158,12 +211,22 @@ public class PluginCommand extends GlobalCommand implements TabCompleter {
     );
   }
 
+  /**
+   *
+   * Sets up the command tab completion based on player's permissions
+   *
+   * @param commandSender (Who sent the command)
+   * @param command (The argument to add into the tab completion list)
+   * @param strings (The command arguments)
+   * @return (The completed tab completion list)
+   */
   @Override
   public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
     if(strings.length <= 1) {
       return new TabCompleteBuilder(commandSender)
         .checkCommand("version", true, "omegavision.admin")
         .checkCommand("reload", true, "omegavision.reload", "omegavision.admin")
+        .checkCommand("debug", true, "omegavision.admin")
         .build(strings[0]);
     }
     return Collections.emptyList();

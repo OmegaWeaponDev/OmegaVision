@@ -5,6 +5,12 @@ import me.omegaweapondev.omegavision.OmegaVision;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
+/**
+ *
+ * Handles registering the plugins placeholders to PlaceholderAPI
+ *
+ * @author PlaceholderAPI
+ */
 public class Placeholders extends PlaceholderExpansion {
   private final OmegaVision plugin;
   private final UserDataHandler userDataHandler;

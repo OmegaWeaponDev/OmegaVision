@@ -38,7 +38,6 @@
       Listing the Author or Authors of the plugin. Use in the plugin.yml file.
     -->
     <pl.author>OmegaWeaponDev</pl.author>
-    <pl.authors>[UltimaWeapon_]</pl.authors>
 
     <!--
       Set the Spigot API Version to stop backwards compatibility checks.
@@ -107,7 +106,7 @@
       <artifactId>spigot-api</artifactId>
 
       <!-- Change this to the latest version to stay up to date -->
-      <version>1.17-R0.1-SNAPSHOT</version>
+      <version>1.17.1-R0.1-SNAPSHOT</version>
 
       <!--
         The scope indicates if this library should be packaged together with our plugin
@@ -140,7 +139,7 @@
     <dependency>
       <groupId>me.clip</groupId>
       <artifactId>placeholderapi</artifactId>
-      <version>2.10.9</version>
+      <version>2.10.10</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

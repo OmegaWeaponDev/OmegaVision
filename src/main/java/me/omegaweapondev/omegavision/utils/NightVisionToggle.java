@@ -11,7 +11,12 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
-
+/**
+ *
+ * The Night Vision Toggle class which handles toggling the night vision potion effect for a player
+ *
+ * @author OmegaWeaponDev
+ */
 public class NightVisionToggle {
   private final OmegaVision pluginInstance;
   private final FileConfiguration configFile;
@@ -31,6 +36,13 @@ public class NightVisionToggle {
 
   private final Player player;
 
+  /**
+   *
+   * The public constructor for the Night Vision Toggle class
+   *
+   * @param pluginInstance (The plugin's instance)
+   * @param player (The player currently targeted)
+   */
   public NightVisionToggle(final OmegaVision pluginInstance, final Player player) {
     this.pluginInstance = pluginInstance;
     this.player = player;
@@ -51,6 +63,11 @@ public class NightVisionToggle {
     hasNightVision = userDataHandler.getEffectStatus(player.getUniqueId());
   }
 
+  /**
+   *
+   * Handles toggling night vision on|off for a specific player
+   *
+   */
   public void nightVisionToggle() {
     // Check if the player has permission
     if(!toggleSelfPerm(player)) {
@@ -73,6 +90,12 @@ public class NightVisionToggle {
     applyNightVision(player, 60 * 60 * 24 * 100);
   }
 
+  /**
+   *
+   * Handles toggling night vision on|off for a target player
+   *
+   * @param target (The player whose night vision status is to be modified)
+   */
   public void nightVisionToggleOthers(final Player target) {
     // Check if the player has permission
     if(!toggleOthersPerm(player)) {
@@ -98,6 +121,13 @@ public class NightVisionToggle {
     sendNightVisionAppliedMessages(target);
   }
 
+  /**
+   *
+   * Handles toggling night vision on for a specific amount of time
+   *
+   * @param target (The player whose night vision status is to be modified)
+   * @param seconds (The duration in seconds for how long the night vision will last)
+   */
   public void nightVisionToggleTemp(final Player target, final int seconds) {
     // Check if the player has permission
     if(!toggleTempPerm(player)) {
@@ -117,6 +147,12 @@ public class NightVisionToggle {
     sendNightVisionAppliedMessages(target);
   }
 
+  /**
+   *
+   * Handles toggling night vision on|off for all players currently online
+   *
+   * @param action (Either `add` | `remove`)
+   */
   public void nightVisionToggleGlobal(final String action) {
     // Check if the player has permission
     if(!toggleGlobalPerm(player)) {
@@ -149,6 +185,13 @@ public class NightVisionToggle {
     }
   }
 
+  /**
+   *
+   * Handles how the night vision effect is applied for the player
+   *
+   * @param player (The player that night vision is to be applied to)
+   * @param duration (The duration in seconds for how long the night vision will last)
+   */
   private void applyNightVision(final Player player, final int duration) {
     if(checkLimitStatus(player)) {
       userDataHandler.setEffectStatus(player.getUniqueId(), true);
@@ -166,6 +209,12 @@ public class NightVisionToggle {
     toggleSoundEffect(player, "Limit_Reached");
   }
 
+  /**
+   *
+   * Handles how the night vision effect is applied for all player currently online
+   *
+   * @param player (The player that night vision is to be applied to)
+   */
   public void applyNightVisionGlobal(final Player player) {
     userDataHandler.setEffectStatus(player.getUniqueId(), true);
     if(Utilities.checkPermissions(player, false, "omegavision.nightvision.particles.bypass", "omegavision.nightvision.admin", "omegavision.admin")) {
@@ -176,6 +225,12 @@ public class NightVisionToggle {
     toggleSoundEffect(player, "Night_Vision_Applied");
   }
 
+  /**
+   *
+   * Sends the player a message notifying them that night vision has been applied
+   *
+   * @param player (The player that the message needs to be sent to)
+   */
   private void sendNightVisionAppliedMessages(final Player player) {
     Utilities.message(player, nightVisionApplied);
 
@@ -184,6 +239,12 @@ public class NightVisionToggle {
     }
   }
 
+  /**
+   *
+   * Sends the player a message notifying them that night vision has been removed
+   *
+   * @param player (The player that the message needs to be sent to)
+   */
   private void sendNightVisionRemovedMessages(final Player player) {
     Utilities.message(player, nightVisionRemoved);
     if(actionBarMessages)
@@ -192,6 +253,13 @@ public class NightVisionToggle {
     }
   }
 
+  /**
+   *
+   * Checks a player's current Night Vision Limit status
+   *
+   * @param player (The player whose night vision limit status is being checked)
+   * @return (The current limit status)
+   */
   private boolean checkLimitStatus(@NotNull final Player player) {
     if(!configFile.getBoolean("Night_Vision_Limit.Enabled")) {
       return true;
@@ -204,6 +272,12 @@ public class NightVisionToggle {
     return userDataHandler.getLimitStatus(player.getUniqueId()) < configFile.getInt("Night_Vision_Limit.Limit");
   }
 
+  /**
+   *
+   * Increase a specific players night vision limit amount
+   *
+   * @param player (The player whose limit is getting increased)
+   */
   private void increaseLimitAmount(@NotNull final Player player) {
     if(!configFile.getBoolean("Night_Vision_Limit.Enabled")) {
       return;
@@ -229,6 +303,13 @@ public class NightVisionToggle {
     );
   }
 
+  /**
+   *
+   * Handles resetting a players limit status after a specific timeframe
+   * Is triggered once the player has reached the max limit
+   *
+   * @param player (The player whose night vision limit is being reset)
+   */
   private void limitResetTimer(final Player player) {
     Bukkit.getScheduler().runTaskLaterAsynchronously(pluginInstance, () -> {
       userDataHandler.setLimitStatus(player.getUniqueId(), 0);
@@ -238,6 +319,13 @@ public class NightVisionToggle {
     }, TimeUnit.MINUTES.toMillis(configFile.getInt("Night_Vision_Limit.Reset_Timer")));
   }
 
+  /**
+   *
+   * Checks the player's permission for the toggle-self command
+   *
+   * @param player (The player who is being checked for permission)
+   * @return (True | false depending on the permission)
+   */
   private boolean toggleSelfPerm(final Player player) {
     if(!Utilities.checkPermissions(player, true, "omegavision.nightvision.toggle", "omegavision.nightvision.admin", "omegavision.admin")) {
       Utilities.message(player, messagesHandler.string("No_Permission", "#f63e3eSorry, but you don't have permission to do that."));
@@ -246,6 +334,13 @@ public class NightVisionToggle {
     return true;
   }
 
+  /**
+   *
+   * Checks the player's permission for the toggle-global command
+   *
+   * @param player (The player who is being checked for permission)
+   * @return (True | false depending on the permission)
+   */
   private boolean toggleGlobalPerm(final Player player) {
     if(!Utilities.checkPermissions(player, true, "omegavision.nightvision.global", "omegavision.nightvision.admin", "omegavision.admin")) {
       Utilities.message(player, messagesHandler.string("No_Permission", "#f63e3eSorry, but you don't have permission to do that."));
@@ -254,6 +349,13 @@ public class NightVisionToggle {
     return true;
   }
 
+  /**
+   *
+   * Checks the player's permission for the toggle-temp command
+   *
+   * @param player (The player who is being checked for permission)
+   * @return (True | false depending on the permission)
+   */
   private boolean toggleTempPerm(final Player player) {
     if(!Utilities.checkPermissions(player, true, "omegavision.nightvision.temp", "omegavision.nightvision.admin", "omegavision.admin")) {
       Utilities.message(player, messagesHandler.string("No_Permission", "#f63e3eSorry, but you don't have permission to do that."));
@@ -262,6 +364,13 @@ public class NightVisionToggle {
     return true;
   }
 
+  /**
+   *
+   * Checks the player's permission for the toggle-others command
+   *
+   * @param player (The player who is being checked for permission)
+   * @return (True | false depending on the permission)
+   */
   private boolean toggleOthersPerm(final Player player) {
     if(!Utilities.checkPermissions(player, true, "omegavision.nightvision.toggle.others", "omegavision.nightvision.admin", "omegavision.admin")) {
       Utilities.message(player, messagesHandler.string("No_Permission", "#f63e3eSorry, but you don't have permission to do that."));
@@ -270,7 +379,14 @@ public class NightVisionToggle {
     return true;
   }
 
-  private void toggleSoundEffect(final Player player, final String soundEffect) {
+  /**
+   *
+   * Toggles a sound effect depending on the action taken for a specific player
+   *
+   * @param player (The player to play the sound effect for)
+   * @param soundEffect (The specific sound effect that needs to be played)
+   */
+  public void toggleSoundEffect(final Player player, final String soundEffect) {
 
     if(!configFile.getBoolean("Sound_Effects.Enabled")) {
       return;

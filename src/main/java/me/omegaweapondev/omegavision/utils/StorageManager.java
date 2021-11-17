@@ -8,6 +8,12 @@ import me.ou.library.configs.ConfigUpdater;
 import java.io.IOException;
 import java.util.Arrays;
 
+/**
+ *
+ * The Storage Manager class that handles all the plugins files
+ *
+ * @author OmegaWeaponDev
+ */
 public class StorageManager {
   private final OmegaVision plugin;
 
@@ -15,10 +21,21 @@ public class StorageManager {
   private final ConfigCreator messagesFile = new ConfigCreator("messages.yml");
   private final ConfigCreator userDataFile = new ConfigCreator("userData.yml");
 
-  public StorageManager(final OmegaVision plugin) {
-    this.plugin = plugin;
+  /**
+   *
+   * The public constructor for the Storage Manager class
+   *
+   * @param pluginInstance (The plugin's instance)
+   */
+  public StorageManager(final OmegaVision pluginInstance) {
+    this.plugin = pluginInstance;
   }
 
+  /**
+   *
+   * Handles creating all the files and the data folder for OmegaVision
+   *
+   */
   public void setupConfigs() {
     getConfigFile().createConfig();
     getMessagesFile().createConfig();
@@ -26,6 +43,11 @@ public class StorageManager {
 
   }
 
+  /**
+   *
+   * Handles making sure all the files are up-to-date against the default in the resources folder
+   *
+   */
   public void configUpdater() {
     Utilities.logInfo(true, "Attempting to update the config files....");
 
@@ -49,19 +71,42 @@ public class StorageManager {
     }
   }
 
+  /**
+   *
+   * Handles reloading all the files
+   *
+   */
   public void reloadFiles() {
     getConfigFile().reloadConfig();
     getMessagesFile().reloadConfig();
   }
 
+  /**
+   *
+   * A getter for the configuration file
+   *
+   * @return configFile
+   */
   public ConfigCreator getConfigFile() {
     return configFile;
   }
 
+  /**
+   *
+   * A getter for the messages file
+   *
+   * @return messagesFile
+   */
   public ConfigCreator getMessagesFile() {
     return messagesFile;
   }
 
+  /**
+   *
+   * A getter for the user data file
+   *
+   * @return userDataFile
+   */
   public ConfigCreator getUserDataFile() {
     return userDataFile;
   }

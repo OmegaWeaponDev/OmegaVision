@@ -8,17 +8,38 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.util.List;
 
+/**
+ *
+ * Handles the messages for the plugin
+ *
+ * @author OmegaWeaponDev
+ */
 public class MessagesHandler {
   private final OmegaVision pluginInstance;
   private final FileConfiguration messagesConfig;
   private final String configName;
 
+  /**
+   *
+   * The public constructor for the MessagesHandler class
+   *
+   * @param pluginInstance (The plugin's instance)
+   * @param messagesConfig (The yaml file containing all the messages)
+   */
   public MessagesHandler(final OmegaVision pluginInstance, FileConfiguration messagesConfig) {
     this.pluginInstance = pluginInstance;
     this.messagesConfig = messagesConfig;
     this.configName = pluginInstance.getStorageManager().getMessagesFile().getFileName();
   }
 
+  /**
+   *
+   * Handles String messages for players in-game
+   *
+   * @param message (The message from the file)
+   * @param fallbackMessage (The fall back message)
+   * @return (The message that is returned. Either message or fallBackMessage)
+   */
   public String string(final String message, final String fallbackMessage) {
     if(messagesConfig.getString(message) == null) {
       getErrorMessage(message);
@@ -27,22 +48,14 @@ public class MessagesHandler {
     return getPrefix() + messagesConfig.getString(message);
   }
 
-  public List<String> stringList(final String message, final List<String> fallbackMessage) {
-    if(messagesConfig.getStringList(message).isEmpty()) {
-      getErrorMessage(message);
-      return fallbackMessage;
-    }
-    return messagesConfig.getStringList(message);
-  }
-
-  public List<String> consoleStringList(final String message, final List<String> fallbackMessage) {
-    if(messagesConfig.getStringList(message).isEmpty()) {
-      getErrorMessage(message);
-      return fallbackMessage;
-    }
-    return messagesConfig.getStringList(message);
-  }
-
+  /**
+   *
+   * Handles String messages for the console
+   *
+   * @param message (The message from the file)
+   * @param fallbackMessage (The fall back message)
+   * @return (The message that is returned. Either message or fallBackMessage)
+   */
   public String console(final String message, final String fallbackMessage) {
     if(messagesConfig.getString(message) == null) {
       getErrorMessage(message);
@@ -51,6 +64,12 @@ public class MessagesHandler {
     return messagesConfig.getString(message);
   }
 
+  /**
+   *
+   * Handles the plugin's prefix
+   *
+   * @return (The plugin's prefix for all the messages)
+   */
   public String getPrefix() {
     if(messagesConfig.getString("Plugin_Prefix") == null) {
       getErrorMessage("Plugin_Prefix");
@@ -59,6 +78,12 @@ public class MessagesHandler {
     return messagesConfig.getString("Plugin_Prefix") + " ";
   }
 
+  /**
+   *
+   * Provides a console error message if one of the messages returns the fallback message
+   *
+   * @param message (The message that returned the fallback message)
+   */
   private void getErrorMessage(final String message) {
     Utilities.logInfo(true,
       "There was an error getting the " + message + " message from the " + configName + ".",
