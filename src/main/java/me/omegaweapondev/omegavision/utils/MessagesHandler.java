@@ -45,6 +45,10 @@ public class MessagesHandler {
       getErrorMessage(message);
       return getPrefix() + fallbackMessage;
     }
+
+    if(messagesConfig.getString(message).length() == 0) {
+      return null;
+    }
     return getPrefix() + messagesConfig.getString(message);
   }
 
@@ -60,6 +64,10 @@ public class MessagesHandler {
     if(messagesConfig.getString(message) == null) {
       getErrorMessage(message);
       return fallbackMessage;
+    }
+
+    if(messagesConfig.getString(message).length() == 0) {
+      return null;
     }
     return messagesConfig.getString(message);
   }

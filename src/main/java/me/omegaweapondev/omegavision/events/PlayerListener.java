@@ -92,10 +92,14 @@ public class PlayerListener implements Listener {
       userDataHandler.addUserToMap(player.getUniqueId());
     }
 
-    // Check if the Night Vision Login setting was enabled and the player has a true night vision status in the map
-    // If so, Apply night vision to them once they have logged in
+    // Check if the Night Vision Login setting was enabled and the player has a
+    // true night vision status in the map and permission for night vision long.
+    // If so, Apply night vision to them once they have logged in. Otherwise, remove it.
     if(configFile.getBoolean("Night_Vision_Settings.Night_Vision_Login") && (boolean) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.NIGHT_VISION) && Utilities.checkPermissions(player, true, "omegavision.nightvision.login", "omegavision.nightvision.admin", "omegavision.admin")) {
       Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100 ,1, particleEffects, ambientEffects, nightvisionIcon);
+    } else {
+      userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
+      Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
     }
 
     if(configFile.getBoolean("Night_Vision_Limit.Enabled")) {
@@ -166,7 +170,7 @@ public class PlayerListener implements Listener {
     Player player = playerRespawnEvent.getPlayer();
 
     // Checks if the keep on death feature has been enabled
-    if(!configFile.getBoolean("Keep_Night_Vision_On_Death")) {
+    if(!configFile.getBoolean("Night_Vision_Settings.Keep_Night_Vision_On_Death")) {
       return;
     }
 
@@ -184,7 +188,6 @@ public class PlayerListener implements Listener {
     }
     NightVisionToggle nightVisionToggle = new NightVisionToggle(pluginInstance, player);
     nightVisionToggle.toggleSoundEffect(player, "Night_Vision_Applied");
-
   }
 
   /**

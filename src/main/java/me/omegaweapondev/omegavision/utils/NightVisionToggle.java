@@ -187,7 +187,9 @@ public class NightVisionToggle {
         applyNightVisionGlobal(player);
 
         // Send night vision applied messages
-        Utilities.broadcast(false, messagesHandler.string("Night_Vision_Messages.Night_Vision_Applied_Global", "#2b9bbfNight Vision has been applied for all players!"));
+        if(Utilities.checkPermissions(player, true, "omegavision.nightvision.global.alert", "omegavision.nightvision.admin", "omegavision.admin")) {
+          Utilities.broadcast(false, messagesHandler.string("Night_Vision_Messages.Night_Vision_Applied_Global", "#2b9bbfNight Vision has been applied for all players!"));
+        }
       }
     }
   }

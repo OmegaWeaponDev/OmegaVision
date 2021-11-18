@@ -128,6 +128,11 @@ public class Placeholders extends PlaceholderExpansion {
       return String.valueOf(userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.LIMIT));
     }
 
+    // %omegavision_limit_reached%
+    if(identifier.equalsIgnoreCase("limit_reached")) {
+      return String.valueOf(userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.LIMIT_REACHED));
+    }
+
     // We return null if an invalid placeholder
     // was provided
     return null;

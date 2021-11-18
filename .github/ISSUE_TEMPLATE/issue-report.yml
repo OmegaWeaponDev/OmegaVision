@@ -1,6 +1,9 @@
 name: Issue reports
 description: Report any issues that you encounter with OmegaVision
-labels: ["type: issue"]
+title: "[Bug]: "
+labels: ["bug"]
+assignees:
+  - OmegaWeaponDev
 body:
   - type: markdown
     attributes:
@@ -8,17 +11,26 @@ body:
   - type: textarea
     id: issue-description
     attributes:
-      label: issue-description
+      label: Issue Description
       description: Please provide a clear and detailed description of the issue that you are reporting.
       placeholder: Issue Description...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce-steps
+    attributes:
+      label: Steps to Reproduce
+      description: Please provide a step-by-step guide on how to re-produce the issue
+      placeholder: First I did....
     validations:
       required: true
   - type: textarea
     id: error-messages
     attributes:
       label: Error Messages
-      description: If you are getting any error messages (either in-game or in the server console) please provide the full errors here. Use hastebin.com or any other paste service to send errors.
-      placeholder: Make sure you use a paste service to provide errors!
+      description: If you are getting any error messages (either in-game or in the server console) please provide the full errors here.
+      placeholder: Make sure you include the full error!
+      render: shell
     validations:
       required: false
   - type: textarea
@@ -41,8 +53,9 @@ body:
     id: logs
     attributes:
       label: Logs and Configs
-      description: Please include a pastebin of relevant config files or logs. You should use https://paste.helpch.at/ to upload, then include the link below.
-      placeholder: Link to config/log paste...
+      description: Please include a pastebin of relevant config files or logs.
+      placeholder: Please make sure to include the full files! (The contents will automatically be formatted when you paste it here!)
+      render: shell
     validations:
       required: false
   - type: textarea

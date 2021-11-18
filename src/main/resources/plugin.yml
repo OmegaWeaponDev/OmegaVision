@@ -46,6 +46,7 @@ permissions:
       - omegavision.nightvision.login
       - omegavision.nightvision.keepondeath
       - omegavision.nightvision.bucket
+      - omegavision.nightvision.global.alert
   omegavision.limit.admin:
     description: The wildcard permission to give all the limit permissions.
     default: false
@@ -86,6 +87,9 @@ permissions:
     default: false
   omegavision.nightvision.keepondeath:
     description: The permission required to keep night vision on death
+    default: false
+  omegavision.nightvision.global.alert:
+    description: The permission required to view night vision global messages
     default: false
   omegavision.limit.check:
     description: The permission required to check your own night vision limit status.
