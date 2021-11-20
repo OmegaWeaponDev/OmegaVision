@@ -177,7 +177,9 @@ public class NightVisionToggle {
         userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
         Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
 
-        Utilities.broadcast(false, messagesHandler.string("Night_Vision_Messages.Night_Vision_Removed_Global", "#2b9bbfNight Vision has been removed for all players!"));
+        if(Utilities.checkPermissions(player, true, "omegavision.nightvision.global.alert", "omegavision.nightvision.admin", "omegavision.admin")) {
+          Utilities.message(player, messagesHandler.string("Night_Vision_Messages.Night_Vision_Removed_Global", "#2b9bbfNight Vision has been removed for all players!"));
+        }
         toggleSoundEffect(player, "Night_Vision_Disabled");
         return;
       }
@@ -188,7 +190,7 @@ public class NightVisionToggle {
 
         // Send night vision applied messages
         if(Utilities.checkPermissions(player, true, "omegavision.nightvision.global.alert", "omegavision.nightvision.admin", "omegavision.admin")) {
-          Utilities.broadcast(false, messagesHandler.string("Night_Vision_Messages.Night_Vision_Applied_Global", "#2b9bbfNight Vision has been applied for all players!"));
+          Utilities.message(player, messagesHandler.string("Night_Vision_Messages.Night_Vision_Applied_Global", "#2b9bbfNight Vision has been applied for all players!"));
         }
       }
     }

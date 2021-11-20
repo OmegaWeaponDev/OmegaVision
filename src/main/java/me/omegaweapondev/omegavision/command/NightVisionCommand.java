@@ -71,6 +71,13 @@ public class NightVisionCommand extends PlayerCommand implements TabCompleter {
       if(!strings[0].equalsIgnoreCase("global")) {
         return;
       }
+
+      if(!strings[1].equalsIgnoreCase("add") && !strings[1].equalsIgnoreCase("remove")) {
+        Utilities.message(player,
+          "#2b9bbfNight Vision Global Command: #f63e3e/nightvision global add #2b9bbf- Adds night vision to add online players",
+          "#2b9bbfNight Vision Global Command: #f63e3e/nightvision global remove #2b9bbf- Removes night vision from all online players"
+        );
+      }
       // Call the night vision global method and pass it the second arg in the command
       nightVisionToggle.nightVisionToggleGlobal(strings[1]);
       return;
