@@ -181,7 +181,7 @@ public class NightVisionToggle {
           Utilities.message(player, messagesHandler.string("Night_Vision_Messages.Night_Vision_Removed_Global", "#2b9bbfNight Vision has been removed for all players!"));
         }
         toggleSoundEffect(player, "Night_Vision_Disabled");
-        return;
+        continue;
       }
 
       if(action.equalsIgnoreCase("add")) {
