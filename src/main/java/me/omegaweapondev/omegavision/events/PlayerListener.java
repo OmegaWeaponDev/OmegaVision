@@ -171,6 +171,7 @@ public class PlayerListener implements Listener {
   public void onPlayerRespawn(PlayerRespawnEvent playerRespawnEvent) {
     Player player = playerRespawnEvent.getPlayer();
 
+    // Wait 1 full second to allow for respawn to finish before checking night vision status
     Bukkit.getScheduler().runTaskLater(pluginInstance, () -> {
       // Checks if the keep on death feature has been enabled
       if(!configFile.getBoolean("Night_Vision_Settings.Keep_Night_Vision_On_Death")) {

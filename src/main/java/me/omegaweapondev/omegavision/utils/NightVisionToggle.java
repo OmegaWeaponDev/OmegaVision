@@ -123,9 +123,6 @@ public class NightVisionToggle {
 
     // Check if the target has particle bypass perm and apply correct night vision effect
     applyNightVision(target, 60 * 60 * 24 * 100);
-
-    // Send night vision applied messages
-    sendNightVisionAppliedMessages(target);
   }
 
   /**
@@ -149,9 +146,6 @@ public class NightVisionToggle {
 
     // Check if the target has particle bypass perm and apply correct night vision effect
     applyNightVision(target, seconds);
-
-    // Send night vision applied messages
-    sendNightVisionAppliedMessages(target);
   }
 
   /**
