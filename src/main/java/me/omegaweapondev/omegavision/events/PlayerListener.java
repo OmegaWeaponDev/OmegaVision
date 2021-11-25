@@ -6,6 +6,7 @@ import me.omegaweapondev.omegavision.utils.NightVisionToggle;
 import me.omegaweapondev.omegavision.utils.UserDataHandler;
 import me.ou.library.SpigotUpdater;
 import me.ou.library.Utilities;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -169,25 +171,29 @@ public class PlayerListener implements Listener {
   public void onPlayerRespawn(PlayerRespawnEvent playerRespawnEvent) {
     Player player = playerRespawnEvent.getPlayer();
 
-    // Checks if the keep on death feature has been enabled
-    if(!configFile.getBoolean("Night_Vision_Settings.Keep_Night_Vision_On_Death")) {
-      return;
-    }
+    Bukkit.getScheduler().runTaskLater(pluginInstance, () -> {
+      // Checks if the keep on death feature has been enabled
+      if(!configFile.getBoolean("Night_Vision_Settings.Keep_Night_Vision_On_Death")) {
+        return;
+      }
 
-    // Checks if the player has permission to keep their night vision when they die
-    if(!Utilities.checkPermissions(player, false, "omegavision.nightvision.keepondeath", "omegavision.nightvision.admin", "omegavision.admin")) {
-     return;
-    }
+      // Checks if the player has permission to keep their night vision when they die
+      if(!Utilities.checkPermissions(player, false, "omegavision.nightvision.keepondeath", "omegavision.nightvision.admin", "omegavision.admin")) {
+        userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
+        Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
+        return;
+      }
 
-    // Re-applies night vision to the player after they respawn
-    userDataHandler.setEffectStatus(player.getUniqueId(), true, UserDataHandler.NIGHT_VISION);
-    if(Utilities.checkPermissions(player, false, "omegavision.nightvision.particles.bypass", "omegavision.nightvision.admin", "omegavision.admin")) {
-      Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100 ,1, false, false, false);
-    } else {
-      Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100 ,1, particleEffects, ambientEffects, nightvisionIcon);
-    }
-    NightVisionToggle nightVisionToggle = new NightVisionToggle(pluginInstance, player);
-    nightVisionToggle.toggleSoundEffect(player, "Night_Vision_Applied");
+      // Re-applies night vision to the player after they respawn
+      userDataHandler.setEffectStatus(player.getUniqueId(), true, UserDataHandler.NIGHT_VISION);
+      if(Utilities.checkPermissions(player, false, "omegavision.nightvision.particles.bypass", "omegavision.nightvision.admin", "omegavision.admin")) {
+        Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100 ,1, false, false, false);
+      } else {
+        Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100 ,1, particleEffects, ambientEffects, nightvisionIcon);
+      }
+      NightVisionToggle nightVisionToggle = new NightVisionToggle(pluginInstance, player);
+      nightVisionToggle.toggleSoundEffect(player, "Night_Vision_Applied");
+    }, 20);
   }
 
   /**
