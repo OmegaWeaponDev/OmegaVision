@@ -4,6 +4,8 @@ import me.omegaweapondev.omegavision.OmegaVision;
 import me.ou.library.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
@@ -26,7 +28,6 @@ public class NightVisionToggle {
   private final boolean particleEffects;
   private final boolean particleAmbients;
   private final boolean nightVisionIcon;
-  private final boolean hasNightVision;
   private final boolean actionBarMessages;
 
   private final String nightVisionApplied;
@@ -34,18 +35,18 @@ public class NightVisionToggle {
   private final String nightVisionAppliedActionbar;
   private final String nightVisionRemovedActionbar;
 
-  private final Player player;
+  private CommandSender commandSender;
 
   /**
    *
    * The public constructor for the Night Vision Toggle class
    *
    * @param pluginInstance (The plugin's instance)
-   * @param player (The player currently targeted)
+   * @param commandSender (The player currently targeted)
    */
-  public NightVisionToggle(final OmegaVision pluginInstance, final Player player) {
+  public NightVisionToggle(final OmegaVision pluginInstance, final CommandSender commandSender) {
     this.pluginInstance = pluginInstance;
-    this.player = player;
+    this.commandSender = commandSender;
     configFile = pluginInstance.getStorageManager().getConfigFile().getConfig();
     messagesHandler = pluginInstance.getMessagesHandler();
     userDataHandler = pluginInstance.getUserDataHandler();
@@ -59,8 +60,6 @@ public class NightVisionToggle {
     nightVisionRemoved = messagesHandler.string("Night_Vision_Messages.Night_Vision_Removed", "#f63e3eNight Vision has been removed!");
     nightVisionAppliedActionbar = messagesHandler.string("Night_Vision_Messages.ActionBar_Night_Vision_Applied", "#2b9bbfNight vision has been applied!");
     nightVisionRemovedActionbar = messagesHandler.string("Night_Vision_Messages.ActionBar_Night_Vision_Removed", "#f63e3eNight Vision has been removed!");
-
-    hasNightVision = (boolean) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.NIGHT_VISION);
   }
 
   /**
@@ -69,13 +68,18 @@ public class NightVisionToggle {
    *
    */
   public void nightVisionToggle() {
+    if(commandSender instanceof ConsoleCommandSender) {
+      return;
+    }
+    Player player = (Player) commandSender;
+
     // Check if the player has permission
     if(!toggleSelfPerm(player)) {
       return;
     }
 
     // Check if the player currently has night vision enabled
-    if(hasNightVision) {
+    if((boolean) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.NIGHT_VISION)) {
       // Remove night vision from the player
       userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
       Utilities.removePotionEffect(player, PotionEffectType.NIGHT_VISION);
@@ -97,15 +101,19 @@ public class NightVisionToggle {
    * @param target (The player whose night vision status is to be modified)
    */
   public void nightVisionToggleOthers(final Player target) {
-    // Check if the player has permission
-    if(!toggleOthersPerm(player)) {
-      return;
-    }
+    if(!(commandSender instanceof ConsoleCommandSender)) {
+      Player player = (Player) commandSender;
 
-    if(target.getName().equals(player.getName())) {
-      if(!Utilities.checkPermissions(player, true, "omegavision.nightvision.toggle", "omegavision.nightvision.admin", "omegavision.admin")) {
-        Utilities.message(player, messagesHandler.string("No_Permission", "#f63e3eSorry, but you don't have permission to do that."));
+      // Check if the player has permission
+      if(!toggleOthersPerm(player)) {
         return;
+      }
+
+      if(target.getName().equals(player.getName())) {
+        if(!Utilities.checkPermissions(player, true, "omegavision.nightvision.toggle", "omegavision.nightvision.admin", "omegavision.admin")) {
+          Utilities.message(player, messagesHandler.string("No_Permission", "#f63e3eSorry, but you don't have permission to do that."));
+          return;
+        }
       }
     }
 
@@ -133,9 +141,13 @@ public class NightVisionToggle {
    * @param seconds (The duration in seconds for how long the night vision will last)
    */
   public void nightVisionToggleTemp(final Player target, final int seconds) {
-    // Check if the player has permission
-    if(!toggleTempPerm(player)) {
-      return;
+    if(!(commandSender instanceof ConsoleCommandSender)) {
+      Player player = (Player) commandSender;
+
+      // Check if the player has permission
+      if(!toggleTempPerm(player)) {
+        return;
+      }
     }
 
     // Check if the target currently has night vision enabled
@@ -155,9 +167,13 @@ public class NightVisionToggle {
    * @param action (Either `add` | `remove`)
    */
   public void nightVisionToggleGlobal(final String action) {
-    // Check if the player has permission
-    if(!toggleGlobalPerm(player)) {
-      return;
+    if(!(commandSender instanceof ConsoleCommandSender)) {
+      Player player = (Player) commandSender;
+
+      // Check if the player has permission
+      if(!toggleGlobalPerm(player)) {
+        return;
+      }
     }
 
     if(Bukkit.getOnlinePlayers().size() == 0){
@@ -433,27 +449,27 @@ public class NightVisionToggle {
       return;
     }
 
-    switch(soundEffect) {
-      case "Night_Vision_Applied":
-        if(!configFile.getBoolean("Sound_Effects.Night_Vision_Enable.Enabled")) {
+    switch (soundEffect) {
+      case "Night_Vision_Applied" -> {
+        if (!configFile.getBoolean("Sound_Effects.Night_Vision_Enable.Enabled")) {
           break;
         }
-        player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Enable.Sound")) , 1, 1);
-        break;
-      case "Night_Vision_Disabled:":
-        if(!configFile.getBoolean("Sound_Effects.Night_Vision_Disable.Enabled")) {
+        player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Enable.Sound")), 1, 1);
+      }
+      case "Night_Vision_Disabled:" -> {
+        if (!configFile.getBoolean("Sound_Effects.Night_Vision_Disable.Enabled")) {
           break;
         }
         player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Disable.Sound")), 1, 1);
-        break;
-      case "Limit_Reached":
-        if(!configFile.getBoolean("Sound_Effects.Limit_Reached.Enabled")) {
+      }
+      case "Limit_Reached" -> {
+        if (!configFile.getBoolean("Sound_Effects.Limit_Reached.Enabled")) {
           break;
         }
         player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Limit_Reached.Sound")), 1, 1);
-        break;
-      default:
-        break;
+      }
+      default -> {
+      }
     }
   }
 }

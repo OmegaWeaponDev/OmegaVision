@@ -9,6 +9,7 @@ import me.ou.library.commands.PlayerCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +25,7 @@ import java.util.List;
  * @author OmegaWeaponDev
  *
  */
-public class NightVisionCommand extends PlayerCommand implements TabCompleter {
+public class NightVisionCommand extends GlobalCommand implements TabCompleter {
   private final OmegaVision pluginInstance;
 
   /**
@@ -41,12 +42,13 @@ public class NightVisionCommand extends PlayerCommand implements TabCompleter {
    *
    * Handles the execution of the Night Vision Command
    *
-   * @param player (The player that trying to execute the night vision command)
+   * @param commandSender (The Executor for the command that trying to execute the night vision command)
    * @param strings (The arguments passed into the command)
    */
   @Override
-  protected void execute(final Player player, final String[] strings) {
-    NightVisionToggle nightVisionToggle = new NightVisionToggle(pluginInstance, player);
+  protected void execute(final CommandSender commandSender, final String[] strings) {
+
+    NightVisionToggle nightVisionToggle = new NightVisionToggle(pluginInstance, commandSender);
 
     // If there are no args, simply call the night vision toggle method
     if(strings.length == 0) {
@@ -73,10 +75,18 @@ public class NightVisionCommand extends PlayerCommand implements TabCompleter {
       }
 
       if(!strings[1].equalsIgnoreCase("add") && !strings[1].equalsIgnoreCase("remove")) {
-        Utilities.message(player,
-          "#2b9bbfNight Vision Global Command: #f63e3e/nightvision global add #2b9bbf- Adds night vision to add online players",
-          "#2b9bbfNight Vision Global Command: #f63e3e/nightvision global remove #2b9bbf- Removes night vision from all online players"
-        );
+        if(commandSender instanceof Player player) {
+          Utilities.message(player,
+            "#2b9bbfNight Vision Global Command: #f63e3e/nightvision global add #2b9bbf- Adds night vision to add online players",
+            "#2b9bbfNight Vision Global Command: #f63e3e/nightvision global remove #2b9bbf- Removes night vision from all online players"
+          );
+        } else {
+          Utilities.logWarning(true,
+            "Night Vision Global Command: /nightvision global add - Adds night vision to add online players",
+            "Night Vision Global Command: /nightvision global remove - Removes night vision from all online players"
+          );
+        }
+
       }
       // Call the night vision global method and pass it the second arg in the command
       nightVisionToggle.nightVisionToggleGlobal(strings[1]);
