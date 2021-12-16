@@ -1,10 +1,10 @@
-name: ${project.name}
-version: ${project.version}
-api-version: ${pl.apiver}
-description: ${project.description}
-main: ${main.class}
+name: OmegaVision
+version: 2.5.8
+api-version: 1.13
+description: A modern simple night vision plugin
+main: me.omegaweapondev.omegavision.OmegaVision
 
-author: ${pl.author}
+author: OmegaWeaponDev
 
 softdepend:
   - PlaceholderAPI

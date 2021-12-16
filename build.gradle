@@ -43,8 +43,7 @@ dependencies {
 }
 
 group = 'me.omegaweapondev'
-version = '2.5.7'
-description = 'OmegaVision'
+version = '2.5.8'
 
 sourceCompatibility = 17
 targetCompatibility = 17

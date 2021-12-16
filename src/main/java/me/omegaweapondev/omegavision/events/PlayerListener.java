@@ -211,13 +211,11 @@ public class PlayerListener implements Listener {
 
     // Check if the bucket usage feature was enabled.
     if(!configFile.getBoolean("Night_Vision_Settings.Bucket_Usage")) {
-      userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
       return;
     }
 
     // Check if the item consumed was a milk bucket
     if(!item.getType().equals(Material.MILK_BUCKET)) {
-      userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
       return;
     }
 
