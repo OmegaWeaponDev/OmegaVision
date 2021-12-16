@@ -1,3 +1,5 @@
 OmegaVision.iml
 /.idea/
 /target/
+/.gradle/
+/build/
