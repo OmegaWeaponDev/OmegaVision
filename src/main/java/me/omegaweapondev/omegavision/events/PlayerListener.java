@@ -208,30 +208,33 @@ public class PlayerListener implements Listener {
   public void onBucketUse(PlayerItemConsumeEvent playerItemConsumeEvent) {
     final Player player = playerItemConsumeEvent.getPlayer();
     final ItemStack item = playerItemConsumeEvent.getItem();
+    playerItemConsumeEvent.setCancelled(true);
 
     // Check if the bucket usage feature was enabled.
     if(!configFile.getBoolean("Night_Vision_Settings.Bucket_Usage")) {
+      playerItemConsumeEvent.setCancelled(false);
       return;
     }
 
     // Check if the item consumed was a milk bucket
     if(!item.getType().equals(Material.MILK_BUCKET)) {
+      playerItemConsumeEvent.setCancelled(false);
       return;
     }
 
     // Check if the player currently has night vision
     if(!player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
       userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
+      playerItemConsumeEvent.setCancelled(false);
       return;
     }
 
     // Check if the player has permission to use the bucket feature
     if(!Utilities.checkPermissions(player, true, "omegavision.nightvision.bucket", "omegavision.nightvision.admin", "omegavision.admin")) {
       userDataHandler.setEffectStatus(player.getUniqueId(), false, UserDataHandler.NIGHT_VISION);
+      playerItemConsumeEvent.setCancelled(false);
       return;
     }
-    // Set the event to cancelled, so we can change how it's handled
-    playerItemConsumeEvent.setCancelled(true);
 
     // Removes all the potion effects from the player then re-applies night vision without the particle effects
     for(PotionEffect activeEffects : player.getActivePotionEffects()) {
