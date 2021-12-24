@@ -40,6 +40,12 @@ Night_Vision_Settings:
   # If set to true, players will keep night vision when they die
   Keep_Night_Vision_On_Death: true
 
+  # If set to true, players without the permission omegavision.nightvision.cost.bypass will be charged to use the
+  # night vision command.
+  Night_Vision_Cost:
+    Enabled: false
+    Amount: 10.0
+
 # Play a special sound to a player when certain things happen
 # You can find all the sound effects here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
 Sound_Effects:
@@ -86,4 +92,4 @@ World_Disable:
 Update_Notify: true
 
 # DO NOT EDIT THIS!
-Config_Version: 2.0
+Config_Version: 2.1

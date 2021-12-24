@@ -8,8 +8,10 @@ import me.omegaweapondev.omegavision.utils.StorageManager;
 import me.omegaweapondev.omegavision.utils.UserDataHandler;
 import me.ou.library.SpigotUpdater;
 import me.ou.library.Utilities;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -25,71 +27,16 @@ public class OmegaVision extends JavaPlugin {
   private MessagesHandler messagesHandler;
   private UserDataHandler userDataHandler;
 
+  private static Economy econ = null;
+
   /**
    *
-   * Allows for enabling of the plugin once the server has started
+   * Getter for the Economy used by Vault
    *
+   * @return econ
    */
-  @Override
-  public void onEnable() {
-    // Set the plugin and Library instance to this.
-    pluginInstance = this;
-    Utilities.setInstance(pluginInstance);
-
-    // Setup the storage manager and configuration files
-    storageManager = new StorageManager(pluginInstance);
-    storageManager.setupConfigs();
-    storageManager.configUpdater();
-
-    // Setup the user data and messages handler
-    userDataHandler = new UserDataHandler(pluginInstance);
-    messagesHandler = new MessagesHandler(pluginInstance, storageManager.getMessagesFile().getConfig());
-
-    // Print a message to console once the plugin has enabled
-    Utilities.logInfo(false,
-      "  ____ _   __",
-      " / __ \\ | / /   OmegaVision v" + pluginInstance.getDescription().getVersion() + " by OmegaWeaponDev",
-      "/ /_/ / |/ /    Running on version: " + Bukkit.getVersion(),
-      "\\____/|___/",
-      ""
-    );
-
-    // Check if PlaceholderAPI is installed. If so, register the plugins placeholders
-    if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
-      Utilities.logWarning(true,
-        "OmegaVision requires PlaceholderAPI to be installed if you are wanting to use any of the placeholders",
-        "You can install PlaceholderAPI here: https://www.spigotmc.org/resources/placeholderapi.6245/ "
-      );
-    } else {
-      new Placeholders(pluginInstance).register();
-    }
-
-    // Register the commands and events
-    registerCommands();
-    registerEvents();
-
-    // Populate the user data map with entries from the user data file
-    getUserDataHandler().populateUserDataMap();
-
-    // Send a message in console if there is a new version of the plugin
-    if(getStorageManager().getConfigFile().getConfig().getBoolean("Update_Notify")) {
-      new SpigotUpdater(pluginInstance, 73013).getVersion(version -> {
-        int spigotVersion = Integer.parseInt(version.replace(".", ""));
-        int pluginVersion = Integer.parseInt(pluginInstance.getDescription().getVersion().replace(".", ""));
-
-        if(pluginVersion >= spigotVersion) {
-          Utilities.logInfo(true, "You are already running the latest version");
-          return;
-        }
-
-        PluginDescriptionFile pdf = pluginInstance.getDescription();
-        Utilities.logWarning(true,
-          "A new version of " + pdf.getName() + " is avaliable!",
-          "Current Version: " + pdf.getVersion() + " > New Version: " + version,
-          "Grab it here: https://www.spigotmc.org/resources/omegavision.73013/"
-        );
-      });
-    }
+  public static Economy getEcon() {
+    return econ;
   }
 
   /**
@@ -140,6 +87,76 @@ public class OmegaVision extends JavaPlugin {
 
   /**
    *
+   * Allows for enabling of the plugin once the server has started
+   *
+   */
+  @Override
+  public void onEnable() {
+    // Set the plugin and Library instance to this.
+    pluginInstance = this;
+    Utilities.setInstance(pluginInstance);
+
+    // Setup the storage manager and configuration files
+    storageManager = new StorageManager(pluginInstance);
+    storageManager.setupConfigs();
+    storageManager.configUpdater();
+
+    // Setup the user data and messages handler
+    userDataHandler = new UserDataHandler(pluginInstance);
+    messagesHandler = new MessagesHandler(pluginInstance, storageManager.getMessagesFile().getConfig());
+
+    // Print a message to console once the plugin has enabled
+    Utilities.logInfo(false,
+      "  ____ _   __",
+      " / __ \\ | / /   OmegaVision v" + pluginInstance.getDescription().getVersion() + " by OmegaWeaponDev",
+      "/ /_/ / |/ /    Running on version: " + Bukkit.getVersion(),
+      "\\____/|___/",
+      ""
+    );
+
+    // Check if PlaceholderAPI is installed. If so, register the plugins placeholders
+    if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
+      Utilities.logWarning(true,
+        "OmegaVision requires PlaceholderAPI to be installed if you are wanting to use any of the placeholders",
+        "You can install PlaceholderAPI here: https://www.spigotmc.org/resources/placeholderapi.6245/ "
+      );
+    } else {
+      new Placeholders(pluginInstance).register();
+    }
+
+    // Register the commands and events
+    registerCommands();
+    registerEvents();
+
+    // Setup the VaultAPI economy
+    setupEconomy();
+
+    // Populate the user data map with entries from the user data file
+    getUserDataHandler().populateUserDataMap();
+
+    // Send a message in console if there is a new version of the plugin
+    if(getStorageManager().getConfigFile().getConfig().getBoolean("Update_Notify")) {
+      new SpigotUpdater(pluginInstance, 73013).getVersion(version -> {
+        int spigotVersion = Integer.parseInt(version.replace(".", ""));
+        int pluginVersion = Integer.parseInt(pluginInstance.getDescription().getVersion().replace(".", ""));
+
+        if(pluginVersion >= spigotVersion) {
+          Utilities.logInfo(true, "You are already running the latest version");
+          return;
+        }
+
+        PluginDescriptionFile pdf = pluginInstance.getDescription();
+        Utilities.logWarning(true,
+          "A new version of " + pdf.getName() + " is avaliable!",
+          "Current Version: " + pdf.getVersion() + " > New Version: " + version,
+          "Grab it here: https://www.spigotmc.org/resources/omegavision.73013/"
+        );
+      });
+    }
+  }
+
+  /**
+   *
    * Getter for the StorageManager
    *
    * @return storageManager
@@ -166,5 +183,23 @@ public class OmegaVision extends JavaPlugin {
    */
   public UserDataHandler getUserDataHandler() {
     return userDataHandler;
+  }
+
+  /**
+   *
+   * Handles registering the Economy class used by VaultAPI
+   *
+   *
+   */
+  private boolean setupEconomy() {
+    if (getServer().getPluginManager().getPlugin("Vault") == null) {
+      return false;
+    }
+    RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+    if (rsp == null) {
+      return false;
+    }
+    econ = rsp.getProvider();
+    return econ != null;
   }
 }

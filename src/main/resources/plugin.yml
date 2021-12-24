@@ -1,5 +1,5 @@
 name: OmegaVision
-version: 2.5.8
+version: 2.5.10
 api-version: 1.13
 description: A modern simple night vision plugin
 main: me.omegaweapondev.omegavision.OmegaVision
@@ -8,6 +8,7 @@ author: OmegaWeaponDev
 
 softdepend:
   - PlaceholderAPI
+  - Vault
 
 commands:
   omegavision:
@@ -47,6 +48,7 @@ permissions:
       - omegavision.nightvision.keepondeath
       - omegavision.nightvision.bucket
       - omegavision.nightvision.global.alert
+      - omegavision.nightvision.cost.bypass
   omegavision.limit.admin:
     description: The wildcard permission to give all the limit permissions.
     default: false
@@ -86,10 +88,13 @@ permissions:
     description: The permission required to use the bucket feature to remove potion particle effects.
     default: false
   omegavision.nightvision.keepondeath:
-    description: The permission required to keep night vision on death
+    description: The permission required to keep night vision on death.
     default: false
   omegavision.nightvision.global.alert:
-    description: The permission required to view night vision global messages
+    description: The permission required to view night vision global messages.
+    default: false
+  omegavision.nightvision.cost.bypass:
+    description: The permission required to bypass the night vision cost.
     default: false
   omegavision.limit.check:
     description: The permission required to check your own night vision limit status.

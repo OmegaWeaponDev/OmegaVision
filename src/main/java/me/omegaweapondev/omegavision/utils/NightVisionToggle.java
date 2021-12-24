@@ -2,6 +2,7 @@ package me.omegaweapondev.omegavision.utils;
 
 import me.omegaweapondev.omegavision.OmegaVision;
 import me.ou.library.Utilities;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -87,6 +88,11 @@ public class NightVisionToggle {
       // Send night vision removal messages
       sendNightVisionRemovedMessages(player);
       toggleSoundEffect(player, "Night_Vision_Disabled");
+      return;
+    }
+
+    // Check if the night vision cost has been enabled, and withdraw the money if it has.
+    if (!withdrawNightVisionCost(player)) {
       return;
     }
 
@@ -471,5 +477,33 @@ public class NightVisionToggle {
       default -> {
       }
     }
+  }
+
+  private boolean withdrawNightVisionCost(@NotNull final Player player) {
+    // Check if the night vision cost has been enabled.
+    if (configFile.getBoolean("Night_Vision_Settings.Night_Vision_Cost.Enabled")) {
+      double nightVisionCost = configFile.getDouble("Night_Vision_Settings.Night_Vision_Cost.Amount", 0);
+
+      if(Utilities.checkPermissions(player, true, "omegavision.nightvision.cost.bypass", "omegavision.nightvision.admin", "omegavision.admin")) {
+        return true;
+      }
+
+      // Try to remove the cost from the players balance
+      EconomyResponse economyResponse = OmegaVision.getEcon().withdrawPlayer(player, nightVisionCost);
+
+      // Withdrawal was not successful, send players a message to inform them and return
+      if (!economyResponse.transactionSuccess()) {
+        Utilities.message(player, messagesHandler.string("Night_Vision_Messages.Night_Vision_Cost_Denied", "#f63e3eSorry, you do not have enough money to use that command!"));
+        return false;
+      }
+      // Withdrawal was successful so send a message to the player and toggle night vision
+      Utilities.message(player,
+        messagesHandler.string(
+          "Night_Vision_Messages.Night_Vision_Cost_Approved".replace("%NightVisionCost%", String.valueOf(nightVisionCost)),
+          "#2b9bbfYou have been charged #f63e3e$" + nightVisionCost + " #2b9bbfto use Night Vision!")
+      );
+      return true;
+    }
+    return true;
   }
 }

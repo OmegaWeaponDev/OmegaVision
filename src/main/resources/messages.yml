@@ -40,6 +40,13 @@ Night_Vision_Messages:
   # to remove the particle and icon when using night vision
   Bucket_Message: "#2b9bbfThe particle effects and the icon have been removed!"
 
+  # Sets the message players get when they are successfully charged for using night vision.
+  # Use the placeholder `%NightVisionCost%` to get the cost of night vision set in the config.yml.
+  Night_Vision_Cost_Approved: "#2b9bbfYou have been charged #f63e3e$%NightVisionCost% #2b9bbfto use Night Vision!"
+
+  # Sets the message players get when they don't have enough money to use night vision.
+  Night_Vision_Cost_Denied: "#f63e3eSorry, you do not have enough money to use that command!"
+
 # Set the different messages for the night vision command limits
 Night_Vision_Limit:
   # Sets the message players get when the limit has been reached
@@ -67,4 +74,4 @@ No_Permission: "#f63e3eSorry, but you don't have permission to do that."
 Plugin_Reload: "#f63e3eOmegaVision has successfully been reloaded."
 
 # DO NOT EDIT THIS!
-Config_Version: 2.0
+Config_Version: 2.1

@@ -1,16 +1,20 @@
 package me.omegaweapondev.omegavision.command;
 
 import me.omegaweapondev.omegavision.OmegaVision;
+import me.omegaweapondev.omegavision.utils.MessagesHandler;
 import me.omegaweapondev.omegavision.utils.NightVisionToggle;
 import me.ou.library.Utilities;
 import me.ou.library.builders.TabCompleteBuilder;
 import me.ou.library.commands.GlobalCommand;
 import me.ou.library.commands.PlayerCommand;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +31,8 @@ import java.util.List;
  */
 public class NightVisionCommand extends GlobalCommand implements TabCompleter {
   private final OmegaVision pluginInstance;
+  private final FileConfiguration configFile;
+  private final MessagesHandler messagesHandler;
 
   /**
    *
@@ -36,6 +42,8 @@ public class NightVisionCommand extends GlobalCommand implements TabCompleter {
    */
   public NightVisionCommand(final OmegaVision pluginInstance) {
     this.pluginInstance = pluginInstance;
+    configFile = pluginInstance.getStorageManager().getConfigFile().getConfig();
+    messagesHandler = pluginInstance.getMessagesHandler();
   }
 
   /**
