@@ -479,6 +479,14 @@ public class NightVisionToggle {
     }
   }
 
+  /**
+   *
+   * Handles checking if the player needs to be charged a specific amount
+   * when they try to enable night vision.
+   *
+   * @param player (The player trying to enable night vision)
+   * @return (True/False depending on if withdrawal was successful)
+   */
   private boolean withdrawNightVisionCost(@NotNull final Player player) {
     // Check if the night vision cost has been enabled.
     if (configFile.getBoolean("Night_Vision_Settings.Night_Vision_Cost.Enabled")) {
@@ -499,8 +507,9 @@ public class NightVisionToggle {
       // Withdrawal was successful so send a message to the player and toggle night vision
       Utilities.message(player,
         messagesHandler.string(
-          "Night_Vision_Messages.Night_Vision_Cost_Approved".replace("%NightVisionCost%", String.valueOf(nightVisionCost)),
-          "#2b9bbfYou have been charged #f63e3e$" + nightVisionCost + " #2b9bbfto use Night Vision!")
+          "Night_Vision_Messages.Night_Vision_Cost_Approved",
+          "#2b9bbfYou have been charged #f63e3e$%NightVisionCost% #2b9bbfto use Night Vision!")
+          .replace("%NightVisionCost%", String.valueOf(nightVisionCost))
       );
       return true;
     }
