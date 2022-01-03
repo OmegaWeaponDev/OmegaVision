@@ -83,7 +83,8 @@ public class NightVisionCommand extends GlobalCommand implements TabCompleter {
       }
 
       if(!strings[1].equalsIgnoreCase("add") && !strings[1].equalsIgnoreCase("remove")) {
-        if(commandSender instanceof Player player) {
+        if(commandSender instanceof Player) {
+          final Player player = (Player) commandSender;
           Utilities.message(player,
             "#2b9bbfNight Vision Global Command: #f63e3e/nightvision global add #2b9bbf- Adds night vision to add online players",
             "#2b9bbfNight Vision Global Command: #f63e3e/nightvision global remove #2b9bbf- Removes night vision from all online players"

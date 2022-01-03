@@ -5,3 +5,5 @@
  */
 
 rootProject.name = 'OmegaVision'
+
+includeBuild "../OULibrary"

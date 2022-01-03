@@ -55,10 +55,18 @@ public class PluginCommand extends GlobalCommand implements TabCompleter {
 
     // Call the correct method based on the first arg passed into the command
     switch(strings[0]) {
-      case "version" -> versionCommand(sender);
-      case "reload" -> reloadCommand(sender);
-      case "debug" -> debugCommand(sender);
-      default -> helpCommand(sender);
+      case "version":
+        versionCommand(sender);
+        break;
+      case "reload":
+        reloadCommand(sender);
+        break;
+      case "debug":
+        debugCommand(sender);
+        break;
+      default:
+        helpCommand(sender);
+        break;
     }
 	}
 
@@ -70,7 +78,8 @@ public class PluginCommand extends GlobalCommand implements TabCompleter {
    */
   private void reloadCommand(final CommandSender commandSender) {
     // Check if the CommandSender is a player
-    if(commandSender instanceof final Player player) {
+    if(commandSender instanceof Player) {
+      final Player player = (Player) commandSender;
 
       // Check if the player has permission to reload the plugin
       if(!Utilities.checkPermissions(player, true, "omegavision.reload", "omegavision.admin")) {

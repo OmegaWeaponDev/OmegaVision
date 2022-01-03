@@ -31,62 +31,6 @@ public class OmegaVision extends JavaPlugin {
 
   /**
    *
-   * Getter for the Economy used by Vault
-   *
-   * @return econ
-   */
-  public static Economy getEcon() {
-    return econ;
-  }
-
-  /**
-   *
-   * Handles disabling the plugin and saving the user data to the files
-   *
-   */
-  @Override
-  public void onDisable() {
-    getUserDataHandler().saveUserDataToFile();
-    Bukkit.getScheduler().cancelTasks(pluginInstance);
-  }
-
-  /**
-   *
-   * Handles reloading the plugin files
-   *
-   */
-  public void onReload() {
-    getStorageManager().reloadFiles();
-  }
-
-  /**
-   *
-   * Handles registering the commands for the plugin
-   *
-   */
-  private void registerCommands() {
-    Utilities.logInfo(true, "OmegaVision is now attempting to register it's commands...");
-
-    Utilities.setCommand().put("omegavision", new PluginCommand(pluginInstance));
-    Utilities.setCommand().put("nightvision", new NightVisionCommand(pluginInstance));
-    Utilities.setCommand().put("nightvisionlimit", new LimitCommand(pluginInstance));
-    Utilities.setCommand().put("nightvisionlist", new ListCommand(pluginInstance));
-
-    Utilities.registerCommands();
-    Utilities.logInfo(true, "OmegaVision has successfully registered all of it's commands.");
-  }
-
-  /**
-   *
-   * Handles registering the events that the plugin listens to
-   *
-   */
-  private void registerEvents() {
-    Utilities.registerEvent(new PlayerListener(pluginInstance));
-  }
-
-  /**
-   *
    * Allows for enabling of the plugin once the server has started
    *
    */
@@ -157,6 +101,55 @@ public class OmegaVision extends JavaPlugin {
 
   /**
    *
+   * Getter for the Economy used by Vault
+   *
+   * @return econ
+   */
+  public static Economy getEcon() {
+    return econ;
+  }
+
+  /**
+   *
+   * Handles disabling the plugin and saving the user data to the files
+   *
+   */
+  @Override
+  public void onDisable() {
+    getUserDataHandler().saveUserDataToFile();
+    Bukkit.getScheduler().cancelTasks(pluginInstance);
+  }
+
+  /**
+   *
+   * Handles reloading the plugin files
+   *
+   */
+  public void onReload() {
+    getStorageManager().reloadFiles();
+  }
+
+  /**
+   *
+   * Handles registering the commands for the plugin
+   *
+   */
+  private void registerCommands() {
+    Utilities.logInfo(true, "OmegaVision is now attempting to register it's commands...");
+
+    Utilities.setCommand().put("omegavision", new PluginCommand(pluginInstance));
+    Utilities.setCommand().put("nightvision", new NightVisionCommand(pluginInstance));
+    Utilities.setCommand().put("nightvisionlimit", new LimitCommand(pluginInstance));
+    Utilities.setCommand().put("nightvisionlist", new ListCommand(pluginInstance));
+
+    Utilities.registerCommands();
+    Utilities.logInfo(true, "OmegaVision has successfully registered all of it's commands.");
+  }
+
+
+
+  /**
+   *
    * Getter for the StorageManager
    *
    * @return storageManager
@@ -201,5 +194,14 @@ public class OmegaVision extends JavaPlugin {
     }
     econ = rsp.getProvider();
     return econ != null;
+  }
+
+  /**
+   *
+   * Handles registering the events that the plugin listens to
+   *
+   */
+  private void registerEvents() {
+    Utilities.registerEvent(new PlayerListener(pluginInstance));
   }
 }

@@ -100,6 +100,11 @@ public class UserDataHandler {
    * @param playerUUID (The player that has their user data saved)
    */
   public void saveUserDataToFile(@NotNull final UUID playerUUID) {
+    // If the user is not in the map for whatever reason, return
+    if(getUserDataMap().get(playerUUID) == null) {
+      return;
+    }
+
     Bukkit.getScheduler().runTaskAsynchronously(pluginInstance, () -> {
       userDataFile.set("Users." + playerUUID + "." + NIGHT_VISION, getUserDataMap().get(playerUUID).getOrDefault(NIGHT_VISION, false));
       userDataFile.set("Users." + playerUUID + "." + LIMIT_REACHED, getUserDataMap().get(playerUUID).getOrDefault(LIMIT_REACHED, false));

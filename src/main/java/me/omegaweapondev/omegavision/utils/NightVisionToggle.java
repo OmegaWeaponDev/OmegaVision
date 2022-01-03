@@ -456,26 +456,26 @@ public class NightVisionToggle {
     }
 
     switch (soundEffect) {
-      case "Night_Vision_Applied" -> {
+      case "Night_Vision_Applied":
         if (!configFile.getBoolean("Sound_Effects.Night_Vision_Enable.Enabled")) {
           break;
         }
         player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Enable.Sound")), 1, 1);
-      }
-      case "Night_Vision_Disabled:" -> {
+        break;
+      case "Night_Vision_Disabled":
         if (!configFile.getBoolean("Sound_Effects.Night_Vision_Disable.Enabled")) {
           break;
         }
         player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Night_Vision_Disable.Sound")), 1, 1);
-      }
-      case "Limit_Reached" -> {
+        break;
+      case "Limit_Reached":
         if (!configFile.getBoolean("Sound_Effects.Limit_Reached.Enabled")) {
           break;
         }
         player.playSound(player.getLocation(), Sound.valueOf(configFile.getString("Sound_Effects.Limit_Reached.Sound")), 1, 1);
-      }
-      default -> {
-      }
+        break;
+      default:
+        break;
     }
   }
 

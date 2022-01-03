@@ -1,5 +1,5 @@
 name: OmegaVision
-version: 2.5.10
+version: 2.5.11
 api-version: 1.13
 description: A modern simple night vision plugin
 main: me.omegaweapondev.omegavision.OmegaVision
