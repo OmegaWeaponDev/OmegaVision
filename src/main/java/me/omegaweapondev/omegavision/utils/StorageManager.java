@@ -59,8 +59,8 @@ public class StorageManager {
         Utilities.logInfo(true, "The config.yml has successfully been updated!");
       }
 
-      if(getMessagesFile().getConfig().getDouble("Config_Version") != 2.1) {
-        getMessagesFile().getConfig().set("Config_Version", 2.1);
+      if(getMessagesFile().getConfig().getDouble("Config_Version") != 2.2) {
+        getMessagesFile().getConfig().set("Config_Version", 2.2);
         getMessagesFile().saveConfig();
         ConfigUpdater.update(plugin, "messages.yml", getMessagesFile().getFile(), Arrays.asList("none"));
         Utilities.logInfo(true, "The messages.yml has successfully been updated!");

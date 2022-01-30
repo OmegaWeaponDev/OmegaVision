@@ -124,6 +124,10 @@ public class UserDataHandler {
    * @param status (The status effect to modify the value for)
    */
   public void setEffectStatus(@NotNull UUID uuid, Object status, String effect) {
+    if(getUserDataMap().get(uuid) == null) {
+      addUserToMap(uuid);
+    }
+
     getUserDataMap().get(uuid).put(effect, status);
   }
 

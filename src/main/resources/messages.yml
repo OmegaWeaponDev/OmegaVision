@@ -9,6 +9,7 @@
 
 # Sets the plugins prefix to use in all the messages.
 # NOTE: A space will automatically be added after the prefix.
+# If set to 'none' it will disable the plugin prefix
 Plugin_Prefix: "#8c8c8c[#2b9bbf&lOV#8c8c8c]"
 
 Night_Vision_Messages:
@@ -74,4 +75,4 @@ No_Permission: "#f63e3eSorry, but you don't have permission to do that."
 Plugin_Reload: "#f63e3eOmegaVision has successfully been reloaded."
 
 # DO NOT EDIT THIS!
-Config_Version: 2.1
+Config_Version: 2.2
