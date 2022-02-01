@@ -3,10 +3,6 @@ package me.omegaweapondev.omegavision.utils;
 import me.omegaweapondev.omegavision.OmegaVision;
 import me.ou.library.Utilities;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
-import java.io.File;
-import java.util.List;
 
 /**
  *

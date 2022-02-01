@@ -185,8 +185,11 @@ public class PlayerListener implements Listener {
         return;
       }
 
+      if(!((boolean) userDataHandler.getEffectStatus(player.getUniqueId(), UserDataHandler.NIGHT_VISION))) {
+        return;
+      }
+
       // Re-applies night vision to the player after they respawn
-      userDataHandler.setEffectStatus(player.getUniqueId(), true, UserDataHandler.NIGHT_VISION);
       if(Utilities.checkPermissions(player, false, "omegavision.nightvision.particles.bypass", "omegavision.nightvision.admin", "omegavision.admin")) {
         Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100 ,1, false, false, false);
       } else {
