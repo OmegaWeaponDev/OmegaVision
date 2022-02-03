@@ -243,6 +243,7 @@ public class PlayerListener implements Listener {
     for(PotionEffect activeEffects : player.getActivePotionEffects()) {
       Utilities.removePotionEffect(player, activeEffects.getType());
     }
+    userDataHandler.setEffectStatus(player.getUniqueId(), true, UserDataHandler.NIGHT_VISION);
     Utilities.addPotionEffect(player, PotionEffectType.NIGHT_VISION, 60 * 60 * 24 * 100, 1, false, false, false);
     Utilities.message(player, messagesHandler.string("Night_Vision_Messages.Bucket_Message", "#2b9bbfThe particle effects and the icon have been removed!"));
 
